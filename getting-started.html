@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started | Revit & CADmep User Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --panel-2: #16233d;
+      --text: #e8eefc;
+      --muted: #a7b4d1;
+      --line: rgba(255,255,255,.08);
+      --accent: #4f8cff;
+      --accent-2: #7fb0ff;
+      --success: #2fbf71;
+      --warning: #ffb347;
+      --shadow: 0 18px 40px rgba(0,0,0,.28);
+      --max: 1320px;
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(79,140,255,.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(127,176,255,.08), transparent 20%),
+        linear-gradient(180deg, #0a1120 0%, #0d1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+      background: rgba(8,14,25,.72);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: .7rem .95rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--text);
+      background: rgba(255,255,255,.05);
+    }
+
+    .hero {
+      padding: 3rem 0 1.6rem;
+    }
+
+    .hero-card,
+    .card,
+    .toc,
+    .callout,
+    .step-card {
+      background: rgba(9,16,28,.55);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #cfe0ff;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(127,176,255,.2);
+    }
+
+    h1, h2, h3, h4 {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: .75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 80ch;
+      font-size: 1.06rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .toc {
+      position: sticky;
+      top: 94px;
+      padding: 1.1rem;
+    }
+
+    .toc h3 {
+      margin-bottom: .85rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: .7rem .8rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+      margin-bottom: .3rem;
+    }
+
+    .toc a:hover {
+      color: var(--text);
+      background: rgba(79,140,255,.12);
+    }
+
+    .content {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .card {
+      padding: 1.3rem;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 1rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      margin-top: .9rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: .5rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #dbe7ff;
+      border: 1px solid rgba(127,176,255,.18);
+      font-size: .9rem;
+    }
+
+    .callout {
+      padding: 1rem 1.05rem;
+      border-left: 4px solid var(--accent);
+      background: rgba(79,140,255,.09);
+    }
+
+    .callout.warning {
+      border-left-color: var(--warning);
+      background: rgba(255,179,71,.10);
+    }
+
+    .callout.success {
+      border-left-color: var(--success);
+      background: rgba(47,191,113,.10);
+    }
+
+    .steps {
+      display: grid;
+      gap: .85rem;
+      margin-top: .9rem;
+    }
+
+    .step-card {
+      padding: 1rem;
+    }
+
+    .step-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: inline-grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      font-weight: 700;
+      margin-bottom: .75rem;
+    }
+
+    .checklist {
+      margin: .7rem 0 0;
+      padding-left: 1.15rem;
+    }
+
+    .checklist li {
+      margin: .3rem 0;
+      color: var(--muted);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .7rem;
+    }
+
+    .mini-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 1080px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .toc {
+        position: static;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        padding: .75rem 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <div class="brand-badge">RC</div>
+        <div>
+          Revit CADmep Guide
+          <small>Professional user guidance for modelling, coordination and production</small>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="getting-started.html" class="active">Guides</a>
+        <a href="faq.html">Resources</a>
+        <a href="documentation.html">Standards</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">Getting Started • Revit • CADmep • ACC</div>
+          <h1>Getting Started with Revit, CADmep & ACC</h1>
+          <p class="lead">
+            This page is designed to help a new user get started with Revit and Autodesk Fabrication CADmep,
+            including creating a native model, understanding the basic setup steps, and preparing a model for
+            collaboration in Autodesk Construction Cloud / Autodesk Docs.
+          </p>
+
+          <div class="pill-row">
+            <span class="pill">Native Revit setup</span>
+            <span class="pill">ACC / Autodesk Docs setup</span>
+            <span class="pill">Cloud model workflow</span>
+            <span class="pill">CADmep database & services</span>
+            <span class="pill">Starter best practice</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container layout">
+      <aside class="toc">
+        <h3>On this page</h3>
+        <a href="#overview">1. Overview</a>
+        <a href="#revit-native">2. Revit native model setup</a>
+        <a href="#revit-acc">3. Revit model setup in ACC</a>
+        <a href="#acc-admin">4. ACC / Autodesk Docs admin steps</a>
+        <a href="#cadmep-start">5. CADmep getting started</a>
+        <a href="#cadmep-database">6. CADmep database, services & templates</a>
+        <a href="#starter-checks">7. Starter checks</a>
+        <a href="#common-mistakes">8. Common mistakes to avoid</a>
+      </aside>
+
+      <div class="content">
+        <section id="overview" class="card">
+          <div class="section-title">
+            <h2>1. Overview</h2>
+            <span class="mini-tag">Start here</span>
+          </div>
+          <p class="muted">
+            Revit is usually used as the model-based BIM authoring environment, while CADmep is commonly used
+            for fabrication-intent MEP detailing. Autodesk Docs / ACC supports cloud-based project setup and,
+            when the right entitlement is in place, Revit cloud model collaboration. A practical beginner workflow
+            is to first understand the difference between a local native model and a cloud-hosted collaborative model,
+            then build the correct project structure from the start.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout success">
+              <strong>Use Revit when you need:</strong>
+              <ul class="checklist">
+                <li>Coordinated BIM models</li>
+                <li>Views, sheets and schedules from one model</li>
+                <li>Team collaboration and documentation</li>
+              </ul>
+            </div>
+
+            <div class="callout">
+              <strong>Use CADmep when you need:</strong>
+              <ul class="checklist">
+                <li>Fabrication-intent MEP detailing</li>
+                <li>Service templates and ITM-driven content</li>
+                <li>Reports, renumbering, spools and PCF export</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="revit-native" class="card">
+          <div class="section-title">
+            <h2>2. Revit native model setup</h2>
+            <span class="mini-tag">Local / office workflow</span>
+          </div>
+
+          <p class="muted">
+            A native Revit setup means starting the model directly in Revit before any cloud collaboration is added.
+            This is usually the simplest place to begin for a new user.
+          </p>
+
+          <div class="steps">
+            <div class="step-card">
+              <div class="step-num">1</div>
+              <h3>Start with the correct template</h3>
+              <p class="muted">
+                Choose the correct company or project template first. This should already contain the correct
+                units, view templates, browser organisation, title blocks, annotation styles, and any standard
+                shared parameters your team expects.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">2</div>
+              <h3>Set project basics before modelling</h3>
+              <p class="muted">
+                Before placing major content, check levels, grids, coordinates, project information, and linked
+                reference models. It is far easier to fix these at the start than after heavy modelling begins.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">3</div>
+              <h3>Link supporting models correctly</h3>
+              <p class="muted">
+                Link architecture, structure, or other discipline models using the agreed project origin /
+                shared coordinates workflow. Do not guess positioning. If links start wrong, every downstream
+                coordination view becomes less reliable.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">4</div>
+              <h3>Set up working views early</h3>
+              <p class="muted">
+                Create clean working views for coordination, modelling, and documentation. This helps with
+                performance and makes troubleshooting easier later.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">5</div>
+              <h3>Enable worksharing only when needed</h3>
+              <p class="muted">
+                If multiple users will work in the same model, enable worksharing deliberately and create a sensible
+                workset strategy. Do not add unnecessary worksets just because a project is large.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout warning" style="margin-top:1rem;">
+            <strong>Best practice:</strong>
+            Do not begin heavy production modelling until the template, coordinates, linked models, and naming structure are correct.
+          </div>
+        </section>
+
+        <section id="revit-acc" class="card">
+          <div class="section-title">
+            <h2>3. Revit model setup in ACC / Autodesk Docs</h2>
+            <span class="mini-tag">Cloud collaboration</span>
+          </div>
+
+          <p class="muted">
+            For cloud collaboration, the Autodesk Docs account administrator and project administrators have setup
+            tasks before the modeller simply opens Revit and starts working.
+          </p>
+
+          <div class="steps">
+            <div class="step-card">
+              <div class="step-num">1</div>
+              <h3>Create the Autodesk Docs / ACC project</h3>
+              <p class="muted">
+                The account or project admin creates the project, sets up administrators, and defines the project
+                structure. A proper folder structure should exist before live models are uploaded.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">2</div>
+              <h3>Invite the team and assign permissions</h3>
+              <p class="muted">
+                Team members need the correct project access and the right cloud-model entitlement where cloud
+                worksharing is being used. Access and entitlement should be checked before rollout.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">3</div>
+              <h3>Organise folders before uploading models</h3>
+              <p class="muted">
+                Do not dump active models into a loose folder structure. Separate work-in-progress, shared,
+                published, and other controlled areas according to your project standards.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">4</div>
+              <h3>Initiate or upload the Revit model to the cloud</h3>
+              <p class="muted">
+                Once the project and folders are ready, the model can be initiated in the cloud or uploaded to
+                enable collaboration. This is the point where the model moves from a local file approach to a
+                cloud-based project workflow.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">5</div>
+              <h3>Use cloud worksharing correctly</h3>
+              <p class="muted">
+                Team members then work against the cloud model using the agreed sync and collaboration workflow.
+                Treat cloud setup as a controlled process, not just a storage location.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:1rem;">
+            <div class="callout">
+              <strong>Cloud model essentials</strong>
+              <ul class="checklist">
+                <li>Correct Autodesk Docs / ACC access</li>
+                <li>Correct project permissions</li>
+                <li>Correct folder structure</li>
+                <li>Correct Revit cloud entitlement where required</li>
+              </ul>
+            </div>
+
+            <div class="callout warning">
+              <strong>Do not assume</strong>
+              <ul class="checklist">
+                <li>That Revit subscription alone covers every cloud-worksharing case</li>
+                <li>That all users already have model access</li>
+                <li>That cloud storage and cloud worksharing are the same thing</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="acc-admin" class="card">
+          <div class="section-title">
+            <h2>4. ACC / Autodesk Docs admin steps</h2>
+            <span class="mini-tag">Admin checklist</span>
+          </div>
+
+          <p class="muted">
+            Before a modeller starts, the admin side should already be in place.
+          </p>
+
+          <ul class="checklist">
+            <li>Create the ACC / Autodesk Docs project.</li>
+            <li>Assign project administrators.</li>
+            <li>Set folder permissions correctly.</li>
+            <li>Invite the project team.</li>
+            <li>Confirm cloud-model access and any required product entitlement.</li>
+            <li>Define where active Revit models should live.</li>
+            <li>Agree naming and publishing conventions.</li>
+          </ul>
+
+          <div class="callout success">
+            <strong>Starter tip:</strong>
+            Build the project structure before the first live model is uploaded. Good administration at the start prevents messy collaboration later.
+          </div>
+        </section>
+
+        <section id="cadmep-start" class="card">
+          <div class="section-title">
+            <h2>5. CADmep getting started</h2>
+            <span class="mini-tag">Fabrication workflow</span>
+          </div>
+
+          <p class="muted">
+            CADmep is not only “installed software”. To be useful, it also needs the correct profile, database,
+            service templates, and item content. New users often underestimate this.
+          </p>
+
+          <div class="steps">
+            <div class="step-card">
+              <div class="step-num">1</div>
+              <h3>Install the correct product and profile</h3>
+              <p class="muted">
+                Confirm the correct Autodesk Fabrication product access and make sure you are using the right
+                CADmep environment for your business or project.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">2</div>
+              <h3>Check the fabrication database</h3>
+              <p class="muted">
+                CADmep relies on a database-driven setup. If the wrong database or a poor database is loaded,
+                the modelling environment will also be poor.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">3</div>
+              <h3>Confirm service templates are present</h3>
+              <p class="muted">
+                Service templates are what users interact with to place content. If services are wrong or missing,
+                users will struggle immediately.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">4</div>
+              <h3>Check ITM content and folders</h3>
+              <p class="muted">
+                CADmep content lives in item folders and ITM files. Clean, controlled content is essential for
+                dependable fabrication-intent modelling.
+              </p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">5</div>
+              <h3>Test reporting and output tools</h3>
+              <p class="muted">
+                Before live production work, confirm that reports, renumbering, spooling workflows, and PCF export
+                are all working in the intended environment.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="cadmep-database" class="card">
+          <div class="section-title">
+            <h2>6. CADmep database, services & templates</h2>
+            <span class="mini-tag">Core setup</span>
+          </div>
+
+          <p class="muted">
+            For CADmep, the real setup work is in the database and services, not just the software window.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Service templates</strong>
+              <ul class="checklist">
+                <li>Control what users can place</li>
+                <li>Need to reflect project standards</li>
+                <li>Depend on correct content structure</li>
+                <li>Should be controlled, not casually edited</li>
+              </ul>
+            </div>
+
+            <div class="callout">
+              <strong>Service types</strong>
+              <ul class="checklist">
+                <li>Help categorise products</li>
+                <li>Support layering and service logic</li>
+                <li>Should be kept clean and understandable</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout warning" style="margin-top:1rem;">
+            <strong>Important:</strong>
+            If service templates are poorly organised, users will place inconsistent items and the outputs will also become inconsistent.
+          </div>
+
+          <h3 style="margin-top:1.2rem;">Good CADmep starter sequence</h3>
+          <ul class="checklist">
+            <li>Open the correct profile.</li>
+            <li>Confirm the correct database path.</li>
+            <li>Review CAD settings where needed.</li>
+            <li>Check service templates and sections.</li>
+            <li>Confirm ITM content availability.</li>
+            <li>Place a small test run.</li>
+            <li>Test a report or output command.</li>
+          </ul>
+        </section>
+
+        <section id="starter-checks" class="card">
+          <div class="section-title">
+            <h2>7. Starter checks</h2>
+            <span class="mini-tag">Quick reference</span>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <h3>Revit quick checks</h3>
+              <ul class="checklist">
+                <li>Correct template</li>
+                <li>Correct units</li>
+                <li>Correct levels and grids</li>
+                <li>Correct linked-model position</li>
+                <li>Correct view templates</li>
+                <li>Correct worksharing strategy if needed</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3>ACC quick checks</h3>
+              <ul class="checklist">
+                <li>Project created</li>
+                <li>Permissions assigned</li>
+                <li>Folders structured</li>
+                <li>Users invited</li>
+                <li>Cloud-model access verified</li>
+                <li>Publishing / naming logic agreed</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:1rem;">
+            <div>
+              <h3>CADmep quick checks</h3>
+              <ul class="checklist">
+                <li>Correct profile</li>
+                <li>Correct fabrication database</li>
+                <li>Correct services</li>
+                <li>Correct ITM content</li>
+                <li>Reports working</li>
+                <li>PCF / output tested</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3>Team starter checks</h3>
+              <ul class="checklist">
+                <li>Naming agreed</li>
+                <li>Revision strategy agreed</li>
+                <li>View / sheet standards agreed</li>
+                <li>Folder use agreed</li>
+                <li>Permissions understood</li>
+                <li>First issue route tested</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="common-mistakes" class="card">
+          <div class="section-title">
+            <h2>8. Common mistakes to avoid</h2>
+            <span class="mini-tag">Avoid rework</span>
+          </div>
+
+          <ul class="checklist">
+            <li>Starting a Revit model with the wrong template.</li>
+            <li>Ignoring coordinates and linked-model position at project start.</li>
+            <li>Turning on worksharing without a plan.</li>
+            <li>Uploading live cloud models before folders and permissions are ready.</li>
+            <li>Assuming all users already have cloud-model access.</li>
+            <li>Installing CADmep but not checking the database and service setup.</li>
+            <li>Letting users edit service templates without control.</li>
+            <li>Beginning production output before testing reports, numbering, and export workflows.</li>
+          </ul>
+
+          <div class="callout success">
+            <strong>Final takeaway:</strong>
+            The best start is a controlled start. Whether you are working natively in Revit, collaborating through ACC,
+            or detailing in CADmep, the setup quality at the beginning has a major effect on everything that follows.
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      © 2026 Revit CADmep Guide. Getting Started page.
+    </div>
+  </footer>
+</body>
+</html>
