@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Troubleshooting & Diagnostics | Revit CADmep Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --panel-2: #16233d;
+      --text: #e8eefc;
+      --muted: #a7b4d1;
+      --line: rgba(255,255,255,.08);
+      --accent: #4f8cff;
+      --accent-2: #7fb0ff;
+      --success: #2fbf71;
+      --warning: #ffb347;
+      --danger: #ff6b6b;
+      --shadow: 0 18px 40px rgba(0,0,0,.28);
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(79,140,255,.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(127,176,255,.08), transparent 20%),
+        linear-gradient(180deg, #0a1120 0%, #0d1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .site-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(8, 14, 25, 0.42);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+    }
+
+    .site-nav-wrap {
+      width: min(calc(100% - 2rem), 1320px);
+      margin: 0 auto;
+    }
+
+    .site-nav { padding: 0.75rem 0; }
+
+    .site-nav-top {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #e8eefc;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .site-brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+    }
+
+    .site-brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #e8eefc;
+      margin: 0;
+    }
+
+    .site-brand-subtitle {
+      display: block;
+      margin-top: 0.2rem;
+      color: #a7b4d1;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-nav-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .site-nav-toggle-icon {
+      position: relative;
+      width: 20px;
+      height: 14px;
+    }
+
+    .site-nav-toggle-icon span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: #ffffff;
+      transition: 0.25s ease;
+    }
+
+    .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+    .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+    .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+      top: 6px;
+      transform: rotate(45deg);
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+      top: 6px;
+      transform: rotate(-45deg);
+    }
+
+    .site-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .site-nav-links a {
+      color: #a7b4d1;
+      padding: 0.75rem 0.95rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .site-nav-links a:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav-links a.active {
+      color: #ffffff;
+      background: rgba(79,140,255,0.16);
+      box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 3rem 0 1.5rem;
+    }
+
+    .hero-card,
+    .sidebar-card,
+    .content-card,
+    .diag-card,
+    .note-card,
+    .empty-state,
+    .summary-card {
+      background: rgba(9,16,28,.55);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #cfe0ff;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(127,176,255,.2);
+    }
+
+    h1, h2, h3, h4 { margin-top: 0; }
+
+    h1 {
+      margin-bottom: .75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 84ch;
+      font-size: 1.05rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: .55rem .85rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #dbe7ff;
+      border: 1px solid rgba(127,176,255,.18);
+      font-size: .9rem;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 94px;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .sidebar-card,
+    .content-card,
+    .summary-card {
+      padding: 1.15rem;
+    }
+
+    .sidebar-card a {
+      display: block;
+      padding: .7rem .8rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+      margin-bottom: .25rem;
+    }
+
+    .sidebar-card a:hover {
+      color: var(--text);
+      background: rgba(79,140,255,.12);
+    }
+
+    .search-input,
+    .note-card textarea {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #0b1424;
+      color: var(--text);
+      padding: .95rem 1rem;
+      font: inherit;
+      outline: none;
+    }
+
+    .search-input:focus,
+    .note-card textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(79,140,255,.12);
+    }
+
+    .symptom-grid {
+      display: grid;
+      gap: .6rem;
+      margin-top: .9rem;
+    }
+
+    .symptom-btn,
+    .action-btn {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: .9rem 1rem;
+      cursor: pointer;
+      font: inherit;
+      transition: .2s ease;
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      text-align: left;
+    }
+
+    .symptom-btn:hover,
+    .action-btn:hover {
+      border-color: rgba(79,140,255,.28);
+      background: rgba(79,140,255,.10);
+    }
+
+    .symptom-btn.active {
+      background: rgba(79,140,255,.16);
+      border-color: rgba(79,140,255,.38);
+      color: #fff;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .summary-card .big {
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: .35rem;
+    }
+
+    .content-stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .diag-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .diag-card {
+      padding: 1rem;
+      transition: .2s ease;
+    }
+
+    .diag-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(79,140,255,.28);
+      background: rgba(79,140,255,.08);
+    }
+
+    .diag-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: start;
+      margin-bottom: .7rem;
+    }
+
+    .diag-title {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .diag-desc {
+      margin: .25rem 0 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .severity {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      white-space: nowrap;
+    }
+
+    .sev-low { color: #b7d8ff; background: rgba(79,140,255,.12); }
+    .sev-med { color: #ffe4af; background: rgba(255,179,71,.12); }
+    .sev-high { color: #ffc2c2; background: rgba(255,107,107,.12); }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin: .75rem 0;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .diag-block {
+      margin-top: .85rem;
+    }
+
+    .diag-block h4 {
+      margin-bottom: .35rem;
+      font-size: .95rem;
+    }
+
+    .diag-block ol,
+    .diag-block ul {
+      margin: .35rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+    }
+
+    .diag-block li {
+      margin: .3rem 0;
+    }
+
+    .note-card {
+      padding: 1rem;
+    }
+
+    .note-card textarea {
+      min-height: 160px;
+      resize: vertical;
+    }
+
+    .muted { color: var(--muted); }
+
+    .empty-state {
+      display: none;
+      padding: 1.4rem;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 901px) {
+      .site-nav {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0;
+      }
+
+      .site-nav-top {
+        min-height: 74px;
+        flex: 0 1 auto;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .diag-grid,
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .site-nav-toggle {
+        display: inline-flex;
+      }
+
+      .site-nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.45rem;
+        padding-top: 0.85rem;
+      }
+
+      .site-nav-links.is-open {
+        display: flex;
+      }
+
+      .site-nav-links a {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .site-nav-links a:hover,
+      .site-nav-links a.active {
+        background: rgba(79,140,255,0.12);
+        border-color: rgba(79,140,255,0.22);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-nav-wrap,
+      .container {
+        width: min(calc(100% - 1rem), 1320px);
+      }
+
+      .site-brand-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .site-brand-title {
+        font-size: 0.98rem;
+      }
+
+      .site-brand-subtitle {
+        font-size: 0.76rem;
+        max-width: 48vw;
+      }
+
+      .site-nav-top {
+        gap: 0.75rem;
+      }
+
+      .section-head,
+      .diag-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+<!-- ===== UNIVERSAL NAVBAR START ===== -->
+<style>
+  .site-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(8, 14, 25, 0.42);
+    backdrop-filter: blur(26px) saturate(185%);
+    -webkit-backdrop-filter: blur(26px) saturate(185%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+  }
+
+  .site-nav-wrap {
+    width: min(calc(100% - 2rem), 1320px);
+    margin: 0 auto;
+  }
+
+  .site-nav {
+    padding: 0.75rem 0;
+  }
+
+  .site-nav-top {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #e8eefc;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .site-brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+  }
+
+  .site-brand-text {
+    min-width: 0;
+  }
+
+  .site-brand-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #e8eefc;
+    margin: 0;
+  }
+
+  .site-brand-subtitle {
+    display: block;
+    margin-top: 0.2rem;
+    color: #a7b4d1;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-nav-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .site-nav-toggle:hover {
+    background: rgba(79,140,255,0.14);
+    border-color: rgba(79,140,255,0.38);
+  }
+
+  .site-nav-toggle-icon {
+    position: relative;
+    width: 20px;
+    height: 14px;
+  }
+
+  .site-nav-toggle-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffffff;
+    transition: 0.25s ease;
+  }
+
+  .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+  .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+  .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+
+  .site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .site-nav-links a {
+    color: #a7b4d1;
+    padding: 0.75rem 0.95rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .site-nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .site-nav-links a.active {
+    color: #ffffff;
+    background: rgba(79,140,255,0.16);
+    box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+  }
+
+  @media (min-width: 901px) {
+    .site-nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .site-nav-top {
+      min-height: 74px;
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav-toggle {
+      display: inline-flex;
+    }
+
+    .site-nav-links {
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
+      padding-top: 0.85rem;
+    }
+
+    .site-nav-links.is-open {
+      display: flex;
+    }
+
+    .site-nav-links a {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .site-nav-links a:hover,
+    .site-nav-links a.active {
+      background: rgba(79,140,255,0.12);
+      border-color: rgba(79,140,255,0.22);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-nav-wrap {
+      width: min(calc(100% - 1rem), 1320px);
+    }
+
+    .site-brand-badge {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .site-brand-title {
+      font-size: 0.98rem;
+    }
+
+    .site-brand-subtitle {
+      font-size: 0.76rem;
+      max-width: 48vw;
+    }
+
+    .site-nav-top {
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<header class="site-topbar">
+  <div class="site-nav-wrap">
+    <nav class="site-nav" aria-label="Main navigation">
+      <div class="site-nav-top">
+        <a href="index.html" class="site-brand">
+          <div class="site-brand-badge">RC</div>
+          <div class="site-brand-text">
+            <p class="site-brand-title">Revit CADmep Guide</p>
+            <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
+          </div>
+        </a>
+
+        <button
+          class="site-nav-toggle"
+          id="siteNavToggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-controls="siteNavLinks"
+          aria-expanded="false"
+        >
+          <div class="site-nav-toggle-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index">Home</a>
+        <a href="getting-started">Getting Started</a>
+        <a href="documentation">Documentation</a>
+        <a href="faq" class="active">Resources</a>
+        <a href="contact">Contact</a>
+        <a href="privacy-policy">Privacy</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">Interactive • Searchable • Diagnostics</div>
+          <h1>Troubleshooting & Diagnostics</h1>
+          <p class="lead">
+            Use this page to diagnose common Revit, CADmep, ACC, and documentation problems. Search by symptom,
+            filter by issue type, review likely causes, and work through structured checks. Notes are saved locally in your browser.
+          </p>
+
+          <div class="pill-row">
+            <span class="pill">Revit visibility</span>
+            <span class="pill">Linked models</span>
+            <span class="pill">CADmep content</span>
+            <span class="pill">ACC issues</span>
+            <span class="pill">Output checks</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="muted">Total diagnostics</div>
+          <div class="big" id="totalDiagnostics">0</div>
+        </div>
+        <div class="summary-card">
+          <div class="muted">Visible results</div>
+          <div class="big" id="visibleDiagnostics">0</div>
+        </div>
+        <div class="summary-card">
+          <div class="muted">Saved notes</div>
+          <div class="big" id="savedNotesCount">0</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container page-grid">
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h3>Search</h3>
+          <input type="text" id="diagSearch" class="search-input" placeholder="Search symptoms, causes, or checks..." />
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Quick Symptoms</h3>
+          <div class="symptom-grid">
+            <button class="symptom-btn active" data-filter="all">All issues</button>
+            <button class="symptom-btn" data-filter="visibility">Missing / hidden elements</button>
+            <button class="symptom-btn" data-filter="links">Linked model problems</button>
+            <button class="symptom-btn" data-filter="worksharing">Worksharing / sync issues</button>
+            <button class="symptom-btn" data-filter="cadmep">CADmep content / services</button>
+            <button class="symptom-btn" data-filter="acc">ACC / Docs issues</button>
+            <button class="symptom-btn" data-filter="output">PDF / DWG / report output</button>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Sections</h3>
+          <a href="#diagnostics-section">Diagnostics Library</a>
+          <a href="#notes-section">Troubleshooting Notes</a>
+        </div>
+
+        <div class="note-card" id="notes-section">
+          <h3>Troubleshooting Notes</h3>
+          <p class="muted">Your notes are stored locally in this browser.</p>
+          <textarea id="troubleNotes" placeholder="Record findings, root causes, actions, or decisions here..."></textarea>
+          <div style="margin-top:.8rem;">
+            <button class="action-btn" id="clearNotesBtn">Clear Notes</button>
+          </div>
+        </div>
+      </aside>
+
+      <div class="content-stack">
+        <section class="content-card" id="diagnostics-section">
+          <div class="section-head">
+            <h2>Diagnostics Library</h2>
+            <span class="section-tag">Interactive results</span>
+          </div>
+
+          <div class="diag-grid" id="diagGrid">
+            <article class="diag-card" data-type="visibility" data-search="elements missing hidden not visible disappeared reveal hidden view template filter workset phase crop section box view range">
+              <div class="diag-top">
+                <div>
+                  <h3 class="diag-title">Elements missing or not visible in Revit</h3>
+                  <p class="diag-desc">Use a structured visibility check instead of changing random settings.</p>
+                </div>
+                <span class="severity sev-med">Medium</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-pill">Revit</span>
+                <span class="meta-pill">Visibility</span>
+                <span class="meta-pill">Common issue</span>
+              </div>
+              <div class="diag-block">
+                <h4>Likely causes</h4>
+                <ul>
+                  <li>Hidden in view or category</li>
+                  <li>View template override</li>
+                  <li>Filters or workset visibility</li>
+                  <li>Phase or design option mismatch</li>
+                  <li>Crop region, section box, or view range problem</li>
+                </ul>
+              </div>
+              <div class="diag-block">
+                <h4>Checks to perform</h4>
+                <ol>
+                  <li>Use Reveal Hidden Elements</li>
+                  <li>Check the applied view template</li>
+                  <li>Review Visibility/Graphics and filters</li>
+                  <li>Check workset, phase, and design options</li>
+                  <li>Test in a temporary 3D view</li>
+                </ol>
+              </div>
+              <div class="diag-block">
+                <h4>Recommended action</h4>
+                <p class="muted">Identify one known missing element and trace its category, workset, phase, and host conditions before wider edits.</p>
+              </div>
+            </article>
+
+            <article class="diag-card" data-type="links" data-search="linked model not showing revit links by host view by linked view custom visibility halftone missing">
+              <div class="diag-top">
+                <div>
+                  <h3 class="diag-title">Linked model not showing correctly</h3>
+                  <p class="diag-desc">A loaded link can still display incorrectly because of view-specific settings.</p>
+                </div>
+                <span class="severity sev-med">Medium</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-pill">Revit</span>
+                <span class="meta-pill">Links</span>
+              </div>
+              <div class="diag-block">
+                <h4>Likely causes</h4>
+                <ul>
+                  <li>Revit Links visibility set incorrectly</li>
+                  <li>By Linked View referencing the wrong linked view</li>
+                  <li>Graphic overrides or halftone making content unclear</li>
+                  <li>Linked model positioned incorrectly</li>
+                </ul>
+              </div>
+              <div class="diag-block">
+                <h4>Checks to perform</h4>
+                <ol>
+                  <li>Open Visibility/Graphics > Revit Links</li>
+                  <li>Check whether the link is By Host View, By Linked View, or Custom</li>
+                  <li>Review the selected linked view if relevant</li>
+                  <li>Check location and positioning assumptions</li>
+                </ol>
+              </div>
+              <div class="diag-block">
+                <h4>Recommended action</h4>
+                <p class="muted">Temporarily switch to Custom visibility to isolate whether the problem is view-driven rather than model-driven.</p>
+              </div>
+            </article>
+
+            <article class="diag-card" data-type="worksharing" data-search="sync with central failed worksharing central model local copy permissions borrowing ownership">
+              <div class="diag-top">
+                <div>
+                  <h3 class="diag-title">Worksharing or sync issues</h3>
+                  <p class="diag-desc">Failures in worksharing often come from local/central misuse or ownership conflicts.</p>
+                </div>
+                <span class="severity sev-high">High</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-pill">Revit</span>
+                <span class="meta-pill">Worksharing</span>
+              </div>
+              <div class="diag-block">
+                <h4>Likely causes</h4>
+                <ul>
+                  <li>Users working incorrectly against the central model</li>
+                  <li>Ownership or borrowing conflicts</li>
+                  <li>Local file corruption or poor sync habits</li>
+                  <li>Permissions or file path issues</li>
+                </ul>
+              </div>
+              <div class="diag-block">
+                <h4>Checks to perform</h4>
+                <ol>
+                  <li>Confirm users are opening the correct local or cloud workflow</li>
+                  <li>Check ownership of edited elements or worksets</li>
+                  <li>Save locally and retry sync</li>
+                  <li>Review whether the issue is user-specific or model-wide</li>
+                </ol>
+              </div>
+              <div class="diag-block">
+                <h4>Recommended action</h4>
+                <p class="muted">Stop random retries. First identify whether the issue is ownership, permissions, or model health.</p>
+              </div>
+            </article>
+
+            <article class="diag-card" data-type="cadmep" data-search="cadmep wrong items service template database itm content folders item file missing">
+              <div class="diag-top">
+                <div>
+                  <h3 class="diag-title">CADmep placing wrong items or missing services</h3>
+                  <p class="diag-desc">Most CADmep placement issues come from services, content, or database setup.</p>
+                </div>
+                <span class="severity sev-high">High</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-pill">CADmep</span>
+                <span class="meta-pill">Services</span>
+              </div>
+              <div class="diag-block">
+                <h4>Likely causes</h4>
+                <ul>
+                  <li>Wrong profile loaded</li>
+                  <li>Incorrect database path</li>
+                  <li>Service template not aligned with standards</li>
+                  <li>ITM content missing or inconsistent</li>
+                </ul>
+              </div>
+              <div class="diag-block">
+                <h4>Checks to perform</h4>
+                <ol>
+                  <li>Confirm the correct profile is open</li>
+                  <li>Check the fabrication database path</li>
+                  <li>Review service templates and item folders</li>
+                  <li>Test with a known approved item</li>
+                </ol>
+              </div>
+              <div class="diag-block">
+                <h4>Recommended action</h4>
+                <p class="muted">Fix the content source and service logic first. Do not let users work around poor setup manually.</p>
+              </div>
+            </article>
+
+            <article class="diag-card" data-type="cadmep" data-search="pcf export report spool numbering output broken cadmep">
+              <div class="diag-top">
+                <div>
+                  <h3 class="diag-title">CADmep report, spool, or PCF export problems</h3>
+                  <p class="diag-desc">Output failures usually indicate upstream content or connectivity issues.</p>
+                </div>
+                <span class="severity sev-med">Medium</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-pill">CADmep</span>
+                <span class="meta-pill">Outputs</span>
+              </div>
+              <div class="diag-block">
+                <h4>Likely causes</h4>
+                <ul>
+                  <li>Bad numbering logic</li>
+                  <li>Inconsistent content</li>
+                  <li>Poor connectivity</li>
+                  <li>Wrong selection scope</li>
+                </ul>
+              </div>
+              <div class="diag-block">
+                <h4>Checks to perform</h4>
+                <ol>
+                  <li>Check item consistency and numbering rules</li>
+                  <li>Confirm the selected objects are correct</li>
+                  <li>Check connectivity before PCF export</li>
+                  <li>Run a small test output first</li>
+                </ol>
+              </div>
+              <div class="diag-block">
+                <h4>Recommended action</h4>
+                <p class="muted">Treat report/export issues as a model-quality problem first, not just a command failure.</p>
+              </div>
+            </article>
+
+            <article class="diag-card" data-type="acc" data-search="acc docs permissions folders upload publish project cannot access cloud model">
+              <div class="diag-top">
+                <div>
+                  <h3 class="diag-title">ACC / Autodesk Docs access or folder issues</h3>
+                  <p class="diag-desc">Many cloud workflow problems come from permissions and folder misuse.</p>
+                </div>
+                <span class="severity sev-high">High</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-pill">ACC</span>
+                <span class="meta-pill">Permissions</span>
+              </div>
+              <div class="diag-block">
+                <h4>Likely causes</h4>
+                <ul>
+                  <li>User not invited or permissions incorrect</li>
+                  <li>Wrong folder being used</li>
+                  <li>Project structure unclear</li>
+                  <li>Expected publish route not understood</li>
+                </ul>
+              </div>
+              <div class="diag-block">
+                <h4>Checks to perform</h4>
+                <ol>
+                  <li>Confirm the user can access the intended project</li>
+                  <li>Review folder permissions</li>
+                  <li>Check whether the model or file is in the correct area</li>
+                  <li>Confirm whether the issue is viewing, editing, or publishing related</li>
+                </ol>
+              </div>
+              <div class="diag-block">
+                <h4>Recommended action</h4>
+                <p class="muted">Clarify folder purpose and permissions before re-uploading or duplicating files.</p>
+              </div>
+            </article>
+
+            <article class="diag-card" data-type="output" data-search="pdf export dwg export print output wrong linework title block scale">
+              <div class="diag-top">
+                <div>
+                  <h3 class="diag-title">PDF or DWG output looks wrong</h3>
+                  <p class="diag-desc">A correct model view can still produce poor output if the issue settings are wrong.</p>
+                </div>
+                <span class="severity sev-med">Medium</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-pill">Documentation</span>
+                <span class="meta-pill">Output</span>
+              </div>
+              <div class="diag-block">
+                <h4>Likely causes</h4>
+                <ul>
+                  <li>Bad print/export setup</li>
+                  <li>Unexpected lineweight or layer mapping</li>
+                  <li>Wrong title block or revision information</li>
+                  <li>View not checked after export</li>
+                </ul>
+              </div>
+              <div class="diag-block">
+                <h4>Checks to perform</h4>
+                <ol>
+                  <li>Check sheet data and revision information</li>
+                  <li>Review print/export configuration</li>
+                  <li>Test output on one sample sheet first</li>
+                  <li>Open the final exported file and review it properly</li>
+                </ol>
+              </div>
+              <div class="diag-block">
+                <h4>Recommended action</h4>
+                <p class="muted">Never assume the issue file is correct just because the live view looked correct.</p>
+              </div>
+            </article>
+
+            <article class="diag-card" data-type="visibility" data-search="plan view range cut plane element visible in 3d not plan">
+              <div class="diag-top">
+                <div>
+                  <h3 class="diag-title">Element visible in 3D but not in plan</h3>
+                  <p class="diag-desc">This usually points to a view range or plan-view-specific visibility issue.</p>
+                </div>
+                <span class="severity sev-low">Low</span>
+              </div>
+              <div class="meta-row">
+                <span class="meta-pill">Revit</span>
+                <span class="meta-pill">Plan views</span>
+              </div>
+              <div class="diag-block">
+                <h4>Likely causes</h4>
+                <ul>
+                  <li>View range cut plane issue</li>
+                  <li>Bottom/top clip mismatch</li>
+                  <li>Category visibility or filter override</li>
+                </ul>
+              </div>
+              <div class="diag-block">
+                <h4>Checks to perform</h4>
+                <ol>
+                  <li>Compare the affected plan to a working plan</li>
+                  <li>Open View Range</li>
+                  <li>Check category visibility and filters</li>
+                </ol>
+              </div>
+              <div class="diag-block">
+                <h4>Recommended action</h4>
+                <p class="muted">Treat it as a plan-view setting issue first, not a missing-model issue.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="empty-state" id="emptyState">
+            No diagnostics matched your search or selected symptom.
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+<!-- FOOTER START -->
+<style>
+  .site-footer {
+    margin-top: 2rem;
+    padding: 2rem 0 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    background: rgba(8,14,25,.85);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-footer .site-footer-container {
+    width: min(calc(100% - 2rem), 1200px);
+    margin: 0 auto;
+  }
+
+  .site-footer .site-footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .site-footer .site-footer-col h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    color: #e8eefc;
+  }
+
+  .site-footer .site-footer-col p {
+    margin: 0;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .site-footer .site-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #e8eefc;
+    font-weight: 700;
+  }
+
+  .site-footer .site-footer-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .site-footer .site-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .site-footer .site-footer-links a {
+    display: block;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .site-footer .site-footer-links a:hover {
+    color: #4f8cff;
+    transform: translateX(2px);
+  }
+
+  .site-footer .site-footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: #a7b4d1;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer .site-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<footer class="site-footer">
+  <div class="site-footer-container">
+    <div class="site-footer-grid">
+      <div class="site-footer-col">
+        <div class="site-footer-brand">
+          <div class="site-footer-badge">RC</div>
+          <span>Revit CADmep Guide</span>
+        </div>
+        <p>
+          A professional resource for learning Autodesk Revit and CADmep,
+          covering BIM workflows, fabrication, and coordination.
+        </p>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Navigation</h4>
+        <div class="site-footer-links">
+          <a href="index.html">Home</a>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="faq.html">Resources</a>
+          <a href="documentation.html">Standards</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Resources</h4>
+        <div class="site-footer-links">
+          <a href="https://www.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk</a>
+          <a href="https://help.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk Help</a>
+          <a href="#">Revit Tutorials</a>
+          <a href="#">CADmep Guides</a>
+          <a href="downloads">Downloads</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Legal</h4>
+        <div class="site-footer-links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-footer-bottom">
+      <div>© 2026 Anarchy Group LTD | https://www.anarchygroup.uk</div>
+      <div>Email: support@revithelpdesk.co.uk</div>
+      <div>This website is not affiliated with Autodesk™, Revit™, CADmep™ or any other Autodesk™ Trademark.</div>
+    </div>
+  </div>
+</footer>
+<!-- FOOTER END -->
+
+  <script>
+    (function () {
+      const toggle = document.getElementById("siteNavToggle");
+      const links = document.getElementById("siteNavLinks");
+
+      if (!toggle || !links) return;
+
+      toggle.addEventListener("click", function () {
+        const isOpen = links.classList.toggle("is-open");
+        toggle.classList.toggle("is-open", isOpen);
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      links.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", function () {
+          if (window.innerWidth <= 900) {
+            links.classList.remove("is-open");
+            toggle.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    })();
+
+    (function () {
+      const STORAGE_KEY = "troubleshootingNotes_v1";
+      const searchInput = document.getElementById("diagSearch");
+      const symptomButtons = Array.from(document.querySelectorAll(".symptom-btn"));
+      const cards = Array.from(document.querySelectorAll(".diag-card"));
+      const emptyState = document.getElementById("emptyState");
+      const notes = document.getElementById("troubleNotes");
+      const clearNotesBtn = document.getElementById("clearNotesBtn");
+
+      const totalDiagnostics = document.getElementById("totalDiagnostics");
+      const visibleDiagnostics = document.getElementById("visibleDiagnostics");
+      const savedNotesCount = document.getElementById("savedNotesCount");
+
+      let currentFilter = "all";
+
+      function updateCounts(visible) {
+        totalDiagnostics.textContent = cards.length;
+        visibleDiagnostics.textContent = visible;
+        savedNotesCount.textContent = notes.value.trim().length > 0 ? "1" : "0";
+      }
+
+      function applyFilters() {
+        const q = searchInput.value.trim().toLowerCase();
+        let visible = 0;
+
+        cards.forEach(card => {
+          const type = card.dataset.type || "";
+          const haystack = (card.dataset.search || "").toLowerCase();
+          const showType = currentFilter === "all" || type === currentFilter;
+          const showSearch = !q || haystack.includes(q) || card.innerText.toLowerCase().includes(q);
+          const show = showType && showSearch;
+
+          card.style.display = show ? "" : "none";
+          if (show) visible++;
+        });
+
+        emptyState.style.display = visible === 0 ? "block" : "none";
+        updateCounts(visible);
+      }
+
+      symptomButtons.forEach(btn => {
+        btn.addEventListener("click", function () {
+          symptomButtons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentFilter = btn.dataset.filter;
+          applyFilters();
+        });
+      });
+
+      searchInput.addEventListener("input", applyFilters);
+
+      function loadNotes() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) notes.value = saved;
+        } catch (e) {}
+        updateCounts(cards.filter(c => c.style.display !== "none").length || cards.length);
+      }
+
+      function saveNotes() {
+        localStorage.setItem(STORAGE_KEY, notes.value);
+        updateCounts(cards.filter(c => c.style.display !== "none").length);
+      }
+
+      notes.addEventListener("input", saveNotes);
+
+      clearNotesBtn.addEventListener("click", function () {
+        const confirmed = window.confirm("Clear troubleshooting notes?");
+        if (!confirmed) return;
+        notes.value = "";
+        localStorage.removeItem(STORAGE_KEY);
+        updateCounts(cards.filter(c => c.style.display !== "none").length);
+      });
+
+      loadNotes();
+      applyFilters();
+    })();
+  </script>
+</body>
+</html>
