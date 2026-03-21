@@ -565,23 +565,170 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="container nav">
-      <a href="index.html" class="brand">
-        <div class="brand-badge">RC</div>
+<!-- ===== NAVBAR START ===== -->
+
+<style>
+/* NAVBAR */
+.site-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(14px);
+  background: rgba(8, 14, 25, 0.78);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.site-nav-wrap {
+  width: min(calc(100% - 2rem), 1320px);
+  margin: 0 auto;
+}
+
+.site-nav {
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: #e8eefc;
+}
+
+.site-brand-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+  color: #fff;
+  font-weight: 800;
+}
+
+.site-brand-title {
+  font-weight: 700;
+}
+
+.site-brand-subtitle {
+  display: block;
+  color: #a7b4d1;
+  font-size: 0.8rem;
+}
+
+/* LINKS */
+.site-nav-links {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.site-nav-links a {
+  color: #a7b4d1;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.site-nav-links a:hover {
+  color: #fff;
+  background: rgba(255,255,255,.05);
+}
+
+.site-nav-links a.active {
+  background: rgba(79,140,255,.2);
+  color: #fff;
+}
+
+/* MOBILE BUTTON */
+.site-nav-toggle {
+  display: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,.05);
+  cursor: pointer;
+}
+
+.site-nav-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #fff;
+  margin: 5px auto;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+
+  .site-nav-toggle {
+    display: block;
+  }
+
+  .site-nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .site-nav-links.open {
+    display: flex;
+  }
+
+  .site-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .site-nav-links a {
+    width: 100%;
+  }
+}
+</style>
+
+<header class="site-topbar">
+  <div class="site-nav-wrap">
+    <nav class="site-nav">
+
+      <a href="index.html" class="site-brand">
+        <div class="site-brand-badge">RC</div>
         <div>
-          Revit CADmep Guide
-          <small>Professional user guidance for modelling, coordination and production</small>
+          <div class="site-brand-title">Revit CADmep Guide</div>
+          <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
         </div>
       </a>
 
-      <nav class="nav-links">
-        <a href="#overview">Overview</a>
-        <a href="#guides">Guides</a>
-        <a href="#resources">Resources</a>
-        <a href="#standards">Standards</a>
-        <a href="#contact">Support</a>
-      </nav>
-    </div>
+      <button class="site-nav-toggle" id="navToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <div class="site-nav-links" id="navLinks">
+        <a href="index.html" class="active">Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="documentation.html">Documentation</a>
+        <a href="faq.html">Resources</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy-policy.html">Privacy</a>
+      </div>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+document.getElementById("navToggle").onclick = function () {
+  document.getElementById("navLinks").classList.toggle("open");
+};
+</script>
+
+<!-- ===== NAVBAR END ===== -->
   </header>
 
   <main>
