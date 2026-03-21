@@ -474,6 +474,92 @@
       .nav-links {
         width: 100%;
       }
+      .footer {
+  margin-top: 2rem;
+  padding: 2rem 0 1rem;
+  border-top: 1px solid rgba(255,255,255,.08);
+  background: rgba(8,14,25,.8);
+  backdrop-filter: blur(10px);
+}
+
+.footer-container {
+  width: min(calc(100% - 2rem), 1200px);
+  margin: 0 auto;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.footer h4 {
+  margin-bottom: .6rem;
+  font-size: 1rem;
+}
+
+.footer p,
+.footer a {
+  color: #a7b4d1;
+  font-size: .9rem;
+}
+
+.footer a {
+  display: block;
+  margin: .3rem 0;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.footer a:hover {
+  color: #4f8cff;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-bottom: .6rem;
+}
+
+.footer-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+  color: #fff;
+  font-weight: bold;
+}
+
+.footer-bottom {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem;
+  font-size: .85rem;
+  color: #a7b4d1;
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
     }
   </style>
 </head>
@@ -703,11 +789,59 @@
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      © 2026 Anarchy Group LTD | www.anarchygroup.uk
-      Not affiliated with Autodesk™, Revit™, CadMep™ or any other Autodesk™ Trademarks, this website is for guidence only and can make mistakes, always check responces or information with offical autodesk sources if spot any mistakes please contact us.
+  <footer class="footer">
+  <div class="footer-container">
+
+    <div class="footer-grid">
+
+      <!-- BRAND -->
+      <div>
+        <div class="footer-brand">
+          <div class="footer-badge">RC</div>
+          <strong>Revit CADmep Guide</strong>
+        </div>
+        <p>
+          A professional resource for learning Autodesk Revit and CADmep,
+          covering BIM workflows, fabrication, and coordination.
+        </p>
+      </div>
+
+      <!-- NAVIGATION -->
+      <div>
+        <h4>Navigation</h4>
+        <a href="index.html">Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="faq.html">Resources</a>
+        <a href="documentation.html">Standards</a>
+        <a href="contact.html">Contact</a>
+      </div>
+
+      <!-- RESOURCES -->
+      <div>
+        <h4>Resources</h4>
+        <a href="https://www.autodesk.com" target="_blank">Autodesk</a>
+        <a href="https://help.autodesk.com" target="_blank">Autodesk Help</a>
+        <a href="#">Revit Tutorials</a>
+        <a href="#">CADmep Guides</a>
+      </div>
+
+      <!-- LEGAL -->
+      <div>
+        <h4>Legal</h4>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Disclaimer</a>
+      </div>
+
     </div>
-  </footer>
+
+    <!-- BOTTOM BAR -->
+    <div class="footer-bottom">
+      <div>© 2026 Revit CADmep Guide</div>
+      <div>Email: support@yourcompany.com</div>
+    </div>
+
+  </div>
+</footer>
 </body>
 </html>
