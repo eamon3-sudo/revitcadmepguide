@@ -193,6 +193,13 @@
       border: 1px solid rgba(255,255,255,0.05);
       background: rgba(255,255,255,0.03);
       border-radius: 16px;
+      transition: 0.2s ease;
+    }
+
+    .contact-item:hover {
+      border-color: rgba(79,140,255,0.28);
+      background: rgba(79,140,255,0.08);
+      transform: translateY(-2px);
     }
 
     .contact-item strong {
@@ -251,7 +258,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      min-height: 740px;
+      min-height: 760px;
     }
 
     .chat-header {
@@ -457,14 +464,6 @@
       font-size: 0.92rem;
     }
 
-    code.inline {
-      background: rgba(255,255,255,0.06);
-      padding: 0.1rem 0.35rem;
-      border-radius: 6px;
-      font-family: Consolas, monospace;
-      font-size: 0.95em;
-    }
-
     footer {
       padding: 1.5rem 0 3rem;
       color: var(--muted);
@@ -523,12 +522,12 @@
     <section class="hero">
       <div class="container">
         <div class="hero-card">
-          <div class="eyebrow">Contact • Support • AI Assistance</div>
+          <div class="eyebrow">Contact • Support • Caddy Assistant</div>
           <h1>Contact Us & Ask Caddy</h1>
           <p class="lead">
             Need help with Revit, CADmep, modelling standards, coordination, fabrication content,
             drawing issues, view problems, service routing, or common CAD workflows?
-            Use the support details on the left, or ask <strong>Caddy</strong>, the built-in CAD assistant.
+            Use the support details on the left, or ask <strong>Caddy</strong>, your browser-based CAD assistant.
           </p>
         </div>
       </div>
@@ -569,13 +568,13 @@
           <div class="info-card">
             <h3>What Caddy can help with</h3>
             <div class="pill-row">
-              <span class="pill">Revit views</span>
+              <span class="pill">Revit visibility</span>
               <span class="pill">CADmep items</span>
               <span class="pill">Service offsets</span>
               <span class="pill">Hangers</span>
               <span class="pill">Coordination</span>
               <span class="pill">Fabrication workflow</span>
-              <span class="pill">Troubleshooting</span>
+              <span class="pill">Drawing QA</span>
             </div>
           </div>
 
@@ -599,11 +598,20 @@
               <button class="starter-btn" data-prompt="What checks should I do before issuing drawings from a Revit MEP model?">
                 What checks should I do before issuing drawings from a Revit MEP model?
               </button>
+
+              <button class="starter-btn" data-prompt="What should I check before agreeing a hanger support detail?">
+                What should I check before agreeing a hanger support detail?
+              </button>
+
+              <button class="starter-btn" data-prompt="Give me a startup checklist for a new Revit MEP project.">
+                Give me a startup checklist for a new Revit MEP project.
+              </button>
             </div>
 
             <div class="notice">
-              Caddy is best used for guidance, troubleshooting, and best-practice support.
-              Project-critical decisions should still be checked against your company standards and project requirements.
+              Caddy works entirely in the browser and is best used for guidance, troubleshooting,
+              and best-practice support. Project-critical decisions should still be checked against
+              company standards and project requirements.
             </div>
           </div>
         </div>
@@ -614,36 +622,17 @@
               <div class="bot-avatar">C</div>
               <div>
                 <strong>Caddy</strong>
-                <div class="chat-meta">AI CAD assistant for Revit, CADmep and coordination help</div>
+                <div class="chat-meta">Browser-based CAD assistant for Revit, CADmep and coordination help</div>
               </div>
             </div>
 
             <div class="status">
               <span class="status-dot"></span>
-              Demo mode ready
+              Ready
             </div>
           </div>
 
-          <div class="chat-body" id="chatBody">
-            <div class="msg bot">
-              <div class="msg-avatar">C</div>
-              <div class="bubble">
-                <p>Hello — I’m <strong>Caddy</strong>.
-
-I can help with:
-- Revit and CADmep guidance
-- coordination and clash avoidance
-- common modelling issues
-- fabrication workflow advice
-- drawing and QA support
-
-Ask me a question such as:
-“Why have my Revit elements disappeared?”
-or
-“How should I model fabrication ductwork for coordination?”</p>
-              </div>
-            </div>
-          </div>
+          <div class="chat-body" id="chatBody"></div>
 
           <div class="chat-footer">
             <div class="input-wrap">
@@ -652,7 +641,7 @@ or
               <button class="send-btn" id="sendBtn" type="button">Send</button>
             </div>
             <div class="footer-note">
-              Demo mode is active in this file. To connect Caddy to a real AI model, replace the demo function with a secure backend API call.
+              Caddy stores chat history locally in your browser on this device only.
             </div>
           </div>
         </div>
@@ -662,7 +651,7 @@ or
 
   <footer>
     <div class="container">
-      © 2026 Revit CADmep Guide. Contact and AI support page.
+      © 2026 Revit CADmep Guide. Contact and Caddy support page.
     </div>
   </footer>
 
@@ -673,11 +662,135 @@ or
     const clearBtn = document.getElementById("clearBtn");
     const starterButtons = document.querySelectorAll(".starter-btn");
 
+    const CADDY_KNOWLEDGE = [
+      {
+        topics: ["revit", "elements", "disappear", "disappeared", "all views", "visibility", "hidden", "missing"],
+        title: "Revit visibility troubleshooting",
+        reply: `Try this Revit visibility check order:
+
+1. Check if the element is hidden in view or by category.
+2. Check worksets are open and visible.
+3. Check phase and phase filter.
+4. Check design options.
+5. Check discipline and view range.
+6. Check crop region and section box.
+7. Check filters and view templates.
+8. Check linked model visibility settings.
+9. Use Reveal Hidden Elements.
+10. Try a temporary 3D view and isolate the category.
+
+Best practice:
+Start with one known missing element and trace its category, workset, phase and host model before changing lots of settings at once.`
+      },
+      {
+        topics: ["cadmep", "fabrication", "itm", "itms", "database", "services", "spec", "specification"],
+        title: "CADmep fabrication guidance",
+        reply: `For CADmep, focus on these basics first:
+
+1. Correct database and service selection.
+2. Correct specification and pressure class.
+3. Consistent item usage across the model.
+4. Accurate straights, fittings, supports and ancillaries.
+5. Spooling and numbering only after the model is stable.
+6. Keep buildability in mind, not just geometry.
+
+Common causes of bad CADmep models:
+- wrong service selected
+- inconsistent item usage
+- oversimplified fittings
+- no allowance for access or installation
+- poor coordination before spooling`
+      },
+      {
+        topics: ["clash", "coordination", "duct", "pipe", "tray", "clearance", "collision"],
+        title: "Clash avoidance approach",
+        reply: `For coordination and clash avoidance:
+
+1. Set service priority rules early.
+2. Fix major routes first: structure, drainage and primary ductwork.
+3. Apply clearance rules, not just hard clash rules.
+4. Reserve installation and maintenance space.
+5. Review problem areas regularly, not only at issue stage.
+6. Track clashes by owner and status.
+
+A strong method is:
+primary route → access check → clearance check → clash review → agreed update → recheck.`
+      },
+      {
+        topics: ["issue", "issuing", "drawing", "drawings", "qa", "checklist", "pre-issue", "export"],
+        title: "Pre-issue QA",
+        reply: `Before issuing drawings, check:
+
+1. Correct views and sheet numbers.
+2. Revision and status are correct.
+3. Dimensions and notes are clear.
+4. No unresolved key coordination issues.
+5. View templates are correct.
+6. Links and coordinates are correct.
+7. Title block information is complete.
+8. Export settings are correct for PDF and DWG.
+9. Hidden items are intentional.
+10. Drawing matches the current model state.
+
+Good issue control reduces comments and rework.`
+      },
+      {
+        topics: ["hanger", "support", "supports", "bracket", "fixing"],
+        title: "Supports and hangers",
+        reply: `For supports and hangers, consider:
+
+1. Load path and fixing type.
+2. Spacing requirements.
+3. Access for installation.
+4. Interface with fire stopping and builderswork.
+5. Whether the support clashes with other services.
+6. Whether the support detail matches the installation sequence.
+
+Support modelling should reflect installation reality, not only a symbolic layout.`
+      },
+      {
+        topics: ["template", "templates", "project setup", "setup", "new project", "startup"],
+        title: "Project setup",
+        reply: `A good Revit and CADmep project setup should include:
+
+1. Correct levels and grids.
+2. Shared coordinates checked.
+3. Links loaded and positioned correctly.
+4. Naming conventions agreed.
+5. View templates prepared.
+6. Worksets set up correctly.
+7. Browser organisation agreed.
+8. CADmep database and services verified before modelling.
+
+A clean start avoids a lot of coordination problems later.`
+      },
+      {
+        topics: ["view", "views", "template", "section box", "crop region"],
+        title: "View management",
+        reply: `For view management, check:
+
+1. correct discipline
+2. correct detail level
+3. correct view template
+4. crop region and annotation crop
+5. filters applied
+6. section box in 3D views
+7. linked model display settings
+8. phasing and worksets
+
+Most view problems come from templates, filters, or scope settings rather than the model itself.`
+      }
+    ];
+
     function escapeHtml(str) {
       return str
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
+    }
+
+    function formatReply(text) {
+      return escapeHtml(text).replace(/\n/g, "<br>");
     }
 
     function addMessage(role, text) {
@@ -692,27 +805,27 @@ or
       bubble.className = "bubble";
 
       const p = document.createElement("p");
-      p.innerHTML = escapeHtml(text);
+      p.innerHTML = formatReply(text);
 
       bubble.appendChild(p);
       msg.appendChild(avatar);
       msg.appendChild(bubble);
       chatBody.appendChild(msg);
       chatBody.scrollTop = chatBody.scrollHeight;
+
+      saveChat();
     }
 
     function addTypingMessage() {
       const msg = document.createElement("div");
       msg.className = "msg bot";
       msg.id = "typingMessage";
-
       msg.innerHTML = `
         <div class="msg-avatar">C</div>
         <div class="bubble">
           <p>Caddy is thinking...</p>
         </div>
       `;
-
       chatBody.appendChild(msg);
       chatBody.scrollTop = chatBody.scrollHeight;
     }
@@ -722,67 +835,79 @@ or
       if (typing) typing.remove();
     }
 
-    function getDemoResponse(userText) {
-      const text = userText.toLowerCase();
-
-      if (text.includes("disappear") || text.includes("disappeared") || text.includes("all views")) {
-        return `If Revit elements have disappeared in all views, check these first:
-
-1. Verify the element has not been hidden individually or by category.
-2. Check view range, phase, phase filter, design options, and worksets.
-3. Confirm the element is not outside the crop region or discipline filter.
-4. Check linked model visibility and whether the item is in a linked file.
-5. Use Reveal Hidden Elements and a temporary 3D view to trace visibility.
-
-A good troubleshooting method is to isolate one affected element, identify its family/category/workset/phase, then test each visibility control one by one.`;
+    function scoreMatch(input, topics) {
+      const text = input.toLowerCase();
+      let score = 0;
+      for (const topic of topics) {
+        if (text.includes(topic)) score++;
       }
+      return score;
+    }
 
-      if (text.includes("clash") || text.includes("coordination")) {
-        return `For clash avoidance, a practical approach is:
+    function buildFollowUp(title) {
+      const map = {
+        "Revit visibility troubleshooting": "You can also ask: “Give me a step-by-step visibility debugging workflow.”",
+        "CADmep fabrication guidance": "You can also ask: “What is the correct workflow from modelling to spooling?”",
+        "Clash avoidance approach": "You can also ask: “How should I prioritise duct, pipe and tray in a ceiling void?”",
+        "Pre-issue QA": "You can also ask: “Create me a pre-issue checklist for MEP drawings.”",
+        "Supports and hangers": "You can also ask: “What should I check before agreeing a hanger detail?”",
+        "Project setup": "You can also ask: “Give me a startup checklist for a new Revit MEP project.”",
+        "View management": "You can also ask: “Why is my linked model not displaying correctly in this view?”"
+      };
+      return map[title] || "You can ask a more specific follow-up and I’ll narrow it down.";
+    }
 
-1. Establish service priority rules before modelling.
-2. Reserve primary routes for major ductwork and drainage early.
-3. Apply minimum access and maintenance zones, not just hard geometry clash checks.
-4. Run regular coordination reviews instead of waiting until issue stage.
-5. Track clashes by ownership, status, and required action.
+    function getSmartResponse(userText) {
+      const ranked = CADDY_KNOWLEDGE
+        .map(item => ({ ...item, score: scoreMatch(userText, item.topics) }))
+        .sort((a, b) => b.score - a.score);
 
-For MEP coordination, it is usually better to prevent clashes during routing than rely only on later clash detection.`;
-      }
+      const best = ranked[0];
 
-      if (text.includes("cadmep") || text.includes("fabrication")) {
-        return `For CADmep fabrication modelling, focus on:
-
-1. Correct service selection and database setup.
-2. Consistent item usage and specification control.
-3. Accurate straights, fittings, supports, and ancillaries.
-4. Buildability and installation access, not only geometry.
-5. Clean numbering, spool logic, and annotation standards.
-
-A strong CADmep model should be suitable for coordination, manufacture, and installation review.`;
-      }
-
-      if (text.includes("issue") || text.includes("drawings") || text.includes("qa")) {
-        return `Before issuing drawings from a Revit MEP model, check:
-
-1. views and sheet naming
-2. revision status
-3. dimensions and annotation clarity
-4. coordination comments closed or recorded
-5. model cleanliness and warnings
-6. linked model positioning
-7. title block and issue metadata
-8. export settings for PDF/DWG output
-
-A simple pre-issue checklist saves a lot of rework.`;
-      }
-
-      return `I can help with Revit, CADmep, clash avoidance, modelling standards, drawing QA, and fabrication workflows.
+      if (!best || best.score === 0) {
+        return `I can help with Revit, CADmep, coordination, fabrication workflow, supports, views and drawing QA.
 
 Try asking something like:
-- How do I troubleshoot missing Revit elements?
+- Why have my Revit elements disappeared in all views?
 - What is best practice for CADmep fabrication modelling?
-- How should I coordinate ductwork against pipework and cable tray?
-- What checks should I do before issuing drawings?`;
+- How do I coordinate ductwork against pipework and cable tray?
+- What checks should I do before issuing drawings?
+- What should I check for hangers and supports?`;
+      }
+
+      return `${best.reply}
+
+${buildFollowUp(best.title)}`;
+    }
+
+    function saveChat() {
+      localStorage.setItem("caddyChatHistory", chatBody.innerHTML);
+    }
+
+    function loadChat() {
+      const saved = localStorage.getItem("caddyChatHistory");
+      if (saved) {
+        chatBody.innerHTML = saved;
+      }
+    }
+
+    function resetChat() {
+      chatBody.innerHTML = `
+        <div class="msg bot">
+          <div class="msg-avatar">C</div>
+          <div class="bubble">
+            <p>Hello — I’m <strong>Caddy</strong>.<br><br>
+I’m a browser-based CAD assistant for:<br>
+- Revit troubleshooting<br>
+- CADmep guidance<br>
+- coordination and clash avoidance<br>
+- supports and hangers<br>
+- drawing QA and issue checks<br><br>
+Ask me a question to get started.</p>
+          </div>
+        </div>
+      `;
+      saveChat();
     }
 
     async function sendMessage(prefilledText = null) {
@@ -793,53 +918,17 @@ Try asking something like:
       chatInput.value = "";
       addTypingMessage();
 
-      try {
-        // DEMO MODE
-        // Replace this section with a fetch() call to your backend.
-        // Example backend endpoint:
-        // const response = await fetch("/api/caddy-chat", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({ message: text })
-        // });
-        // const data = await response.json();
-        // const botReply = data.reply;
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-        await new Promise(resolve => setTimeout(resolve, 700));
-        const botReply = getDemoResponse(text);
-
-        removeTypingMessage();
-        addMessage("bot", botReply);
-      } catch (error) {
-        removeTypingMessage();
-        addMessage("bot", "Sorry — Caddy could not respond just now. Please try again.");
-        console.error(error);
-      }
+      removeTypingMessage();
+      const reply = getSmartResponse(text);
+      addMessage("bot", reply);
     }
 
     sendBtn.addEventListener("click", () => sendMessage());
 
     clearBtn.addEventListener("click", () => {
-      chatBody.innerHTML = `
-        <div class="msg bot">
-          <div class="msg-avatar">C</div>
-          <div class="bubble">
-            <p>Hello — I’m <strong>Caddy</strong>.
-
-I can help with:
-- Revit and CADmep guidance
-- coordination and clash avoidance
-- common modelling issues
-- fabrication workflow advice
-- drawing and QA support
-
-Ask me a question such as:
-“Why have my Revit elements disappeared?”
-or
-“How should I model fabrication ductwork for coordination?”</p>
-          </div>
-        </div>
-      `;
+      resetChat();
       chatInput.value = "";
     });
 
@@ -856,6 +945,12 @@ or
         sendMessage(prompt);
       });
     });
+
+    if (!localStorage.getItem("caddyChatHistory")) {
+      resetChat();
+    } else {
+      loadChat();
+    }
   </script>
 </body>
 </html>
