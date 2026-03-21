@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentation | Revit CADmep Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --panel-2: #16233d;
+      --text: #e8eefc;
+      --muted: #a7b4d1;
+      --line: rgba(255,255,255,.08);
+      --accent: #4f8cff;
+      --accent-2: #7fb0ff;
+      --success: #2fbf71;
+      --warning: #ffb347;
+      --shadow: 0 18px 40px rgba(0,0,0,.28);
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(79,140,255,.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(127,176,255,.08), transparent 20%),
+        linear-gradient(180deg, #0a1120 0%, #0d1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(8,14,25,.72);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 74px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: .7rem .95rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--text);
+      background: rgba(255,255,255,.05);
+    }
+
+    .hero {
+      padding: 3rem 0 1.5rem;
+    }
+
+    .hero-card,
+    .toc,
+    .doc-card,
+    .callout,
+    .quick-card {
+      background: rgba(9,16,28,.55);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #cfe0ff;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(127,176,255,.2);
+    }
+
+    h1, h2, h3, h4 {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: .75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 82ch;
+      font-size: 1.05rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .toc {
+      position: sticky;
+      top: 94px;
+      padding: 1.1rem;
+    }
+
+    .toc h3 {
+      margin-bottom: .8rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: .7rem .8rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+      margin-bottom: .25rem;
+    }
+
+    .toc a:hover {
+      color: var(--text);
+      background: rgba(79,140,255,.12);
+    }
+
+    .content {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .doc-card {
+      padding: 1.25rem;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .7rem;
+    }
+
+    .mini-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 1rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 1rem;
+    }
+
+    .quick-card {
+      padding: 1rem;
+    }
+
+    .quick-card h4 {
+      margin-bottom: .45rem;
+    }
+
+    .callout {
+      padding: 1rem 1.05rem;
+      border-left: 4px solid var(--accent);
+      background: rgba(79,140,255,.09);
+    }
+
+    .callout.warning {
+      border-left-color: var(--warning);
+      background: rgba(255,179,71,.10);
+    }
+
+    .callout.success {
+      border-left-color: var(--success);
+      background: rgba(47,191,113,.10);
+    }
+
+    .pill-row {
+      display: flex;
+      gap: .65rem;
+      flex-wrap: wrap;
+      margin-top: .8rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: .5rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #dbe7ff;
+      border: 1px solid rgba(127,176,255,.18);
+      font-size: .9rem;
+    }
+
+    ul.checklist {
+      margin: .75rem 0 0;
+      padding-left: 1.2rem;
+    }
+
+    ul.checklist li {
+      margin: .35rem 0;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 1080px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .toc {
+        position: static;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .grid-3,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        padding: .75rem 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="index.html" class="brand">
+        <div class="brand-badge">RC</div>
+        <div>
+          Revit CADmep Guide
+          <small>Professional user guidance for modelling, coordination and production</small>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="getting-started.html">Guides</a>
+        <a href="faq.html">Resources</a>
+        <a href="documentation.html" class="active">Standards</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">Documentation • Standards • QA • Delivery</div>
+          <h1>Documentation & Standards</h1>
+          <p class="lead">
+            This page brings together the main documentation principles for Revit and CADmep workflows,
+            including model setup standards, drawing issue checks, naming conventions, coordination records,
+            QA expectations, and fabrication-ready outputs. It is designed as a reference page for teams who
+            need consistent delivery standards across BIM, design, coordination, and production workflows.
+          </p>
+
+          <div class="pill-row">
+            <span class="pill">Model standards</span>
+            <span class="pill">Drawing QA</span>
+            <span class="pill">Issue control</span>
+            <span class="pill">CADmep outputs</span>
+            <span class="pill">Coordination records</span>
+            <span class="pill">Documentation best practice</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container layout">
+      <aside class="toc">
+        <h3>Contents</h3>
+        <a href="#overview">1. Overview</a>
+        <a href="#model-standards">2. Model standards</a>
+        <a href="#views-sheets">3. Views, sheets & issue information</a>
+        <a href="#qa-checks">4. QA checks before issue</a>
+        <a href="#coordination-docs">5. Coordination documentation</a>
+        <a href="#cadmep-docs">6. CADmep documentation & outputs</a>
+        <a href="#naming">7. Naming conventions</a>
+        <a href="#records">8. Records, revisions & traceability</a>
+        <a href="#best-practice">9. Best practice summary</a>
+      </aside>
+
+      <div class="content">
+        <section id="overview" class="doc-card">
+          <div class="section-title">
+            <h2>1. Overview</h2>
+            <span class="mini-tag">Foundation</span>
+          </div>
+          <p class="muted">
+            Good documentation is not just about issuing drawings. It is the controlled process of creating,
+            checking, presenting, and recording information so that models, drawings, schedules, reports, and
+            fabrication outputs are consistent and traceable. In practice, strong documentation reduces confusion,
+            improves coordination, and makes project delivery more dependable.
+          </p>
+
+          <div class="grid-3">
+            <div class="quick-card">
+              <h4>Model documentation</h4>
+              <p class="muted">How the live model is organised, named, structured and checked.</p>
+            </div>
+            <div class="quick-card">
+              <h4>Drawing documentation</h4>
+              <p class="muted">How views, sheets, notes, tags and revisions are presented for issue.</p>
+            </div>
+            <div class="quick-card">
+              <h4>Output documentation</h4>
+              <p class="muted">How reports, spools, PDFs, DWGs and fabrication outputs are controlled.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="model-standards" class="doc-card">
+          <div class="section-title">
+            <h2>2. Model standards</h2>
+            <span class="mini-tag">Revit / BIM</span>
+          </div>
+
+          <p class="muted">
+            A reliable documentation process starts with a reliable model structure. If the model is badly organised,
+            the documentation coming from it will also be weak.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Core model standards</strong>
+              <ul class="checklist">
+                <li>Correct project template</li>
+                <li>Correct units and project information</li>
+                <li>Consistent view templates</li>
+                <li>Clean browser organisation</li>
+                <li>Linked-model positioning checked</li>
+                <li>Worksets used only where appropriate</li>
+              </ul>
+            </div>
+
+            <div class="callout success">
+              <strong>What good looks like</strong>
+              <ul class="checklist">
+                <li>Views are easy to find</li>
+                <li>Templates are clearly named</li>
+                <li>Schedules are standardised</li>
+                <li>Duplicate uncontrolled views are minimised</li>
+                <li>Model data supports tags and schedules correctly</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout warning" style="margin-top:1rem;">
+            <strong>Warning:</strong>
+            Do not rely on manual drawing workarounds to compensate for a poorly structured model.
+          </div>
+        </section>
+
+        <section id="views-sheets" class="doc-card">
+          <div class="section-title">
+            <h2>3. Views, sheets & issue information</h2>
+            <span class="mini-tag">Presentation</span>
+          </div>
+
+          <p class="muted">
+            Views and sheets should be consistent, readable, and suitable for the intended audience. A sheet is not
+            simply a place to drop views; it is a controlled output for review, approval, construction, coordination,
+            or manufacture.
+          </p>
+
+          <div class="grid-3">
+            <div class="quick-card">
+              <h4>Views</h4>
+              <ul class="checklist">
+                <li>Use the correct view template</li>
+                <li>Check scale and crop region</li>
+                <li>Confirm filters and linked-model display</li>
+                <li>Remove accidental hidden items</li>
+              </ul>
+            </div>
+
+            <div class="quick-card">
+              <h4>Sheets</h4>
+              <ul class="checklist">
+                <li>Consistent sheet names and numbers</li>
+                <li>Correct title block</li>
+                <li>Correct revision and status</li>
+                <li>Logical arrangement of views and notes</li>
+              </ul>
+            </div>
+
+            <div class="quick-card">
+              <h4>Issue information</h4>
+              <ul class="checklist">
+                <li>Correct revision clouding where needed</li>
+                <li>Correct issue status</li>
+                <li>Correct date and project data</li>
+                <li>No conflicting notes or duplicated dimensions</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="qa-checks" class="doc-card">
+          <div class="section-title">
+            <h2>4. QA checks before issue</h2>
+            <span class="mini-tag">Pre-issue review</span>
+          </div>
+
+          <p class="muted">
+            A drawing or model issue should be the end of a checking process, not the start of one.
+          </p>
+
+          <div class="grid-2">
+            <div>
+              <h3>Model QA</h3>
+              <ul class="checklist">
+                <li>Model content matches the intended issue scope</li>
+                <li>Linked-model positions have been reviewed</li>
+                <li>Known coordination issues are recorded or closed</li>
+                <li>Visibility settings are intentional</li>
+                <li>Parameters and schedule data are complete where required</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3>Drawing QA</h3>
+              <ul class="checklist">
+                <li>Correct views placed on correct sheets</li>
+                <li>Dimensions and notes are clear</li>
+                <li>Tags read correctly</li>
+                <li>Sheet number, title and revision are correct</li>
+                <li>PDF / print output reviewed after export</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout success" style="margin-top:1rem;">
+            <strong>Suggested QA split:</strong>
+            model check → view check → sheet check → export check
+          </div>
+        </section>
+
+        <section id="coordination-docs" class="doc-card">
+          <div class="section-title">
+            <h2>5. Coordination documentation</h2>
+            <span class="mini-tag">Clashes / actions / records</span>
+          </div>
+
+          <p class="muted">
+            Coordination is not only the act of detecting clashes. It also requires recorded actions, ownership,
+            and documented outcomes.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Useful coordination records</strong>
+              <ul class="checklist">
+                <li>Clash reports</li>
+                <li>Meeting action lists</li>
+                <li>Issue trackers</li>
+                <li>Model review comments</li>
+                <li>Builderswork or interface records</li>
+              </ul>
+            </div>
+
+            <div class="callout">
+              <strong>What should be recorded</strong>
+              <ul class="checklist">
+                <li>The issue</li>
+                <li>The owner</li>
+                <li>The expected action</li>
+                <li>The target date</li>
+                <li>The close-out status</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="muted" style="margin-top:1rem;">
+            A coordination process becomes much stronger when teams can trace not only what was found, but what was
+            done about it.
+          </p>
+        </section>
+
+        <section id="cadmep-docs" class="doc-card">
+          <div class="section-title">
+            <h2>6. CADmep documentation & outputs</h2>
+            <span class="mini-tag">Fabrication</span>
+          </div>
+
+          <p class="muted">
+            CADmep documentation is driven by content quality, numbering logic, and output control. Reports, worksheets,
+            spools, and exports must all follow a repeatable standard.
+          </p>
+
+          <div class="grid-3">
+            <div class="quick-card">
+              <h4>Reports</h4>
+              <ul class="checklist">
+                <li>Use controlled report formats</li>
+                <li>Check item consistency before issue</li>
+                <li>Use reports as QA tools as well as deliverables</li>
+              </ul>
+            </div>
+
+            <div class="quick-card">
+              <h4>Spools</h4>
+              <ul class="checklist">
+                <li>Only spool stable model content</li>
+                <li>Confirm numbering logic first</li>
+                <li>Avoid early spool issue during unstable coordination</li>
+              </ul>
+            </div>
+
+            <div class="quick-card">
+              <h4>Exports</h4>
+              <ul class="checklist">
+                <li>Check PCF scope before export</li>
+                <li>Check content and connectivity</li>
+                <li>Use standard naming and save locations</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout warning" style="margin-top:1rem;">
+            <strong>Important:</strong>
+            Poor content control upstream will always weaken reports, numbering, spool output, and export quality downstream.
+          </div>
+        </section>
+
+        <section id="naming" class="doc-card">
+          <div class="section-title">
+            <h2>7. Naming conventions</h2>
+            <span class="mini-tag">Consistency</span>
+          </div>
+
+          <p class="muted">
+            Naming conventions are essential for model management, collaboration, issue control, and retrieval of information.
+            They should be agreed early and followed consistently.
+          </p>
+
+          <div class="grid-2">
+            <div>
+              <h3>Typical items to standardise</h3>
+              <ul class="checklist">
+                <li>Model file names</li>
+                <li>View names</li>
+                <li>Sheet numbers and titles</li>
+                <li>Schedule names</li>
+                <li>CADmep service and report names</li>
+                <li>Export file names</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3>Benefits of good naming</h3>
+              <ul class="checklist">
+                <li>Faster navigation</li>
+                <li>Cleaner QA</li>
+                <li>Better searchability</li>
+                <li>Less duplication</li>
+                <li>Stronger audit trail</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="records" class="doc-card">
+          <div class="section-title">
+            <h2>8. Records, revisions & traceability</h2>
+            <span class="mini-tag">Control</span>
+          </div>
+
+          <p class="muted">
+            Documentation should be traceable. Teams should be able to understand what changed, why it changed,
+            when it changed, and what version or revision is current.
+          </p>
+
+          <ul class="checklist">
+            <li>Maintain revision discipline across sheets and outputs.</li>
+            <li>Record major changes and issue points clearly.</li>
+            <li>Use controlled shared locations or cloud folders for issued information.</li>
+            <li>Keep superseded information distinguishable from current information.</li>
+            <li>Make sure model issue, sheet issue, and fabrication issue states do not conflict.</li>
+          </ul>
+
+          <div class="callout success">
+            <strong>Strong traceability means:</strong>
+            a reviewer should be able to follow the path from live model → reviewed output → issued information without confusion.
+          </div>
+        </section>
+
+        <section id="best-practice" class="doc-card">
+          <div class="section-title">
+            <h2>9. Best practice summary</h2>
+            <span class="mini-tag">Summary</span>
+          </div>
+
+          <div class="grid-3">
+            <div class="quick-card">
+              <h4>Start clean</h4>
+              <p class="muted">Use the right template, naming, and standards before modelling grows.</p>
+            </div>
+            <div class="quick-card">
+              <h4>Check before issue</h4>
+              <p class="muted">Never assume the model, sheet, or export is correct without review.</p>
+            </div>
+            <div class="quick-card">
+              <h4>Keep records</h4>
+              <p class="muted">Traceability matters for revisions, actions, and project confidence.</p>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:1rem;">
+            <strong>Final takeaway:</strong>
+            Good documentation is controlled information, not just generated information. The strongest teams build
+            standards into the model, the sheets, the checks, and the outputs from the beginning.
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      © 2026 Revit CADmep Guide. Documentation page.
+    </div>
+  </footer>
+</body>
+</html>
