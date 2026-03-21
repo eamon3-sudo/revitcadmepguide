@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starter Checklist | Revit CADmep Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --panel-2: #16233d;
+      --text: #e8eefc;
+      --muted: #a7b4d1;
+      --line: rgba(255,255,255,.08);
+      --accent: #4f8cff;
+      --accent-2: #7fb0ff;
+      --success: #2fbf71;
+      --warning: #ffb347;
+      --shadow: 0 18px 40px rgba(0,0,0,.28);
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(79,140,255,.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(127,176,255,.08), transparent 20%),
+        linear-gradient(180deg, #0a1120 0%, #0d1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .site-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(8, 14, 25, 0.42);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+    }
+
+    .site-nav-wrap {
+      width: min(calc(100% - 2rem), 1320px);
+      margin: 0 auto;
+    }
+
+    .site-nav { padding: 0.75rem 0; }
+
+    .site-nav-top {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #e8eefc;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .site-brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+    }
+
+    .site-brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #e8eefc;
+      margin: 0;
+    }
+
+    .site-brand-subtitle {
+      display: block;
+      margin-top: 0.2rem;
+      color: #a7b4d1;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-nav-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .site-nav-toggle-icon {
+      position: relative;
+      width: 20px;
+      height: 14px;
+    }
+
+    .site-nav-toggle-icon span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: #ffffff;
+      transition: 0.25s ease;
+    }
+
+    .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+    .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+    .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+      top: 6px;
+      transform: rotate(45deg);
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+      top: 6px;
+      transform: rotate(-45deg);
+    }
+
+    .site-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .site-nav-links a {
+      color: #a7b4d1;
+      padding: 0.75rem 0.95rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .site-nav-links a:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav-links a.active {
+      color: #ffffff;
+      background: rgba(79,140,255,0.16);
+      box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 3rem 0 1.5rem;
+    }
+
+    .hero-card,
+    .sidebar-card,
+    .checklist-card,
+    .task-card,
+    .note-card,
+    .empty-card {
+      background: rgba(9,16,28,.55);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #cfe0ff;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(127,176,255,.2);
+    }
+
+    h1, h2, h3, h4 { margin-top: 0; }
+
+    h1 {
+      margin-bottom: .75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 84ch;
+      font-size: 1.05rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: .55rem .85rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #dbe7ff;
+      border: 1px solid rgba(127,176,255,.18);
+      font-size: .9rem;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 94px;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .sidebar-card,
+    .checklist-card {
+      padding: 1.15rem;
+    }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      overflow: hidden;
+      margin: .85rem 0 .65rem;
+      border: 1px solid rgba(255,255,255,.05);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      transition: width .25s ease;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: .94rem;
+      margin-top: .35rem;
+    }
+
+    .action-stack {
+      display: grid;
+      gap: .75rem;
+      margin-top: 1rem;
+    }
+
+    .action-btn {
+      width: 100%;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: .95rem 1rem;
+      cursor: pointer;
+      font-weight: 700;
+      font: inherit;
+      transition: .2s ease;
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, var(--accent), #5c97ff);
+      color: #fff;
+    }
+
+    .action-btn.primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(79,140,255,.22);
+    }
+
+    .action-btn.secondary {
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      border-color: var(--line);
+    }
+
+    .action-btn.secondary:hover {
+      border-color: rgba(79,140,255,.28);
+      background: rgba(255,255,255,.08);
+    }
+
+    .section-nav a {
+      display: block;
+      padding: .7rem .8rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+      margin-bottom: .25rem;
+    }
+
+    .section-nav a:hover {
+      color: var(--text);
+      background: rgba(79,140,255,.12);
+    }
+
+    .content-stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .task-list {
+      display: grid;
+      gap: .8rem;
+    }
+
+    .task-card {
+      padding: 1rem;
+      transition: .2s ease;
+    }
+
+    .task-card:hover {
+      border-color: rgba(79,140,255,.22);
+      background: rgba(79,140,255,.06);
+    }
+
+    .task-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .9rem;
+      align-items: start;
+    }
+
+    .check-input {
+      width: 22px;
+      height: 22px;
+      margin-top: .15rem;
+      accent-color: var(--success);
+      cursor: pointer;
+    }
+
+    .task-title {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .task-desc {
+      margin: .25rem 0 0;
+      color: var(--muted);
+      font-size: .93rem;
+    }
+
+    .task-card.completed .task-title {
+      text-decoration: line-through;
+      opacity: .82;
+    }
+
+    .task-card.completed {
+      border-color: rgba(47,191,113,.28);
+      background: rgba(47,191,113,.07);
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-top: .7rem;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .note-card {
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .note-card textarea,
+    .project-input {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #0b1424;
+      color: var(--text);
+      padding: .95rem 1rem;
+      font: inherit;
+      outline: none;
+    }
+
+    .note-card textarea:focus,
+    .project-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(79,140,255,.12);
+    }
+
+    .note-card textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .muted { color: var(--muted); }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 1rem;
+    }
+
+    @media print {
+      .site-topbar,
+      .sidebar,
+      .action-stack {
+        display: none !important;
+      }
+
+      body {
+        background: #fff;
+        color: #000;
+      }
+
+      .hero-card,
+      .checklist-card,
+      .task-card,
+      .note-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        background: #fff;
+      }
+
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .task-desc,
+      .muted,
+      .summary-row,
+      .meta-pill {
+        color: #333 !important;
+      }
+
+      .task-title,
+      h1, h2, h3, h4 {
+        color: #000 !important;
+      }
+    }
+
+    @media (min-width: 901px) {
+      .site-nav {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0;
+      }
+
+      .site-nav-top {
+        min-height: 74px;
+        flex: 0 1 auto;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .site-nav-toggle {
+        display: inline-flex;
+      }
+
+      .site-nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.45rem;
+        padding-top: 0.85rem;
+      }
+
+      .site-nav-links.is-open {
+        display: flex;
+      }
+
+      .site-nav-links a {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .site-nav-links a:hover,
+      .site-nav-links a.active {
+        background: rgba(79,140,255,0.12);
+        border-color: rgba(79,140,255,0.22);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-nav-wrap,
+      .container {
+        width: min(calc(100% - 1rem), 1320px);
+      }
+
+      .site-brand-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .site-brand-title {
+        font-size: 0.98rem;
+      }
+
+      .site-brand-subtitle {
+        font-size: 0.76rem;
+        max-width: 48vw;
+      }
+
+      .site-nav-top {
+        gap: 0.75rem;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .task-row {
+        grid-template-columns: 1fr;
+      }
+
+      .check-input {
+        margin-top: 0;
+      }
+    }
+  </style>
+<!-- ===== UNIVERSAL NAVBAR START ===== -->
+<style>
+  .site-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(8, 14, 25, 0.42);
+    backdrop-filter: blur(26px) saturate(185%);
+    -webkit-backdrop-filter: blur(26px) saturate(185%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+  }
+
+  .site-nav-wrap {
+    width: min(calc(100% - 2rem), 1320px);
+    margin: 0 auto;
+  }
+
+  .site-nav {
+    padding: 0.75rem 0;
+  }
+
+  .site-nav-top {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #e8eefc;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .site-brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+  }
+
+  .site-brand-text {
+    min-width: 0;
+  }
+
+  .site-brand-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #e8eefc;
+    margin: 0;
+  }
+
+  .site-brand-subtitle {
+    display: block;
+    margin-top: 0.2rem;
+    color: #a7b4d1;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-nav-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .site-nav-toggle:hover {
+    background: rgba(79,140,255,0.14);
+    border-color: rgba(79,140,255,0.38);
+  }
+
+  .site-nav-toggle-icon {
+    position: relative;
+    width: 20px;
+    height: 14px;
+  }
+
+  .site-nav-toggle-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffffff;
+    transition: 0.25s ease;
+  }
+
+  .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+  .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+  .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+
+  .site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .site-nav-links a {
+    color: #a7b4d1;
+    padding: 0.75rem 0.95rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .site-nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .site-nav-links a.active {
+    color: #ffffff;
+    background: rgba(79,140,255,0.16);
+    box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+  }
+
+  @media (min-width: 901px) {
+    .site-nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .site-nav-top {
+      min-height: 74px;
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav-toggle {
+      display: inline-flex;
+    }
+
+    .site-nav-links {
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
+      padding-top: 0.85rem;
+    }
+
+    .site-nav-links.is-open {
+      display: flex;
+    }
+
+    .site-nav-links a {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .site-nav-links a:hover,
+    .site-nav-links a.active {
+      background: rgba(79,140,255,0.12);
+      border-color: rgba(79,140,255,0.22);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-nav-wrap {
+      width: min(calc(100% - 1rem), 1320px);
+    }
+
+    .site-brand-badge {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .site-brand-title {
+      font-size: 0.98rem;
+    }
+
+    .site-brand-subtitle {
+      font-size: 0.76rem;
+      max-width: 48vw;
+    }
+
+    .site-nav-top {
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<header class="site-topbar">
+  <div class="site-nav-wrap">
+    <nav class="site-nav" aria-label="Main navigation">
+      <div class="site-nav-top">
+        <a href="index.html" class="site-brand">
+          <div class="site-brand-badge">RC</div>
+          <div class="site-brand-text">
+            <p class="site-brand-title">Revit CADmep Guide</p>
+            <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
+          </div>
+        </a>
+
+        <button
+          class="site-nav-toggle"
+          id="siteNavToggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-controls="siteNavLinks"
+          aria-expanded="false"
+        >
+          <div class="site-nav-toggle-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index">Home</a>
+        <a href="getting-started">Getting Started</a>
+        <a href="documentation">Documentation</a>
+        <a href="faq" class="active">Resources</a>
+        <a href="contact">Contact</a>
+        <a href="privacy-policy">Privacy</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">Interactive • Saveable • Local Storage</div>
+          <h1>Starter Checklist</h1>
+          <p class="lead">
+            Use this interactive checklist to track a Revit, CADmep, and ACC project setup. Your progress,
+            project name, and notes are automatically saved in your browser using local storage.
+          </p>
+
+          <div class="pill-row">
+            <span class="pill">Revit setup</span>
+            <span class="pill">ACC / CDE checks</span>
+            <span class="pill">CADmep checks</span>
+            <span class="pill">QA starter review</span>
+            <span class="pill">Auto save</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container page-grid">
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h3>Project Details</h3>
+          <input type="text" id="projectName" class="project-input" placeholder="Enter project name..." />
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <div class="summary-row"><span>Completed</span><strong id="completedCount">0</strong></div>
+          <div class="summary-row"><span>Total tasks</span><strong id="totalCount">0</strong></div>
+          <div class="summary-row"><span>Progress</span><strong id="progressPercent">0%</strong></div>
+
+          <div class="action-stack">
+            <button class="action-btn primary" id="printBtn">Print / Save PDF</button>
+            <button class="action-btn secondary" id="expandBtn">Expand All</button>
+            <button class="action-btn secondary" id="collapseBtn">Collapse All</button>
+            <button class="action-btn secondary" id="resetBtn">Reset Checklist</button>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Sections</h3>
+          <div class="section-nav">
+            <a href="#revit-section">Revit Setup</a>
+            <a href="#acc-section">ACC / Autodesk Docs</a>
+            <a href="#cadmep-section">CADmep Setup</a>
+            <a href="#qa-section">Starter QA Review</a>
+            <a href="#notes-section">Project Notes</a>
+          </div>
+        </div>
+      </aside>
+
+      <div class="content-stack">
+        <section class="checklist-card" id="revit-section">
+          <div class="section-head">
+            <h2>Revit Setup</h2>
+            <span class="section-tag">Model start</span>
+          </div>
+          <div class="task-list" data-section="revit">
+            <div class="task-card" data-task="revit-template">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Use the correct project template</h3>
+                  <p class="task-desc">Confirm the project starts from the correct company or project template.</p>
+                  <div class="task-meta"><span class="meta-pill">Template</span><span class="meta-pill">Required</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="revit-units">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Check units and project information</h3>
+                  <p class="task-desc">Confirm units, project name, discipline data, and key metadata are correct.</p>
+                  <div class="task-meta"><span class="meta-pill">Project info</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="revit-levels">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Verify levels and grids</h3>
+                  <p class="task-desc">Make sure the building grid and level structure are correct before heavy modelling.</p>
+                  <div class="task-meta"><span class="meta-pill">Coordination</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="revit-links">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Link reference models correctly</h3>
+                  <p class="task-desc">Confirm architectural, structural, or other discipline links are positioned correctly.</p>
+                  <div class="task-meta"><span class="meta-pill">Linked models</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="revit-views">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Create working views and view templates</h3>
+                  <p class="task-desc">Set up coordination, modelling, and documentation views in a controlled way.</p>
+                  <div class="task-meta"><span class="meta-pill">Views</span><span class="meta-pill">Templates</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="revit-worksharing">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Decide whether worksharing is needed</h3>
+                  <p class="task-desc">Only enable worksharing when the team workflow requires it and there is a clear plan.</p>
+                  <div class="task-meta"><span class="meta-pill">Worksets</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="checklist-card" id="acc-section">
+          <div class="section-head">
+            <h2>ACC / Autodesk Docs</h2>
+            <span class="section-tag">Cloud setup</span>
+          </div>
+          <div class="task-list" data-section="acc">
+            <div class="task-card" data-task="acc-project">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Create the ACC / Autodesk Docs project</h3>
+                  <p class="task-desc">Ensure the project exists and has been configured properly before live work starts.</p>
+                  <div class="task-meta"><span class="meta-pill">Admin</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="acc-permissions">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Assign permissions and invite the team</h3>
+                  <p class="task-desc">Check the team can access the correct folders and workflows.</p>
+                  <div class="task-meta"><span class="meta-pill">Access</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="acc-folders">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Set up folder structure</h3>
+                  <p class="task-desc">Create a clear structure for WIP, shared, published, and issued information.</p>
+                  <div class="task-meta"><span class="meta-pill">CDE</span><span class="meta-pill">Folders</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="acc-cloudmodel">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Confirm cloud model workflow</h3>
+                  <p class="task-desc">Decide whether the model will stay native or be initiated as a cloud-based model.</p>
+                  <div class="task-meta"><span class="meta-pill">Cloud model</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="acc-publish">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Agree publish and issue process</h3>
+                  <p class="task-desc">Define how reviewed information will move through the common data environment.</p>
+                  <div class="task-meta"><span class="meta-pill">Issue control</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="checklist-card" id="cadmep-section">
+          <div class="section-head">
+            <h2>CADmep Setup</h2>
+            <span class="section-tag">Fabrication start</span>
+          </div>
+          <div class="task-list" data-section="cadmep">
+            <div class="task-card" data-task="cadmep-profile">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Open the correct profile</h3>
+                  <p class="task-desc">Make sure the intended CADmep environment is being used for the project.</p>
+                  <div class="task-meta"><span class="meta-pill">Profile</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="cadmep-database">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Check the fabrication database</h3>
+                  <p class="task-desc">Confirm the correct database path, content source, and configuration are active.</p>
+                  <div class="task-meta"><span class="meta-pill">Database</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="cadmep-services">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Verify service templates and service types</h3>
+                  <p class="task-desc">Check that users can access the correct services and that content aligns with standards.</p>
+                  <div class="task-meta"><span class="meta-pill">Services</span><span class="meta-pill">Templates</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="cadmep-itm">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Check ITM content and folders</h3>
+                  <p class="task-desc">Ensure item content is controlled, accessible, and relevant to the intended workflow.</p>
+                  <div class="task-meta"><span class="meta-pill">ITM</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="cadmep-output">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Test reports and export outputs</h3>
+                  <p class="task-desc">Confirm reporting, renumbering, spool, and PCF workflows can run as expected.</p>
+                  <div class="task-meta"><span class="meta-pill">Reports</span><span class="meta-pill">Export</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="checklist-card" id="qa-section">
+          <div class="section-head">
+            <h2>Starter QA Review</h2>
+            <span class="section-tag">Pre-production check</span>
+          </div>
+          <div class="task-list" data-section="qa">
+            <div class="task-card" data-task="qa-naming">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Confirm naming conventions</h3>
+                  <p class="task-desc">Make sure file, view, and sheet naming align with agreed project standards.</p>
+                  <div class="task-meta"><span class="meta-pill">Naming</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="qa-docs">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Confirm documentation strategy</h3>
+                  <p class="task-desc">Check sheet logic, issue routes, and revision approach before issuing anything.</p>
+                  <div class="task-meta"><span class="meta-pill">Documentation</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="qa-coordination">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Review coordination assumptions</h3>
+                  <p class="task-desc">Check that linked models, roles, and coordination responsibilities are understood.</p>
+                  <div class="task-meta"><span class="meta-pill">Coordination</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-card" data-task="qa-outputs">
+              <div class="task-row">
+                <input class="check-input" type="checkbox" />
+                <div>
+                  <h3 class="task-title">Test one sample output</h3>
+                  <p class="task-desc">Create at least one sample PDF, report, or export and review it properly.</p>
+                  <div class="task-meta"><span class="meta-pill">Output check</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="checklist-card" id="notes-section">
+          <div class="section-head">
+            <h2>Project Notes</h2>
+            <span class="section-tag">Saved locally</span>
+          </div>
+          <div class="note-card">
+            <p class="muted">Use this area to record project-specific setup notes, actions, decisions, or reminders.</p>
+            <textarea id="projectNotes" placeholder="Add your notes here..."></textarea>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+<!-- FOOTER START -->
+<style>
+  .site-footer {
+    margin-top: 2rem;
+    padding: 2rem 0 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    background: rgba(8,14,25,.85);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-footer .site-footer-container {
+    width: min(calc(100% - 2rem), 1200px);
+    margin: 0 auto;
+  }
+
+  .site-footer .site-footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .site-footer .site-footer-col h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    color: #e8eefc;
+  }
+
+  .site-footer .site-footer-col p {
+    margin: 0;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .site-footer .site-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #e8eefc;
+    font-weight: 700;
+  }
+
+  .site-footer .site-footer-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .site-footer .site-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .site-footer .site-footer-links a {
+    display: block;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .site-footer .site-footer-links a:hover {
+    color: #4f8cff;
+    transform: translateX(2px);
+  }
+
+  .site-footer .site-footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: #a7b4d1;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer .site-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<footer class="site-footer">
+  <div class="site-footer-container">
+    <div class="site-footer-grid">
+      <div class="site-footer-col">
+        <div class="site-footer-brand">
+          <div class="site-footer-badge">RC</div>
+          <span>Revit CADmep Guide</span>
+        </div>
+        <p>
+          A professional resource for learning Autodesk Revit and CADmep,
+          covering BIM workflows, fabrication, and coordination.
+        </p>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Navigation</h4>
+        <div class="site-footer-links">
+          <a href="index.html">Home</a>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="faq.html">Resources</a>
+          <a href="documentation.html">Standards</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Resources</h4>
+        <div class="site-footer-links">
+          <a href="https://www.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk</a>
+          <a href="https://help.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk Help</a>
+          <a href="#">Revit Tutorials</a>
+          <a href="#">CADmep Guides</a>
+          <a href="downloads">Downloads</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Legal</h4>
+        <div class="site-footer-links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-footer-bottom">
+      <div>© 2026 Anarchy Group LTD | https://www.anarchygroup.uk</div>
+      <div>Email: support@revithelpdesk.co.uk</div>
+      <div>This website is not affiliated with Autodesk™, Revit™, CADmep™ or any other Autodesk™ Trademark.</div>
+    </div>
+  </div>
+</footer>
+<!-- FOOTER END -->
+
+  <script>
+    (function () {
+      const toggle = document.getElementById("siteNavToggle");
+      const links = document.getElementById("siteNavLinks");
+
+      if (!toggle || !links) return;
+
+      toggle.addEventListener("click", function () {
+        const isOpen = links.classList.toggle("is-open");
+        toggle.classList.toggle("is-open", isOpen);
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      links.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", function () {
+          if (window.innerWidth <= 900) {
+            links.classList.remove("is-open");
+            toggle.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    })();
+
+    (function () {
+      const STORAGE_KEY = "starterChecklistData_v1";
+
+      const projectName = document.getElementById("projectName");
+      const projectNotes = document.getElementById("projectNotes");
+      const checkboxes = Array.from(document.querySelectorAll(".check-input"));
+      const taskCards = Array.from(document.querySelectorAll(".task-card"));
+
+      const completedCount = document.getElementById("completedCount");
+      const totalCount = document.getElementById("totalCount");
+      const progressPercent = document.getElementById("progressPercent");
+      const progressBar = document.getElementById("progressBar");
+
+      const printBtn = document.getElementById("printBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const expandBtn = document.getElementById("expandBtn");
+      const collapseBtn = document.getElementById("collapseBtn");
+
+      function buildState() {
+        const tasks = {};
+        taskCards.forEach(card => {
+          const key = card.getAttribute("data-task");
+          const checked = card.querySelector(".check-input").checked;
+          tasks[key] = checked;
+        });
+
+        return {
+          projectName: projectName.value,
+          projectNotes: projectNotes.value,
+          tasks
+        };
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(buildState()));
+        updateSummary();
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const data = JSON.parse(raw);
+
+          if (typeof data.projectName === "string") {
+            projectName.value = data.projectName;
+          }
+
+          if (typeof data.projectNotes === "string") {
+            projectNotes.value = data.projectNotes;
+          }
+
+          if (data.tasks && typeof data.tasks === "object") {
+            taskCards.forEach(card => {
+              const key = card.getAttribute("data-task");
+              const checkbox = card.querySelector(".check-input");
+              checkbox.checked = !!data.tasks[key];
+            });
+          }
+        } catch (e) {
+          console.warn("Could not load checklist state.", e);
+        }
+      }
+
+      function updateTaskStyles() {
+        taskCards.forEach(card => {
+          const checked = card.querySelector(".check-input").checked;
+          card.classList.toggle("completed", checked);
+        });
+      }
+
+      function updateSummary() {
+        const total = checkboxes.length;
+        const completed = checkboxes.filter(cb => cb.checked).length;
+        const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+        totalCount.textContent = total;
+        completedCount.textContent = completed;
+        progressPercent.textContent = percent + "%";
+        progressBar.style.width = percent + "%";
+
+        updateTaskStyles();
+      }
+
+      checkboxes.forEach(cb => {
+        cb.addEventListener("change", saveState);
+      });
+
+      projectName.addEventListener("input", saveState);
+      projectNotes.addEventListener("input", saveState);
+
+      printBtn.addEventListener("click", function () {
+        window.print();
+      });
+
+      resetBtn.addEventListener("click", function () {
+        const confirmed = window.confirm("Reset the checklist and clear saved local data?");
+        if (!confirmed) return;
+
+        projectName.value = "";
+        projectNotes.value = "";
+        checkboxes.forEach(cb => cb.checked = false);
+        localStorage.removeItem(STORAGE_KEY);
+        updateSummary();
+      });
+
+      expandBtn.addEventListener("click", function () {
+        document.querySelectorAll(".task-card").forEach(card => {
+          card.style.display = "";
+        });
+      });
+
+      collapseBtn.addEventListener("click", function () {
+        document.querySelectorAll(".task-card.completed").forEach(card => {
+          card.style.display = "none";
+        });
+      });
+
+      loadState();
+      updateSummary();
+    })();
+  </script>
+</body>
+</html>
