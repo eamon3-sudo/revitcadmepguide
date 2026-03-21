@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Downloads | Revit CADmep Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --panel-2: #16233d;
+      --text: #e8eefc;
+      --muted: #a7b4d1;
+      --line: rgba(255,255,255,.08);
+      --accent: #4f8cff;
+      --accent-2: #7fb0ff;
+      --success: #2fbf71;
+      --warning: #ffb347;
+      --danger: #ff6b6b;
+      --shadow: 0 18px 40px rgba(0,0,0,.28);
+      --max: 1320px;
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(79,140,255,.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(127,176,255,.08), transparent 20%),
+        linear-gradient(180deg, #0a1120 0%, #0d1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .site-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(8, 14, 25, 0.42);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+    }
+
+    .site-nav-wrap {
+      width: min(calc(100% - 2rem), 1320px);
+      margin: 0 auto;
+    }
+
+    .site-nav { padding: 0.75rem 0; }
+
+    .site-nav-top {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #e8eefc;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .site-brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+    }
+
+    .site-brand-text { min-width: 0; }
+
+    .site-brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #e8eefc;
+      margin: 0;
+    }
+
+    .site-brand-subtitle {
+      display: block;
+      margin-top: 0.2rem;
+      color: #a7b4d1;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-nav-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .site-nav-toggle:hover {
+      background: rgba(79,140,255,0.14);
+      border-color: rgba(79,140,255,0.38);
+    }
+
+    .site-nav-toggle-icon {
+      position: relative;
+      width: 20px;
+      height: 14px;
+    }
+
+    .site-nav-toggle-icon span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: #ffffff;
+      transition: 0.25s ease;
+    }
+
+    .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+    .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+    .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+      top: 6px;
+      transform: rotate(45deg);
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+      top: 6px;
+      transform: rotate(-45deg);
+    }
+
+    .site-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .site-nav-links a {
+      color: #a7b4d1;
+      padding: 0.75rem 0.95rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .site-nav-links a:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav-links a.active {
+      color: #ffffff;
+      background: rgba(79,140,255,0.16);
+      box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+    }
+
+    .hero {
+      padding: 3rem 0 1.5rem;
+    }
+
+    .hero-card,
+    .filter-card,
+    .downloads-card,
+    .download-item,
+    .summary-card,
+    .empty-state {
+      background: rgba(9,16,28,.55);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #cfe0ff;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(127,176,255,.2);
+    }
+
+    h1, h2, h3, h4 { margin-top: 0; }
+
+    h1 {
+      margin-bottom: .75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 84ch;
+      font-size: 1.05rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: .55rem .85rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #dbe7ff;
+      border: 1px solid rgba(127,176,255,.18);
+      font-size: .9rem;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 94px;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .filter-card,
+    .summary-card {
+      padding: 1.1rem;
+    }
+
+    .filter-card h3,
+    .summary-card h3 {
+      margin-bottom: .8rem;
+    }
+
+    .search-input {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #0b1424;
+      color: var(--text);
+      padding: .95rem 1rem;
+      font: inherit;
+      outline: none;
+      margin-bottom: .9rem;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(79,140,255,.12);
+    }
+
+    .filter-group {
+      display: grid;
+      gap: .55rem;
+      margin-bottom: 1rem;
+    }
+
+    .filter-label {
+      font-size: .88rem;
+      color: var(--muted);
+      margin-bottom: .15rem;
+    }
+
+    .filter-btn {
+      width: 100%;
+      text-align: left;
+      padding: .8rem .9rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      cursor: pointer;
+      transition: .2s ease;
+      font: inherit;
+    }
+
+    .filter-btn:hover {
+      background: rgba(79,140,255,.12);
+      border-color: rgba(79,140,255,.28);
+    }
+
+    .filter-btn.active {
+      background: rgba(79,140,255,.16);
+      border-color: rgba(79,140,255,.38);
+      color: #fff;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: .55rem;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: .94rem;
+    }
+
+    .downloads-card {
+      padding: 1.25rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .download-item {
+      padding: 1rem;
+      display: grid;
+      gap: .8rem;
+      transition: .2s ease;
+    }
+
+    .download-item:hover {
+      transform: translateY(-2px);
+      border-color: rgba(79,140,255,.28);
+      background: rgba(79,140,255,.08);
+    }
+
+    .download-top {
+      display: flex;
+      gap: .9rem;
+      align-items: flex-start;
+    }
+
+    .file-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: .92rem;
+      color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 10px 22px rgba(0,0,0,.22);
+    }
+
+    .icon-doc  { background: linear-gradient(135deg, #4f8cff, #7fb0ff); }
+    .icon-xlsx { background: linear-gradient(135deg, #2fbf71, #4dd68a); }
+    .icon-ppt  { background: linear-gradient(135deg, #ff8c42, #ffb347); }
+    .icon-rvt  { background: linear-gradient(135deg, #7a5cff, #a182ff); }
+    .icon-pdf  { background: linear-gradient(135deg, #ff5f6d, #ff8b94); }
+
+    .file-meta {
+      min-width: 0;
+    }
+
+    .file-title {
+      margin: 0 0 .25rem 0;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .file-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: .38rem .62rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .download-actions {
+      display: flex;
+      gap: .65rem;
+      flex-wrap: wrap;
+    }
+
+    .download-btn,
+    .preview-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: .82rem 1rem;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: .2s ease;
+      border: 1px solid transparent;
+    }
+
+    .download-btn {
+      background: linear-gradient(135deg, var(--accent), #5c97ff);
+      color: #fff;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(79,140,255,.22);
+    }
+
+    .preview-btn {
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      border-color: var(--line);
+    }
+
+    .preview-btn:hover {
+      background: rgba(255,255,255,.08);
+      border-color: rgba(79,140,255,.28);
+    }
+
+    .empty-state {
+      padding: 1.4rem;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 901px) {
+      .site-nav {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0;
+      }
+
+      .site-nav-top {
+        min-height: 74px;
+        flex: 0 1 auto;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .site-nav-toggle {
+        display: inline-flex;
+      }
+
+      .site-nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.45rem;
+        padding-top: 0.85rem;
+      }
+
+      .site-nav-links.is-open {
+        display: flex;
+      }
+
+      .site-nav-links a {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .site-nav-links a:hover,
+      .site-nav-links a.active {
+        background: rgba(79,140,255,0.12);
+        border-color: rgba(79,140,255,0.22);
+      }
+
+      .download-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-nav-wrap,
+      .container {
+        width: min(calc(100% - 1rem), 1320px);
+      }
+
+      .site-brand-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .site-brand-title {
+        font-size: 0.98rem;
+      }
+
+      .site-brand-subtitle {
+        font-size: 0.76rem;
+        max-width: 48vw;
+      }
+
+      .site-nav-top {
+        gap: 0.75rem;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+<!-- ===== UNIVERSAL NAVBAR START ===== -->
+<style>
+  .site-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(8, 14, 25, 0.42);
+    backdrop-filter: blur(26px) saturate(185%);
+    -webkit-backdrop-filter: blur(26px) saturate(185%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+  }
+
+  .site-nav-wrap {
+    width: min(calc(100% - 2rem), 1320px);
+    margin: 0 auto;
+  }
+
+  .site-nav {
+    padding: 0.75rem 0;
+  }
+
+  .site-nav-top {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #e8eefc;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .site-brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+  }
+
+  .site-brand-text {
+    min-width: 0;
+  }
+
+  .site-brand-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #e8eefc;
+    margin: 0;
+  }
+
+  .site-brand-subtitle {
+    display: block;
+    margin-top: 0.2rem;
+    color: #a7b4d1;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-nav-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .site-nav-toggle:hover {
+    background: rgba(79,140,255,0.14);
+    border-color: rgba(79,140,255,0.38);
+  }
+
+  .site-nav-toggle-icon {
+    position: relative;
+    width: 20px;
+    height: 14px;
+  }
+
+  .site-nav-toggle-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffffff;
+    transition: 0.25s ease;
+  }
+
+  .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+  .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+  .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+
+  .site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .site-nav-links a {
+    color: #a7b4d1;
+    padding: 0.75rem 0.95rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .site-nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .site-nav-links a.active {
+    color: #ffffff;
+    background: rgba(79,140,255,0.16);
+    box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+  }
+
+  @media (min-width: 901px) {
+    .site-nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .site-nav-top {
+      min-height: 74px;
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav-toggle {
+      display: inline-flex;
+    }
+
+    .site-nav-links {
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
+      padding-top: 0.85rem;
+    }
+
+    .site-nav-links.is-open {
+      display: flex;
+    }
+
+    .site-nav-links a {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .site-nav-links a:hover,
+    .site-nav-links a.active {
+      background: rgba(79,140,255,0.12);
+      border-color: rgba(79,140,255,0.22);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-nav-wrap {
+      width: min(calc(100% - 1rem), 1320px);
+    }
+
+    .site-brand-badge {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .site-brand-title {
+      font-size: 0.98rem;
+    }
+
+    .site-brand-subtitle {
+      font-size: 0.76rem;
+      max-width: 48vw;
+    }
+
+    .site-nav-top {
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<header class="site-topbar">
+  <div class="site-nav-wrap">
+    <nav class="site-nav" aria-label="Main navigation">
+      <div class="site-nav-top">
+        <a href="index.html" class="site-brand">
+          <div class="site-brand-badge">RC</div>
+          <div class="site-brand-text">
+            <p class="site-brand-title">Revit CADmep Guide</p>
+            <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
+          </div>
+        </a>
+
+        <button
+          class="site-nav-toggle"
+          id="siteNavToggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-controls="siteNavLinks"
+          aria-expanded="false"
+        >
+          <div class="site-nav-toggle-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index">Home</a>
+        <a href="getting-started">Getting Started</a>
+        <a href="documentation">Documentation</a>
+        <a href="faq">Resources</a>
+        <a href="contact">Contact</a>
+        <a href="privacy-policy">Privacy</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const toggle = document.getElementById("siteNavToggle");
+    const links = document.getElementById("siteNavLinks");
+
+    if (!toggle || !links) return;
+
+    toggle.addEventListener("click", function () {
+      const isOpen = links.classList.toggle("is-open");
+      toggle.classList.toggle("is-open", isOpen);
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    links.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", function () {
+        if (window.innerWidth <= 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 900) {
+        links.classList.remove("is-open");
+        toggle.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  })();
+</script>
+<!-- ===== UNIVERSAL NAVBAR END ===== -->
+<body>
+  <header class="site-topbar">
+    <div class="site-nav-wrap">
+      <nav class="site-nav" aria-label="Main navigation">
+        <div class="site-nav-top">
+          <a href="index.html" class="site-brand">
+            <div class="site-brand-badge">RC</div>
+            <div class="site-brand-text">
+              <p class="site-brand-title">Revit CADmep Guide</p>
+              <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
+            </div>
+          </a>
+
+          <button
+            class="site-nav-toggle"
+            id="siteNavToggle"
+            type="button"
+            aria-label="Toggle navigation"
+            aria-controls="siteNavLinks"
+            aria-expanded="false"
+          >
+            <div class="site-nav-toggle-icon" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </button>
+        </div>
+
+        <div class="site-nav-links" id="siteNavLinks">
+          <a href="index.html">Home</a>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="documentation.html">Documentation</a>
+          <a href="quality-assurance.html">Quality Assurance</a>
+          <a href="downloads.html" class="active">Downloads</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy-policy.html">Privacy</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">Downloads • Templates • Files • Resources</div>
+          <h1>Downloads</h1>
+          <p class="lead">
+            Browse and download documents, spreadsheets, slide decks, Revit files, PDFs, and other project resources.
+            Use the search and category filters to quickly find the content you need.
+          </p>
+
+          <div class="pill-row">
+            <span class="pill">Documents</span>
+            <span class="pill">Spreadsheets</span>
+            <span class="pill">Slideshows</span>
+            <span class="pill">Revit Files</span>
+            <span class="pill">PDFs</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container page-grid">
+      <aside class="sidebar">
+        <div class="filter-card">
+          <h3>Search & Filter</h3>
+          <input
+            type="text"
+            id="downloadSearch"
+            class="search-input"
+            placeholder="Search downloads..."
+          />
+
+          <div class="filter-group">
+            <div class="filter-label">File type</div>
+            <button class="filter-btn active" data-filter="all">All files</button>
+            <button class="filter-btn" data-filter="doc">Documents</button>
+            <button class="filter-btn" data-filter="xlsx">Spreadsheets</button>
+            <button class="filter-btn" data-filter="ppt">Slideshows</button>
+            <button class="filter-btn" data-filter="rvt">Revit Files</button>
+            <button class="filter-btn" data-filter="pdf">PDFs</button>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <h3>Download Summary</h3>
+          <div class="summary-list">
+            <div class="summary-row"><span>Total files</span><strong id="countAll">10</strong></div>
+            <div class="summary-row"><span>Visible files</span><strong id="countVisible">10</strong></div>
+            <div class="summary-row"><span>Categories</span><strong>5</strong></div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="downloads-card">
+        <div class="section-head">
+          <div>
+            <h2>Available Downloads</h2>
+            <p class="muted">Replace the example file names and links below with your real resources.</p>
+          </div>
+          <span class="section-tag">Resource Library</span>
+        </div>
+
+        <div class="download-grid" id="downloadGrid">
+          <article class="download-item" data-type="doc" data-search="revit getting started guide word document beginner guide">
+            <div class="download-top">
+              <div class="file-icon icon-doc">DOC</div>
+              <div class="file-meta">
+                <h3 class="file-title">Revit Getting Started Guide</h3>
+                <p class="file-desc">Introductory guide covering templates, views, levels, links, and first model setup.</p>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="meta-pill">Word Document</span>
+              <span class="meta-pill">v1.0</span>
+              <span class="meta-pill">2.1 MB</span>
+            </div>
+            <div class="download-actions">
+              <a class="download-btn" href="downloads/revit-getting-started-guide.docx" download>Download</a>
+              <a class="preview-btn" href="downloads/revit-getting-started-guide.docx">View file</a>
+            </div>
+          </article>
+
+          <article class="download-item" data-type="xlsx" data-search="qa checklist spreadsheet excel quality assurance">
+            <div class="download-top">
+              <div class="file-icon icon-xlsx">XLS</div>
+              <div class="file-meta">
+                <h3 class="file-title">QA Checklist</h3>
+                <p class="file-desc">Structured QA checklist for model checks, drawing checks, and pre-issue review.</p>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="meta-pill">Spreadsheet</span>
+              <span class="meta-pill">QA</span>
+              <span class="meta-pill">640 KB</span>
+            </div>
+            <div class="download-actions">
+              <a class="download-btn" href="downloads/qa-checklist.xlsx" download>Download</a>
+              <a class="preview-btn" href="downloads/qa-checklist.xlsx">View file</a>
+            </div>
+          </article>
+
+          <article class="download-item" data-type="ppt" data-search="acc clash detection slideshow powerpoint presentation">
+            <div class="download-top">
+              <div class="file-icon icon-ppt">PPT</div>
+              <div class="file-meta">
+                <h3 class="file-title">ACC Clash Detection Presentation</h3>
+                <p class="file-desc">Slide deck covering coordination workflows, clash reviews, and action tracking.</p>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="meta-pill">PowerPoint</span>
+              <span class="meta-pill">Coordination</span>
+              <span class="meta-pill">4.8 MB</span>
+            </div>
+            <div class="download-actions">
+              <a class="download-btn" href="downloads/acc-clash-detection-presentation.pptx" download>Download</a>
+              <a class="preview-btn" href="downloads/acc-clash-detection-presentation.pptx">View file</a>
+            </div>
+          </article>
+
+          <article class="download-item" data-type="rvt" data-search="revit template project starter file native model setup">
+            <div class="download-top">
+              <div class="file-icon icon-rvt">RVT</div>
+              <div class="file-meta">
+                <h3 class="file-title">Project Starter Template</h3>
+                <p class="file-desc">Starter Revit project file with example views, browser structure, and sheet setup.</p>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="meta-pill">Revit File</span>
+              <span class="meta-pill">Template</span>
+              <span class="meta-pill">12.4 MB</span>
+            </div>
+            <div class="download-actions">
+              <a class="download-btn" href="downloads/project-starter-template.rvt" download>Download</a>
+              <a class="preview-btn" href="downloads/project-starter-template.rvt">View file</a>
+            </div>
+          </article>
+
+          <article class="download-item" data-type="pdf" data-search="documentation standards pdf naming issue drawing standard">
+            <div class="download-top">
+              <div class="file-icon icon-pdf">PDF</div>
+              <div class="file-meta">
+                <h3 class="file-title">Documentation Standards Guide</h3>
+                <p class="file-desc">Reference PDF covering naming, sheets, revisions, and drawing issue standards.</p>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="meta-pill">PDF</span>
+              <span class="meta-pill">Standards</span>
+              <span class="meta-pill">1.8 MB</span>
+            </div>
+            <div class="download-actions">
+              <a class="download-btn" href="downloads/documentation-standards-guide.pdf" download>Download</a>
+              <a class="preview-btn" href="downloads/documentation-standards-guide.pdf">Open PDF</a>
+            </div>
+          </article>
+
+          <article class="download-item" data-type="doc" data-search="cadmep user guide document fabrication beginner">
+            <div class="download-top">
+              <div class="file-icon icon-doc">DOC</div>
+              <div class="file-meta">
+                <h3 class="file-title">CADmep User Guide</h3>
+                <p class="file-desc">General guide covering services, ITM content, reports, and fabrication basics.</p>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="meta-pill">Word Document</span>
+              <span class="meta-pill">CADmep</span>
+              <span class="meta-pill">3.0 MB</span>
+            </div>
+            <div class="download-actions">
+              <a class="download-btn" href="downloads/cadmep-user-guide.docx" download>Download</a>
+              <a class="preview-btn" href="downloads/cadmep-user-guide.docx">View file</a>
+            </div>
+          </article>
+
+          <article class="download-item" data-type="xlsx" data-search="builderswork tracker spreadsheet openings penetrations excel">
+            <div class="download-top">
+              <div class="file-icon icon-xlsx">XLS</div>
+              <div class="file-meta">
+                <h3 class="file-title">Builderswork Tracker</h3>
+                <p class="file-desc">Spreadsheet for tracking openings, penetrations, locations, and status updates.</p>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="meta-pill">Spreadsheet</span>
+              <span class="meta-pill">Tracker</span>
+              <span class="meta-pill">520 KB</span>
+            </div>
+            <div class="download-actions">
+              <a class="download-btn" href="downloads/builderswork-tracker.xlsx" download>Download</a>
+              <a class="preview-btn" href="downloads/builderswork-tracker.xlsx">View file</a>
+            </div>
+          </article>
+
+          <article class="download-item" data-type="ppt" data-search="revit training slides beginner slideshow powerpoint">
+            <div class="download-top">
+              <div class="file-icon icon-ppt">PPT</div>
+              <div class="file-meta">
+                <h3 class="file-title">Revit Training Slides</h3>
+                <p class="file-desc">Presentation slides for onboarding new users into Revit workflows and standards.</p>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="meta-pill">PowerPoint</span>
+              <span class="meta-pill">Training</span>
+              <span class="meta-pill">5.2 MB</span>
+            </div>
+            <div class="download-actions">
+              <a class="download-btn" href="downloads/revit-training-slides.pptx" download>Download</a>
+              <a class="preview-btn" href="downloads/revit-training-slides.pptx">View file</a>
+            </div>
+          </article>
+
+          <article class="download-item" data-type="rvt" data-search="sample mep model revit file duct pipe coordination">
+            <div class="download-top">
+              <div class="file-icon icon-rvt">RVT</div>
+              <div class="file-meta">
+                <h3 class="file-title">Sample MEP Coordination Model</h3>
+                <p class="file-desc">Example Revit model for training and coordination review workflows.</p>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="meta-pill">Revit File</span>
+              <span class="meta-pill">Training Model</span>
+              <span class="meta-pill">28.7 MB</span>
+            </div>
+            <div class="download-actions">
+              <a class="download-btn" href="downloads/sample-mep-coordination-model.rvt" download>Download</a>
+              <a class="preview-btn" href="downloads/sample-mep-coordination-model.rvt">View file</a>
+            </div>
+          </article>
+
+          <article class="download-item" data-type="pdf" data-search="quality assurance pdf checklist issue process">
+            <div class="download-top">
+              <div class="file-icon icon-pdf">PDF</div>
+              <div class="file-meta">
+                <h3 class="file-title">Quality Assurance Guide</h3>
+                <p class="file-desc">PDF guide covering QA workflows for models, drawings, coordination, and issue stages.</p>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="meta-pill">PDF</span>
+              <span class="meta-pill">QA</span>
+              <span class="meta-pill">2.4 MB</span>
+            </div>
+            <div class="download-actions">
+              <a class="download-btn" href="downloads/quality-assurance-guide.pdf" download>Download</a>
+              <a class="preview-btn" href="downloads/quality-assurance-guide.pdf">Open PDF</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="empty-state" id="emptyState" style="display:none; margin-top:1rem;">
+          No downloads matched your search or selected category.
+        </div>
+      </div>
+    </section>
+  </main>
+
+<!-- FOOTER START -->
+<style>
+  .site-footer {
+    margin-top: 2rem;
+    padding: 2rem 0 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    background: rgba(8,14,25,.85);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-footer .site-footer-container {
+    width: min(calc(100% - 2rem), 1200px);
+    margin: 0 auto;
+  }
+
+  .site-footer .site-footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .site-footer .site-footer-col h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    color: #e8eefc;
+  }
+
+  .site-footer .site-footer-col p {
+    margin: 0;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .site-footer .site-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #e8eefc;
+    font-weight: 700;
+  }
+
+  .site-footer .site-footer-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .site-footer .site-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .site-footer .site-footer-links a {
+    display: block;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .site-footer .site-footer-links a:hover {
+    color: #4f8cff;
+    transform: translateX(2px);
+  }
+
+  .site-footer .site-footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: #a7b4d1;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer .site-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<footer class="site-footer">
+  <div class="site-footer-container">
+    <div class="site-footer-grid">
+      <div class="site-footer-col">
+        <div class="site-footer-brand">
+          <div class="site-footer-badge">RC</div>
+          <span>Revit CADmep Guide</span>
+        </div>
+        <p>
+          A professional resource for learning Autodesk Revit and CADmep,
+          covering BIM workflows, fabrication, and coordination.
+        </p>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Navigation</h4>
+        <div class="site-footer-links">
+          <a href="index.html">Home</a>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="faq.html">Resources</a>
+          <a href="documentation.html">Standards</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Resources</h4>
+        <div class="site-footer-links">
+          <a href="https://www.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk</a>
+          <a href="https://help.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk Help</a>
+          <a href="#">Revit Tutorials</a>
+          <a href="#">CADmep Guides</a>
+          <a href="">Downloads</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Legal</h4>
+        <div class="site-footer-links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-footer-bottom">
+      <div>© 2026 Anarchy Group LTD | https://www.anarchygroup.uk</div>
+      <div>Email: support@revithelpdesk.co.uk</div>
+      <div>This website is not affiliated with Autodesk™, Revit™, CADmep™ or any other Autodesk™ Trademark.</div>
+    </div>
+  </div>
+</footer>
+<!-- FOOTER END -->
+
+  <script>
+    (function () {
+      const toggle = document.getElementById("siteNavToggle");
+      const links = document.getElementById("siteNavLinks");
+
+      if (toggle && links) {
+        toggle.addEventListener("click", function () {
+          const isOpen = links.classList.toggle("is-open");
+          toggle.classList.toggle("is-open", isOpen);
+          toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+
+        links.querySelectorAll("a").forEach(link => {
+          link.addEventListener("click", function () {
+            if (window.innerWidth <= 900) {
+              links.classList.remove("is-open");
+              toggle.classList.remove("is-open");
+              toggle.setAttribute("aria-expanded", "false");
+            }
+          });
+        });
+
+        window.addEventListener("resize", function () {
+          if (window.innerWidth > 900) {
+            links.classList.remove("is-open");
+            toggle.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+    })();
+
+    (function () {
+      const searchInput = document.getElementById("downloadSearch");
+      const filterButtons = document.querySelectorAll(".filter-btn");
+      const items = document.querySelectorAll(".download-item");
+      const emptyState = document.getElementById("emptyState");
+      const countAll = document.getElementById("countAll");
+      const countVisible = document.getElementById("countVisible");
+
+      let currentFilter = "all";
+
+      function updateCounts(visibleCount) {
+        countAll.textContent = items.length;
+        countVisible.textContent = visibleCount;
+      }
+
+      function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visible = 0;
+
+        items.forEach(item => {
+          const type = item.getAttribute("data-type");
+          const text = item.getAttribute("data-search");
+
+          const matchesType = currentFilter === "all" || type === currentFilter;
+          const matchesSearch = !query || text.includes(query);
+
+          const show = matchesType && matchesSearch;
+          item.style.display = show ? "" : "none";
+
+          if (show) visible++;
+        });
+
+        emptyState.style.display = visible === 0 ? "" : "none";
+        updateCounts(visible);
+      }
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener("click", function () {
+          filterButtons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentFilter = btn.getAttribute("data-filter");
+          applyFilters();
+        });
+      });
+
+      searchInput.addEventListener("input", applyFilters);
+
+      updateCounts(items.length);
+    })();
+  </script>
+</body>
+</html>
