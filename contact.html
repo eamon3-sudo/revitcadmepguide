@@ -733,7 +733,6 @@ Most “missing element” problems come from view controls, not deleted geometr
 
 What to do first:
 Open a temporary 3D view, select a known missing category, and see whether the problem exists there as well. If it appears in 3D but not in plan, the issue is usually view-specific.`,
-
         followUp: `For a deeper visibility workflow, check these in order:
 
 - Hidden in View / Category
@@ -764,7 +763,6 @@ Suggested steps:
 
 Why it matters:
 This only solves one type of visibility issue. If the element still does not show, the cause is probably elsewhere such as view templates, filters, phase settings, worksets, or linked-model visibility.`,
-
         followUp: `If Reveal Hidden Elements does not solve it, move next to:
 - View template
 - V/G overrides
@@ -789,7 +787,6 @@ What to check:
 
 Best practice:
 Use separate templates for coordination plans, fabrication views, and issue sheets. Reusing one template for everything usually creates confusion.`,
-
         followUp: `If you want a practical test, duplicate the view with detailing, temporarily remove the view template, and compare the result. If the element appears, the template is driving the issue.`
       },
       {
@@ -807,7 +804,6 @@ What to check:
 
 Important point:
 A linked model can be loaded correctly but still not appear in a view if its visibility mode or linked-view settings are wrong.`,
-
         followUp: `A strong troubleshooting test is:
 - set the link temporarily to Custom
 - turn visibility on
@@ -832,7 +828,6 @@ If the geometry sits outside the active visible range, it may not display in the
 
 Typical use:
 If something is visible in 3D but not in plan, check the cut plane, bottom clip, and view depth before changing anything else.`,
-
         followUp: `A quick rule of thumb:
 - visible in 3D but not plan = check view range
 - visible in one plan but not another = compare view range and template
@@ -841,7 +836,7 @@ If something is visible in 3D but not in plan, check the cut plane, bottom clip,
       {
         id: "revit-worksets-overview",
         topics: ["workset", "worksets", "team project", "worksharing", "central model", "local copy"],
-        reply: `In a workshared Revit project, the central model acts as the project database and stores current workset and ownership information. Autodesk recommends team members work in local copies rather than directly in the central model.
+        reply: `In a workshared Revit project, the central model acts as the project database and stores current workset and ownership information.
 
 What this means for practice:
 1. Enable worksharing deliberately.
@@ -851,7 +846,6 @@ What this means for practice:
 5. Avoid overcomplicating worksets just for the sake of discipline separation.
 
 Good workset planning improves visibility control and team coordination, but too many worksets can make views harder to manage.`,
-
         followUp: `A sensible basic structure is:
 - Shared Levels and Grids
 - Architecture / Structure links
@@ -874,14 +868,13 @@ What to check:
 
 Why this matters:
 A model element can exist normally but still not appear if its workset is turned off in that specific view.`,
-
         followUp: `Best practice:
 Use worksets to support team workflow and visibility control, but do not rely on them as your only coordination method. Always check the actual assignment of the element too.`
       },
       {
         id: "revit-design-options",
         topics: ["design option", "design options", "option set", "secondary option"],
-        reply: `Design options affect what the current view is allowed to show. In Visibility/Graphics, the Design Options tab controls which option from each set the view displays.
+        reply: `Design options affect what the current view is allowed to show.
 
 What to check:
 1. Is the element in a design option?
@@ -891,7 +884,6 @@ What to check:
 
 Typical mistake:
 Users often think the element is missing when the view is simply showing a different option from the one that contains the geometry.`,
-
         followUp: `A simple test:
 Open Visibility/Graphics > Design Options and confirm exactly which option the view is using. If necessary, create dedicated duplicate views for secondary options.`
       },
@@ -908,7 +900,6 @@ What to check:
 
 Why this causes confusion:
 The model may be correct, but the view may be intentionally hiding or graphically overriding elements because of phasing rules.`,
-
         followUp: `If you are unsure, compare:
 - the element’s created / demolished phase
 - the view phase
@@ -919,7 +910,7 @@ That three-way check usually reveals the problem quickly.`
       {
         id: "revit-filters",
         topics: ["filter", "filters", "view filter", "graphic override hierarchy"],
-        reply: `View filters can change visibility and graphics for selected elements based on rules. They are powerful, but they are also a common cause of unexpected display.
+        reply: `View filters can change visibility and graphics for selected elements based on rules.
 
 What to check:
 1. Which filters are applied to the view?
@@ -929,7 +920,6 @@ What to check:
 
 Best practice:
 Name filters clearly and keep their scope obvious. Hidden filter logic is one of the biggest causes of wasted troubleshooting time.`,
-
         followUp: `If a view looks wrong, temporarily review all applied filters before changing model data. In many cases, the model is fine and the filter is doing exactly what it was told to do.`
       },
       {
@@ -945,7 +935,6 @@ What to check:
 
 Typical issue:
 People forget a 3D coordination view may still have a section box active from earlier troubleshooting or detailing.`,
-
         followUp: `Good practice:
 Create separate named 3D views for:
 - full coordination
@@ -957,7 +946,7 @@ That reduces confusion caused by inherited section-box settings.`
       {
         id: "revit-coordination-model",
         topics: ["coordination model", "navisworks", "nwd", "nwc", "coordination visibility"],
-        reply: `When using coordination models in Revit, visibility and transparency are controlled in Visibility/Graphics for that view.
+        reply: `When using coordination models in Revit, visibility and transparency are controlled in the view.
 
 Useful check points:
 1. Confirm the coordination model is linked correctly.
@@ -984,13 +973,12 @@ Use coordination models as context and clash reference, not as a replacement for
 
 Why this matters:
 Most downstream visibility and coordination issues are harder to solve if the project starts with weak structure or unclear view standards.`,
-
         followUp: `A good startup habit is to prepare one clean “known good” coordination view for each discipline. That gives the team a reliable comparison view when problems appear later.`
       },
       {
         id: "cadmep-intro",
         topics: ["cadmep", "what is cadmep", "fabrication cadmep", "cadmep for"],
-        reply: `Autodesk Fabrication CADmep is aimed at MEP detailing and installation workflows. It is used to create fabrication-intent models for piping, plumbing and ductwork systems, often starting from AutoCAD, AutoCAD MEP, Revit, or CADmep data.
+        reply: `Autodesk Fabrication CADmep is aimed at MEP detailing and installation workflows.
 
 What that means in practice:
 - it is stronger than simple design-intent drafting when you need fabrication detail
@@ -999,7 +987,6 @@ What that means in practice:
 
 In simple terms:
 Revit often handles the coordinated project model, while CADmep is frequently used when you need fabrication-level control and data-rich items.`,
-
         followUp: `A useful question to ask yourself is:
 “Am I only routing design intent, or do I need fabrication-ready detail, numbering, reports and exports?”`
       },
@@ -1016,7 +1003,6 @@ What this means:
 
 Best practice:
 Keep service templates tightly aligned to your project specification and approved content. A messy template leads to inconsistent modelling and poor output.`,
-
         followUp: `If users keep placing the wrong items, the problem is often not drafting skill. It is usually poor template structure, poor specification control, or too much unmanaged content.`
       },
       {
@@ -1031,7 +1017,6 @@ Why it matters:
 
 Practical takeaway:
 If the ITM content is poor, outdated, or inconsistent, the resulting model will also be inconsistent no matter how carefully it is drawn.`,
-
         followUp: `A strong CADmep workflow starts with controlled content before users ever begin modelling.`
       },
       {
@@ -1041,7 +1026,6 @@ If the ITM content is poor, outdated, or inconsistent, the resulting model will 
 
 Why this matters:
 The start condition of the drawing affects downstream alignment and routing. If the first item is badly placed, later adjustments become harder.`,
-
         followUp: `Good practice:
 Place the first item intentionally against a clear reference, then build the run from a controlled start point rather than correcting the whole run later.`
       },
@@ -1061,7 +1045,6 @@ Spooling should happen after the model is stable enough that item content, numbe
 
 Best practice:
 Do not spool too early. Resolve content consistency and coordination first, or you risk rework in numbering and spool output.`,
-
         followUp: `Before spooling, confirm:
 - the service content is correct
 - similar items are consistent
@@ -1075,13 +1058,12 @@ Do not spool too early. Resolve content consistency and coordination first, or y
 
 Why this matters:
 Poor numbering creates confusion in reporting, manufacture, and installation. Controlled renumbering helps similar items stay logically grouped.`,
-
         followUp: `Before renumbering, decide what should make items genuinely different. If too many parameters are included, matching items may get unnecessary new numbers.`
       },
       {
         id: "cadmep-reports",
         topics: ["report", "reports", "item report", "report builder", "worksheet"],
-        reply: `The Item Report Builder in CADmep lets you create and customise reports. In CADmep, you can access it with REPORT or through the CADmep report layout path.
+        reply: `The Item Report Builder in CADmep lets you create and customise reports.
 
 What to expect:
 1. Select the relevant objects.
@@ -1091,17 +1073,15 @@ What to expect:
 
 Best practice:
 Use reporting as a quality check as well as an output tool. If reports expose inconsistent item data, fix the model or content before issue.`,
-
         followUp: `Reports are most valuable when they are standardised. If every team member uses a different report structure, comparison and checking become harder.`
       },
       {
         id: "cadmep-item-worksheets",
         topics: ["item worksheet", "worksheets", "worksheet layout"],
-        reply: `Item worksheets are configurable reports that allow specific print order and filtering. They can work like custom forms or item labels depending on setup.
+        reply: `Item worksheets are configurable reports that allow specific print order and filtering.
 
 Why they are useful:
 They help structure output for fabrication or checking where filtered and ordered information matters more than a generic report.`,
-
         followUp: `A good worksheet is not just “more data”. It is the right filtered data for the person who will use it next.`
       },
       {
@@ -1117,28 +1097,25 @@ Practical steps:
 
 Best practice:
 Before export, check that the model content and connection logic are correct. Export problems often reflect upstream modelling or content issues rather than the export step itself.`,
-
         followUp: `If PCF export is part of your workflow, create a pre-export check list for content consistency and connection type validation.`
       },
       {
         id: "cadmep-folders",
         topics: ["folders", "item folders", "display folders", "content folders"],
-        reply: `In CADmep, item folders are used to access and manage content. The FOLDERS command opens the item-folder view.
+        reply: `In CADmep, item folders are used to access and manage content.
 
 Why it matters:
 Controlled folders are the starting point for controlled services and content. If folders are disorganised, template quality usually suffers too.`,
-
         followUp: `A useful rule is:
 clean folders → clean service templates → cleaner modelling choices.`
       },
       {
         id: "cadmep-edit-service-content",
         topics: ["edit service", "edit service template", "edit service content", "service database"],
-        reply: `You can edit service-template content to add, remove, or copy items between groups. This is usually done through the Edit Service Database route.
+        reply: `You can edit service-template content to add, remove, or copy items between groups.
 
 Best practice:
 Treat service editing as controlled configuration work, not casual day-to-day drafting. Unmanaged service changes tend to spread inconsistency very quickly.`,
-
         followUp: `If multiple users need changes, route them through one coordinator or controlled database manager.`
       },
       {
@@ -1148,7 +1125,6 @@ Treat service editing as controlled configuration work, not casual day-to-day dr
 
 Why it matters:
 Batch processing is useful when standards need to be applied consistently or repeated outputs need to be generated efficiently.`,
-
         followUp: `Use batch processes only after you are confident the underlying standards and selections are correct. Automating bad settings just creates bad output faster.`
       },
       {
@@ -1170,7 +1146,6 @@ Use the same item logic for similar conditions. Inconsistent item use creates we
 
 5. Output readiness
 Only move to renumbering, reporting and spooling when the model is stable enough to trust.`,
-
         followUp: `If you want, ask:
 “Break that down into modelling, checking, and output stages.”`
       },
@@ -1195,7 +1170,6 @@ Also ask:
 - Can it be maintained?
 - Can it be supported?
 - Does it interfere with fire stopping or access zones?`,
-
         followUp: `For a ceiling void, define who gets priority first. Without that rule, the model usually becomes a negotiation after the clash rather than before it.`
       },
       {
@@ -1215,7 +1189,6 @@ Also ask:
 
 Best practice:
 A drawing issue should be the end of a checking process, not the start of one.`,
-
         followUp: `If you want a stronger process, split checks into:
 - model check
 - view check
@@ -1232,13 +1205,24 @@ A drawing issue should be the end of a checking process, not the start of one.`,
       "more detail",
       "can you explain",
       "what should i check first",
-      "what next",
       "step by step",
       "break that down",
       "tell me more",
+      "explain that more simply",
+      "give me a checklist",
+      "turn that into a checklist",
+      "turn that into a step-by-step workflow",
+      "go deeper on that"
+    ];
+
+    const SHORT_FOLLOW_UPS = [
       "why",
-      "how exactly",
-      "what do you mean"
+      "how",
+      "what next",
+      "and then",
+      "go on",
+      "continue",
+      "tell me more"
     ];
 
     function escapeHtml(str) {
@@ -1289,11 +1273,13 @@ A drawing issue should be the end of a checking process, not the start of one.`,
     function updateConversation(updatedConversation) {
       const conversations = loadConversations();
       const index = conversations.findIndex(c => c.id === updatedConversation.id);
+
       if (index >= 0) {
         conversations[index] = updatedConversation;
       } else {
         conversations.unshift(updatedConversation);
       }
+
       conversations.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
       saveConversations(conversations);
       renderHistory();
@@ -1333,6 +1319,7 @@ Ask a question or choose one of the starter prompts.`,
 
     function ensureConversation() {
       let conversation = getCurrentConversation();
+
       if (!conversation) {
         const conversations = loadConversations();
         if (conversations.length > 0) {
@@ -1342,6 +1329,7 @@ Ask a question or choose one of the starter prompts.`,
           conversation = createNewConversation();
         }
       }
+
       return conversation;
     }
 
@@ -1463,7 +1451,11 @@ Ask a question or choose one of the starter prompts.`,
 
     function isFollowUp(text) {
       const lower = text.toLowerCase().trim();
-      return FOLLOW_UP_PHRASES.some(phrase => lower.includes(phrase)) || lower.length < 30;
+
+      const explicitFollowUp = FOLLOW_UP_PHRASES.some(phrase => lower.includes(phrase));
+      const contextualShortFollowUp = SHORT_FOLLOW_UPS.includes(lower);
+
+      return explicitFollowUp || contextualShortFollowUp;
     }
 
     function getFollowUpResponse(lastTopic, userText) {
@@ -1471,11 +1463,32 @@ Ask a question or choose one of the starter prompts.`,
 
       if (!lastTopic) return null;
 
+      if (lower.includes("explain that more simply")) {
+        return `Here is a simpler version:
+
+${lastTopic.reply.split("\n\n")[0]}
+
+In simple terms:
+Start with the most likely setting controlling what you can see or place, test one thing at a time, and compare against a working example.`;
+      }
+
+      if (lower.includes("give me a checklist") || lower.includes("turn that into a checklist")) {
+        return `Checklist for this topic:
+
+1. Confirm one known example of the issue.
+2. Compare it with a working example.
+3. Check the most likely controlling setting first.
+4. Change one setting at a time.
+5. Recheck the result.
+6. Record the cause if this is a recurring project issue.
+7. Only then apply wider clean-up or standard updates.`;
+      }
+
       if (lower.includes("what should i check first")) {
         return `Start with the quickest high-value checks for this topic:
 
 1. Confirm the issue in one specific view or one specific object.
-2. Check the most likely view-control setting first.
+2. Check the most likely view-control or content-control setting first.
 3. Compare against a known good view or known good item.
 4. Only then start changing wider project settings.
 
@@ -1484,12 +1497,14 @@ ${lastTopic.id === "revit-view-range" ? "- compare the affected plan view range 
  lastTopic.id === "revit-linked-models" ? "- open Revit Links visibility and verify whether the link is controlled by host view, linked view, or custom" :
  lastTopic.id === "cadmep-service-templates" ? "- confirm the user is working in the correct service template before changing content" :
  lastTopic.id === "cadmep-spooling" ? "- confirm the model is stable and consistent before defining spools" :
- "- isolate one known example and trace the controlling setting first"}
-
-After that, ask me to turn it into a checklist if you want.`;
+ "- isolate one known example and trace the controlling setting first"}`;
       }
 
-      if (lower.includes("step by step") || lower.includes("break that down")) {
+      if (
+        lower.includes("step by step") ||
+        lower.includes("break that down") ||
+        lower.includes("turn that into a step-by-step workflow")
+      ) {
         return `${lastTopic.followUp}
 
 Step-by-step approach:
@@ -1500,6 +1515,50 @@ Step-by-step approach:
 5. Correct the cause.
 6. Recheck the output.
 7. Only then apply wider clean-up if needed.`;
+      }
+
+      if (
+        lower.includes("go deeper") ||
+        lower.includes("explain more") ||
+        lower.includes("expand") ||
+        lower.includes("more detail") ||
+        lower.includes("go deeper on that") ||
+        lower.includes("tell me more") ||
+        lower === "continue" ||
+        lower === "go on"
+      ) {
+        return lastTopic.followUp || `This is a follow-up to the previous topic. Tell me whether you want:
+- troubleshooting steps
+- best practice
+- common mistakes
+- a checking checklist`;
+      }
+
+      if (lower === "why") {
+        return `The reason this matters is that the visible result you see is often controlled by project settings rather than by the model geometry itself.
+
+That means a problem can look like a modelling issue when it is actually a visibility, phasing, workset, filter, or content-control issue. Good troubleshooting separates those possibilities instead of guessing.`;
+      }
+
+      if (lower === "how") {
+        return `The best way to approach it is methodically:
+
+1. pick one known example
+2. compare it to a working example
+3. identify the controlling setting
+4. change one thing at a time
+5. recheck before moving on
+
+That avoids creating more confusion while troubleshooting.`;
+      }
+
+      if (lower === "what next" || lower === "and then") {
+        return `Next, turn the answer into action:
+
+1. test the most likely cause
+2. confirm whether the issue is local or project-wide
+3. fix the specific cause
+4. then decide whether a standard, template, or content update is needed to stop it happening again`;
       }
 
       return lastTopic.followUp || `This is a follow-up to the previous topic. Tell me whether you want:
@@ -1524,6 +1583,17 @@ Step-by-step approach:
 Try asking a specific question and I’ll make the answer more detailed.`;
     }
 
+    function buildSuggestedFollowUps() {
+      return `
+
+Optional follow-ups you can ask:
+- “Explain that more simply”
+- “Give me a checklist”
+- “What should I check first?”
+- “Go deeper on that”
+- “Turn that into a step-by-step workflow”`;
+    }
+
     function getSmartResponse(userText) {
       const lower = userText.toLowerCase().trim();
       const lastTopic = getLastTopic();
@@ -1531,7 +1601,8 @@ Try asking a specific question and I’ll make the answer more detailed.`;
       if (isFollowUp(lower) && lastTopic) {
         return {
           topicId: lastTopic.id,
-          text: getFollowUpResponse(lastTopic, lower)
+          text: getFollowUpResponse(lastTopic, lower),
+          matched: true
         };
       }
 
@@ -1547,20 +1618,15 @@ Try asking a specific question and I’ll make the answer more detailed.`;
       if (!best || best.score === 0) {
         return {
           topicId: null,
-          text: getDefaultResponse()
+          text: getDefaultResponse(),
+          matched: false
         };
       }
 
       return {
         topicId: best.id,
-        text: `${best.reply}
-
-Follow-up options:
-- “Explain that more simply”
-- “Give me a checklist”
-- “What should I check first?”
-- “Go deeper on that”
-- “Turn that into a step-by-step workflow” `
+        text: `${best.reply}${buildSuggestedFollowUps()}`,
+        matched: true
       };
     }
 
