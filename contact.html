@@ -18,16 +18,11 @@
       --warning: #ffb347;
       --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
       --radius: 18px;
-      --max: 1200px;
+      --max: 1280px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -139,7 +134,7 @@
       border: 1px solid rgba(127, 176, 255, 0.2);
     }
 
-    h1, h2, h3 {
+    h1, h2, h3, h4 {
       margin-top: 0;
     }
 
@@ -152,7 +147,7 @@
 
     .lead {
       color: var(--muted);
-      max-width: 70ch;
+      max-width: 78ch;
       font-size: 1.05rem;
     }
 
@@ -162,7 +157,7 @@
 
     .contact-grid {
       display: grid;
-      grid-template-columns: 0.95fr 1.35fr;
+      grid-template-columns: 360px 1fr;
       gap: 1.4rem;
       align-items: start;
     }
@@ -188,7 +183,8 @@
       gap: 1rem;
     }
 
-    .contact-item {
+    .contact-item,
+    .history-item {
       padding: 1rem;
       border: 1px solid rgba(255,255,255,0.05);
       background: rgba(255,255,255,0.03);
@@ -196,7 +192,8 @@
       transition: 0.2s ease;
     }
 
-    .contact-item:hover {
+    .contact-item:hover,
+    .history-item:hover {
       border-color: rgba(79,140,255,0.28);
       background: rgba(79,140,255,0.08);
       transform: translateY(-2px);
@@ -234,7 +231,9 @@
       margin-top: 1rem;
     }
 
-    .starter-btn {
+    .starter-btn,
+    .history-item,
+    .new-chat-btn {
       width: 100%;
       text-align: left;
       border: 1px solid var(--line);
@@ -247,18 +246,30 @@
       font: inherit;
     }
 
-    .starter-btn:hover {
-      transform: translateY(-2px);
+    .starter-btn:hover,
+    .new-chat-btn:hover,
+    .history-item:hover {
       border-color: var(--accent);
       background: rgba(79, 140, 255, 0.12);
       box-shadow: 0 12px 30px rgba(79, 140, 255, 0.18);
+    }
+
+    .history-item.active {
+      border-color: var(--accent);
+      background: rgba(79, 140, 255, 0.16);
+    }
+
+    .history-item small {
+      display: block;
+      color: var(--muted);
+      margin-top: 0.35rem;
     }
 
     .chat-shell {
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      min-height: 760px;
+      min-height: 860px;
     }
 
     .chat-header {
@@ -315,6 +326,12 @@
       margin-top: 0.15rem;
     }
 
+    .chat-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
     .chat-body {
       flex: 1;
       padding: 1.1rem;
@@ -330,7 +347,7 @@
       display: flex;
       gap: 0.8rem;
       align-items: flex-start;
-      max-width: 92%;
+      max-width: 94%;
     }
 
     .msg.user {
@@ -398,7 +415,7 @@
     textarea {
       flex: 1;
       min-height: 58px;
-      max-height: 180px;
+      max-height: 200px;
       resize: vertical;
       border-radius: 16px;
       border: 1px solid var(--line);
@@ -464,11 +481,31 @@
       font-size: 0.92rem;
     }
 
+    .subtle {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .history-list {
+      display: grid;
+      gap: 0.75rem;
+      max-height: 360px;
+      overflow: auto;
+      margin-top: 1rem;
+      padding-right: 0.2rem;
+    }
+
     footer {
       padding: 1.5rem 0 3rem;
       color: var(--muted);
       border-top: 1px solid var(--line);
       margin-top: 1rem;
+    }
+
+    @media (max-width: 1080px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 980px) {
@@ -478,12 +515,8 @@
         flex-direction: column;
       }
 
-      .contact-grid {
-        grid-template-columns: 1fr;
-      }
-
       .chat-shell {
-        min-height: 680px;
+        min-height: 700px;
       }
 
       .input-wrap {
@@ -492,6 +525,19 @@
 
       .send-btn,
       .clear-btn {
+        width: 100%;
+      }
+
+      .chat-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .chat-actions {
+        width: 100%;
+      }
+
+      .new-chat-btn {
         width: 100%;
       }
     }
@@ -526,7 +572,7 @@
           <h1>Contact Us & Ask Caddy</h1>
           <p class="lead">
             Need help with Revit, CADmep, modelling standards, coordination, fabrication content,
-            drawing issues, view problems, service routing, or common CAD workflows?
+            visibility issues, view problems, service routing, spooling, reports, or common CAD workflows?
             Use the support details on the left, or ask <strong>Caddy</strong>, your browser-based CAD assistant.
           </p>
         </div>
@@ -538,9 +584,7 @@
         <div class="stack">
           <div class="panel">
             <h2>Support Contact</h2>
-            <p class="muted">
-              Contact your BIM, CAD, or digital engineering support team for project-specific help.
-            </p>
+            <p class="muted">Contact your BIM, CAD, or digital engineering support team for project-specific help.</p>
 
             <div class="stack">
               <div class="contact-item">
@@ -560,7 +604,7 @@
 
               <div class="contact-item">
                 <strong>Typical Support Topics</strong>
-                <span class="muted">Revit setup, CADmep services, ITMs, model issues, views, clash avoidance, fabrication workflows, exports and QA.</span>
+                <span class="muted">Revit setup, linked models, worksets, view templates, CADmep services, ITMs, spooling, reports, PCF export, coordination, fabrication workflows, exports and QA.</span>
               </div>
             </div>
           </div>
@@ -568,13 +612,18 @@
           <div class="info-card">
             <h3>What Caddy can help with</h3>
             <div class="pill-row">
-              <span class="pill">Revit visibility</span>
-              <span class="pill">CADmep items</span>
-              <span class="pill">Service offsets</span>
-              <span class="pill">Hangers</span>
-              <span class="pill">Coordination</span>
-              <span class="pill">Fabrication workflow</span>
-              <span class="pill">Drawing QA</span>
+              <span class="pill">Visibility debugging</span>
+              <span class="pill">Linked models</span>
+              <span class="pill">View range</span>
+              <span class="pill">Worksets</span>
+              <span class="pill">Phasing</span>
+              <span class="pill">Design options</span>
+              <span class="pill">Section box</span>
+              <span class="pill">CADmep services</span>
+              <span class="pill">ITM content</span>
+              <span class="pill">Spooling</span>
+              <span class="pill">Reports</span>
+              <span class="pill">PCF export</span>
             </div>
           </div>
 
@@ -583,36 +632,27 @@
             <p class="muted">Click a prompt to send it into the chat.</p>
 
             <div class="starter-prompts">
-              <button class="starter-btn" data-prompt="How do I stop Revit elements disappearing in all views?">
-                How do I stop Revit elements disappearing in all views?
-              </button>
-
-              <button class="starter-btn" data-prompt="What is the best way to model fabrication ductwork in CADmep for coordination?">
-                What is the best way to model fabrication ductwork in CADmep for coordination?
-              </button>
-
-              <button class="starter-btn" data-prompt="How should I approach clash avoidance between ductwork, pipework, and cable tray?">
-                How should I approach clash avoidance between ductwork, pipework, and cable tray?
-              </button>
-
-              <button class="starter-btn" data-prompt="What checks should I do before issuing drawings from a Revit MEP model?">
-                What checks should I do before issuing drawings from a Revit MEP model?
-              </button>
-
-              <button class="starter-btn" data-prompt="What should I check before agreeing a hanger support detail?">
-                What should I check before agreeing a hanger support detail?
-              </button>
-
-              <button class="starter-btn" data-prompt="Give me a startup checklist for a new Revit MEP project.">
-                Give me a startup checklist for a new Revit MEP project.
-              </button>
+              <button class="starter-btn" data-prompt="How do I troubleshoot missing Revit elements in all views?">How do I troubleshoot missing Revit elements in all views?</button>
+              <button class="starter-btn" data-prompt="Explain linked model visibility in Revit and what I should check first.">Explain linked model visibility in Revit and what I should check first.</button>
+              <button class="starter-btn" data-prompt="What does view range do in a Revit plan view?">What does view range do in a Revit plan view?</button>
+              <button class="starter-btn" data-prompt="How should I set up worksets for a team project in Revit?">How should I set up worksets for a team project in Revit?</button>
+              <button class="starter-btn" data-prompt="How do service templates work in CADmep?">How do service templates work in CADmep?</button>
+              <button class="starter-btn" data-prompt="Give me the correct workflow for spooling in CADmep.">Give me the correct workflow for spooling in CADmep.</button>
+              <button class="starter-btn" data-prompt="How do I create an item report in CADmep?">How do I create an item report in CADmep?</button>
+              <button class="starter-btn" data-prompt="How do I export PCF from CADmep?">How do I export PCF from CADmep?</button>
             </div>
 
             <div class="notice">
-              Caddy works entirely in the browser and is best used for guidance, troubleshooting,
+              Caddy works entirely in the browser. It is designed for guidance, troubleshooting,
               and best-practice support. Project-critical decisions should still be checked against
               company standards and project requirements.
             </div>
+          </div>
+
+          <div class="faq-card">
+            <h3>Previous Caddy conversations</h3>
+            <p class="subtle">Saved locally in this browser only.</p>
+            <div id="historyList" class="history-list"></div>
           </div>
         </div>
 
@@ -626,9 +666,12 @@
               </div>
             </div>
 
-            <div class="status">
-              <span class="status-dot"></span>
-              Ready
+            <div class="chat-actions">
+              <div class="status">
+                <span class="status-dot"></span>
+                Ready
+              </div>
+              <button class="new-chat-btn" id="newChatBtn" type="button">+ New Chat</button>
             </div>
           </div>
 
@@ -636,12 +679,12 @@
 
           <div class="chat-footer">
             <div class="input-wrap">
-              <textarea id="chatInput" placeholder="Ask Caddy a CAD or Revit question..."></textarea>
-              <button class="clear-btn" id="clearBtn" type="button">Clear</button>
+              <textarea id="chatInput" placeholder="Ask Caddy a Revit or CADmep question..."></textarea>
+              <button class="clear-btn" id="clearBtn" type="button">Reset Chat</button>
               <button class="send-btn" id="sendBtn" type="button">Send</button>
             </div>
             <div class="footer-note">
-              Caddy stores chat history locally in your browser on this device only.
+              Caddy remembers previous conversations in local storage on this device, and can continue follow-up questions within the same chat.
             </div>
           </div>
         </div>
@@ -660,126 +703,542 @@
     const chatInput = document.getElementById("chatInput");
     const sendBtn = document.getElementById("sendBtn");
     const clearBtn = document.getElementById("clearBtn");
+    const newChatBtn = document.getElementById("newChatBtn");
+    const historyList = document.getElementById("historyList");
     const starterButtons = document.querySelectorAll(".starter-btn");
+
+    const STORAGE_KEY = "caddyConversations";
+    const CURRENT_KEY = "caddyCurrentConversationId";
 
     const CADDY_KNOWLEDGE = [
       {
-        topics: ["revit", "elements", "disappear", "disappeared", "all views", "visibility", "hidden", "missing"],
-        title: "Revit visibility troubleshooting",
-        reply: `Try this Revit visibility check order:
+        id: "revit-missing-elements",
+        topics: ["missing element", "elements missing", "not visible", "disappeared", "in all views", "hidden", "can't see", "cannot see", "object not visible", "visibility"],
+        reply: `If Revit elements are missing, work through visibility in a fixed order instead of changing lots of settings at random.
 
-1. Check if the element is hidden in view or by category.
-2. Check worksets are open and visible.
-3. Check phase and phase filter.
-4. Check design options.
-5. Check discipline and view range.
-6. Check crop region and section box.
-7. Check filters and view templates.
-8. Check linked model visibility settings.
-9. Use Reveal Hidden Elements.
-10. Try a temporary 3D view and isolate the category.
+Recommended check order:
+1. Check whether the element or category has been hidden in the view.
+2. Use Reveal Hidden Elements.
+3. Check the view template.
+4. Check Visibility/Graphics settings and filters.
+5. Check workset visibility.
+6. Check phase and phase filter.
+7. Check design options.
+8. Check linked model settings if the element is in a link.
+9. Check crop region, section box, and view range.
+10. Test in a clean temporary 3D view.
+
+Why this works:
+Most “missing element” problems come from view controls, not deleted geometry. The fastest approach is to isolate one known element and trace category, workset, phase, option, and host model one by one.
+
+What to do first:
+Open a temporary 3D view, select a known missing category, and see whether the problem exists there as well. If it appears in 3D but not in plan, the issue is usually view-specific.`,
+
+        followUp: `For a deeper visibility workflow, check these in order:
+
+- Hidden in View / Category
+- View Template locking settings
+- Visibility/Graphics model category
+- Applied filters
+- Worksets tab
+- Revit Links tab
+- Phase / Phase Filter
+- Design Options tab
+- Crop / annotation crop
+- Section box
+- View range
+
+A good debugging habit is to change only one control at a time and recheck the result.`
+      },
+      {
+        id: "revit-reveal-hidden",
+        topics: ["reveal hidden", "unhide", "hidden in view", "reveal hidden elements"],
+        reply: `Use Reveal Hidden Elements when you suspect an item has been hidden using visibility controls in that view.
+
+Suggested steps:
+1. Open the affected view.
+2. Turn on Reveal Hidden Elements.
+3. Look for the hidden item or category.
+4. Unhide the element or category if needed.
+5. Exit Reveal Hidden Elements mode and recheck the view.
+
+Why it matters:
+This only solves one type of visibility issue. If the element still does not show, the cause is probably elsewhere such as view templates, filters, phase settings, worksets, or linked-model visibility.`,
+
+        followUp: `If Reveal Hidden Elements does not solve it, move next to:
+- View template
+- V/G overrides
+- Filters
+- Worksets
+- Phase filter
+- Linked-model visibility
+- Crop and section box`
+      },
+      {
+        id: "revit-view-template",
+        topics: ["view template", "templates", "template", "locked by template"],
+        reply: `View templates can control visibility, graphics, filters, worksets, and linked-model display, so they are one of the first places to check when a view behaves unexpectedly.
+
+What to check:
+1. Is a view template applied to the affected view?
+2. Is the template controlling Visibility/Graphics?
+3. Is it controlling filters?
+4. Is it controlling worksets?
+5. Is it controlling Revit Links visibility?
+6. Is the view using a template that was intended for a different discipline or purpose?
 
 Best practice:
-Start with one known missing element and trace its category, workset, phase and host model before changing lots of settings at once.`
+Use separate templates for coordination plans, fabrication views, and issue sheets. Reusing one template for everything usually creates confusion.`,
+
+        followUp: `If you want a practical test, duplicate the view with detailing, temporarily remove the view template, and compare the result. If the element appears, the template is driving the issue.`
       },
       {
-        topics: ["cadmep", "fabrication", "itm", "itms", "database", "services", "spec", "specification"],
-        title: "CADmep fabrication guidance",
-        reply: `For CADmep, focus on these basics first:
+        id: "revit-linked-models",
+        topics: ["linked model", "linked models", "revit links", "link visibility", "link not showing", "linked file", "linked model visibility"],
+        reply: `Linked-model visibility in Revit is controlled on the Revit Links tab in Visibility/Graphics.
 
-1. Correct database and service selection.
-2. Correct specification and pressure class.
-3. Consistent item usage across the model.
-4. Accurate straights, fittings, supports and ancillaries.
-5. Spooling and numbering only after the model is stable.
-6. Keep buildability in mind, not just geometry.
+What to check:
+1. Open Visibility/Graphics.
+2. Go to the Revit Links tab.
+3. Check whether the link is visible in the current view.
+4. Check whether it is set to By Host View, By Linked View, or Custom.
+5. If using a linked view, confirm the linked view itself shows the required elements.
+6. Check halftone or display overrides if the link looks incorrect rather than missing.
 
-Common causes of bad CADmep models:
-- wrong service selected
-- inconsistent item usage
-- oversimplified fittings
-- no allowance for access or installation
-- poor coordination before spooling`
+Important point:
+A linked model can be loaded correctly but still not appear in a view if its visibility mode or linked-view settings are wrong.`,
+
+        followUp: `A strong troubleshooting test is:
+- set the link temporarily to Custom
+- turn visibility on
+- remove unusual overrides
+- then recheck
+
+If it appears, the problem was with host/linked-view display logic rather than the link placement itself.`
       },
       {
-        topics: ["clash", "coordination", "duct", "pipe", "tray", "clearance", "collision"],
-        title: "Clash avoidance approach",
-        reply: `For coordination and clash avoidance:
+        id: "revit-view-range",
+        topics: ["view range", "plan view", "cut plane", "bottom clip", "top clip", "view depth"],
+        reply: `View range controls how objects display in a plan view using horizontal planes: Top, Cut Plane, Bottom, and View Depth.
 
-1. Set service priority rules early.
-2. Fix major routes first: structure, drainage and primary ductwork.
-3. Apply clearance rules, not just hard clash rules.
-4. Reserve installation and maintenance space.
-5. Review problem areas regularly, not only at issue stage.
-6. Track clashes by owner and status.
+What it affects:
+- whether an element is cut
+- whether it is projected
+- whether it appears as Beyond
+- whether it does not appear at all
 
-A strong method is:
-primary route → access check → clearance check → clash review → agreed update → recheck.`
+Practical meaning:
+If the geometry sits outside the active visible range, it may not display in the plan even though it still exists in the model.
+
+Typical use:
+If something is visible in 3D but not in plan, check the cut plane, bottom clip, and view depth before changing anything else.`,
+
+        followUp: `A quick rule of thumb:
+- visible in 3D but not plan = check view range
+- visible in one plan but not another = compare view range and template
+- visible only faintly = check Beyond display and related line style`
       },
       {
-        topics: ["issue", "issuing", "drawing", "drawings", "qa", "checklist", "pre-issue", "export"],
-        title: "Pre-issue QA",
+        id: "revit-worksets-overview",
+        topics: ["workset", "worksets", "team project", "worksharing", "central model", "local copy"],
+        reply: `In a workshared Revit project, the central model acts as the project database and stores current workset and ownership information. Autodesk recommends team members work in local copies rather than directly in the central model.
+
+What this means for practice:
+1. Enable worksharing deliberately.
+2. Create sensible worksets.
+3. Keep naming clear.
+4. Use local files for day-to-day work.
+5. Avoid overcomplicating worksets just for the sake of discipline separation.
+
+Good workset planning improves visibility control and team coordination, but too many worksets can make views harder to manage.`,
+
+        followUp: `A sensible basic structure is:
+- Shared Levels and Grids
+- Architecture / Structure links
+- MEP service groups
+- Coordination / reference content
+- Temporary or construction aids
+
+Keep the structure understandable to the whole team.`
+      },
+      {
+        id: "revit-workset-visibility",
+        topics: ["workset visibility", "visible in all views", "workset not visible", "change workset visibility"],
+        reply: `Workset visibility can be controlled globally and per view.
+
+What to check:
+1. Is the workset visible in all views?
+2. Is the current view overriding workset visibility in Visibility/Graphics?
+3. Is the item assigned to the workset you think it is?
+4. Is a template controlling workset display?
+
+Why this matters:
+A model element can exist normally but still not appear if its workset is turned off in that specific view.`,
+
+        followUp: `Best practice:
+Use worksets to support team workflow and visibility control, but do not rely on them as your only coordination method. Always check the actual assignment of the element too.`
+      },
+      {
+        id: "revit-design-options",
+        topics: ["design option", "design options", "option set", "secondary option"],
+        reply: `Design options affect what the current view is allowed to show. In Visibility/Graphics, the Design Options tab controls which option from each set the view displays.
+
+What to check:
+1. Is the element in a design option?
+2. Is the view showing the correct option?
+3. Is the setting Automatic or tied to a different option?
+4. Are you editing the option while expecting the main model to show something else?
+
+Typical mistake:
+Users often think the element is missing when the view is simply showing a different option from the one that contains the geometry.`,
+
+        followUp: `A simple test:
+Open Visibility/Graphics > Design Options and confirm exactly which option the view is using. If necessary, create dedicated duplicate views for secondary options.`
+      },
+      {
+        id: "revit-phasing",
+        topics: ["phase", "phasing", "phase filter", "phase settings", "existing", "demolished", "new construction"],
+        reply: `Phase and Phase Filter settings determine whether elements are visible and how they are graphically represented in a view.
+
+What to check:
+1. What phase is the view set to?
+2. What phase filter is applied?
+3. What phase is the element assigned to?
+4. Do the phase graphic overrides make it appear lighter, dashed, or hidden?
+
+Why this causes confusion:
+The model may be correct, but the view may be intentionally hiding or graphically overriding elements because of phasing rules.`,
+
+        followUp: `If you are unsure, compare:
+- the element’s created / demolished phase
+- the view phase
+- the phase filter
+
+That three-way check usually reveals the problem quickly.`
+      },
+      {
+        id: "revit-filters",
+        topics: ["filter", "filters", "view filter", "graphic override hierarchy"],
+        reply: `View filters can change visibility and graphics for selected elements based on rules. They are powerful, but they are also a common cause of unexpected display.
+
+What to check:
+1. Which filters are applied to the view?
+2. Do any of them turn categories off?
+3. Are graphic overrides making the element look faint or misleading?
+4. Is a view template applying the filter automatically?
+
+Best practice:
+Name filters clearly and keep their scope obvious. Hidden filter logic is one of the biggest causes of wasted troubleshooting time.`,
+
+        followUp: `If a view looks wrong, temporarily review all applied filters before changing model data. In many cases, the model is fine and the filter is doing exactly what it was told to do.`
+      },
+      {
+        id: "revit-section-box",
+        topics: ["section box", "3d view", "3d extents", "cropped in 3d"],
+        reply: `A section box limits what is visible in a 3D view.
+
+What to check:
+1. Is Section Box enabled in the view properties?
+2. Are the extents cutting off the element?
+3. Is the box visible so you can drag and inspect it?
+4. Are you expecting the full model while using a clipped coordination or detail view?
+
+Typical issue:
+People forget a 3D coordination view may still have a section box active from earlier troubleshooting or detailing.`,
+
+        followUp: `Good practice:
+Create separate named 3D views for:
+- full coordination
+- area coordination
+- detail or issue review
+
+That reduces confusion caused by inherited section-box settings.`
+      },
+      {
+        id: "revit-coordination-model",
+        topics: ["coordination model", "navisworks", "nwd", "nwc", "coordination visibility"],
+        reply: `When using coordination models in Revit, visibility and transparency are controlled in Visibility/Graphics for that view.
+
+Useful check points:
+1. Confirm the coordination model is linked correctly.
+2. Check visibility in the current view.
+3. Adjust transparency if it is visually dominating the Revit model.
+4. Do not confuse coordination-model graphics with actual Revit element graphics.
+
+Best practice:
+Use coordination models as context and clash reference, not as a replacement for modelled design responsibility.`,
+        followUp: `A good coordination setup keeps the external reference visible enough for checking but not so heavy that it obscures your working model.`
+      },
+      {
+        id: "revit-project-setup",
+        topics: ["project setup", "startup", "new project", "set up project", "setup project"],
+        reply: `A strong Revit project setup usually includes:
+1. levels and grids checked
+2. coordinates checked
+3. linked models located properly
+4. view templates prepared
+5. worksets planned if worksharing is needed
+6. browser organisation agreed
+7. naming conventions agreed
+8. discipline-specific starting views prepared
+
+Why this matters:
+Most downstream visibility and coordination issues are harder to solve if the project starts with weak structure or unclear view standards.`,
+
+        followUp: `A good startup habit is to prepare one clean “known good” coordination view for each discipline. That gives the team a reliable comparison view when problems appear later.`
+      },
+      {
+        id: "cadmep-intro",
+        topics: ["cadmep", "what is cadmep", "fabrication cadmep", "cadmep for"],
+        reply: `Autodesk Fabrication CADmep is aimed at MEP detailing and installation workflows. It is used to create fabrication-intent models for piping, plumbing and ductwork systems, often starting from AutoCAD, AutoCAD MEP, Revit, or CADmep data.
+
+What that means in practice:
+- it is stronger than simple design-intent drafting when you need fabrication detail
+- it supports intelligent item-based modelling
+- it fits workflows involving detailing, prefabrication, reporting and installation control
+
+In simple terms:
+Revit often handles the coordinated project model, while CADmep is frequently used when you need fabrication-level control and data-rich items.`,
+
+        followUp: `A useful question to ask yourself is:
+“Am I only routing design intent, or do I need fabrication-ready detail, numbering, reports and exports?”`
+      },
+      {
+        id: "cadmep-service-templates",
+        topics: ["service template", "service templates", "services", "setup services", "edit service database"],
+        reply: `Service templates are the main user interface for selecting products in Autodesk Fabrication applications. They define the products and conditions associated with drawing a service.
+
+What this means:
+1. Templates drive what buttons and item choices users see.
+2. They should be configured against project requirements.
+3. Required products must already be available from the item folders.
+4. Changes should normally be controlled by a coordinator or CAD manager.
+
+Best practice:
+Keep service templates tightly aligned to your project specification and approved content. A messy template leads to inconsistent modelling and poor output.`,
+
+        followUp: `If users keep placing the wrong items, the problem is often not drafting skill. It is usually poor template structure, poor specification control, or too much unmanaged content.`
+      },
+      {
+        id: "cadmep-itm-content",
+        topics: ["itm", "itm content", "item file", "item content", "itm files"],
+        reply: `ITM content is Autodesk Fabrication’s native item content. It is the foundation of the item-based workflow used in CADmep, ESTmep and CAMduct.
+
+Why it matters:
+- ITM content controls what gets placed
+- it affects dimensions, intelligence and outputs
+- it underpins reporting and fabrication workflows
+
+Practical takeaway:
+If the ITM content is poor, outdated, or inconsistent, the resulting model will also be inconsistent no matter how carefully it is drawn.`,
+
+        followUp: `A strong CADmep workflow starts with controlled content before users ever begin modelling.`
+      },
+      {
+        id: "cadmep-first-item",
+        topics: ["first item", "add item", "insert item", "fix relative"],
+        reply: `When placing the first item in a CADmep drawing, the Fix Relative method is useful because it lets you position the item at a specific point and elevation.
+
+Why this matters:
+The start condition of the drawing affects downstream alignment and routing. If the first item is badly placed, later adjustments become harder.`,
+
+        followUp: `Good practice:
+Place the first item intentionally against a clear reference, then build the run from a controlled start point rather than correcting the whole run later.`
+      },
+      {
+        id: "cadmep-spooling",
+        topics: ["spool", "spooling", "spools", "spool drawing", "spool workflow"],
+        reply: `A standard CADmep spooling workflow is:
+1. Open the required model.
+2. Create the export layout.
+3. Define spool(s).
+4. Create spool(s).
+5. Apply spool models to a worksheet layout.
+6. Complete the layout sheet process.
+
+What this means in practice:
+Spooling should happen after the model is stable enough that item content, numbering logic, and specification choices are not still changing heavily.
+
+Best practice:
+Do not spool too early. Resolve content consistency and coordination first, or you risk rework in numbering and spool output.`,
+
+        followUp: `Before spooling, confirm:
+- the service content is correct
+- similar items are consistent
+- major coordination problems are closed
+- item numbering logic is understood`
+      },
+      {
+        id: "cadmep-renumbering",
+        topics: ["renumber", "renumbering", "item number", "similar items"],
+        reply: `CADmep includes controlled renumbering so similar items can receive consistent numbering while excluding parameters that you do not want driving uniqueness.
+
+Why this matters:
+Poor numbering creates confusion in reporting, manufacture, and installation. Controlled renumbering helps similar items stay logically grouped.`,
+
+        followUp: `Before renumbering, decide what should make items genuinely different. If too many parameters are included, matching items may get unnecessary new numbers.`
+      },
+      {
+        id: "cadmep-reports",
+        topics: ["report", "reports", "item report", "report builder", "worksheet"],
+        reply: `The Item Report Builder in CADmep lets you create and customise reports. In CADmep, you can access it with REPORT or through the CADmep report layout path.
+
+What to expect:
+1. Select the relevant objects.
+2. Open the report builder.
+3. Choose or customise a report layout.
+4. Use the report to review item data in a structured way.
+
+Best practice:
+Use reporting as a quality check as well as an output tool. If reports expose inconsistent item data, fix the model or content before issue.`,
+
+        followUp: `Reports are most valuable when they are standardised. If every team member uses a different report structure, comparison and checking become harder.`
+      },
+      {
+        id: "cadmep-item-worksheets",
+        topics: ["item worksheet", "worksheets", "worksheet layout"],
+        reply: `Item worksheets are configurable reports that allow specific print order and filtering. They can work like custom forms or item labels depending on setup.
+
+Why they are useful:
+They help structure output for fabrication or checking where filtered and ordered information matters more than a generic report.`,
+
+        followUp: `A good worksheet is not just “more data”. It is the right filtered data for the person who will use it next.`
+      },
+      {
+        id: "cadmep-pcf-export",
+        topics: ["pcf", "pcf export", "export pcf"],
+        reply: `In CADmep, PCF export can be accessed by right-clicking through Utilities > Export PCF File, or by typing PCFEXPORT.
+
+Practical steps:
+1. Run PCFEXPORT.
+2. Choose the save location.
+3. Name the file.
+4. Save.
+
+Best practice:
+Before export, check that the model content and connection logic are correct. Export problems often reflect upstream modelling or content issues rather than the export step itself.`,
+
+        followUp: `If PCF export is part of your workflow, create a pre-export check list for content consistency and connection type validation.`
+      },
+      {
+        id: "cadmep-folders",
+        topics: ["folders", "item folders", "display folders", "content folders"],
+        reply: `In CADmep, item folders are used to access and manage content. The FOLDERS command opens the item-folder view.
+
+Why it matters:
+Controlled folders are the starting point for controlled services and content. If folders are disorganised, template quality usually suffers too.`,
+
+        followUp: `A useful rule is:
+clean folders → clean service templates → cleaner modelling choices.`
+      },
+      {
+        id: "cadmep-edit-service-content",
+        topics: ["edit service", "edit service template", "edit service content", "service database"],
+        reply: `You can edit service-template content to add, remove, or copy items between groups. This is usually done through the Edit Service Database route.
+
+Best practice:
+Treat service editing as controlled configuration work, not casual day-to-day drafting. Unmanaged service changes tend to spread inconsistency very quickly.`,
+
+        followUp: `If multiple users need changes, route them through one coordinator or controlled database manager.`
+      },
+      {
+        id: "cadmep-batch-processing",
+        topics: ["batch", "batchdwgs", "batch process", "process multiple drawings"],
+        reply: `CADmep supports batch processing for actions such as printing reports, running scripts, and exporting data across drawing files.
+
+Why it matters:
+Batch processing is useful when standards need to be applied consistently or repeated outputs need to be generated efficiently.`,
+
+        followUp: `Use batch processes only after you are confident the underlying standards and selections are correct. Automating bad settings just creates bad output faster.`
+      },
+      {
+        id: "cadmep-complex-modelling",
+        topics: ["best practice", "fabrication modelling", "coordination workflow", "complex answer", "how should i model"],
+        reply: `For a strong CADmep fabrication workflow, think in layers:
+
+1. Content control
+Make sure services, ITMs and specifications are correct before heavy modelling begins.
+
+2. Placement logic
+Start with major routes and known constraints, not with minor fittings.
+
+3. Buildability
+Check access, support zones, installation sequence and interfaces with builderswork and fire stopping.
+
+4. Consistency
+Use the same item logic for similar conditions. Inconsistent item use creates weak reports and weak spool output.
+
+5. Output readiness
+Only move to renumbering, reporting and spooling when the model is stable enough to trust.`,
+
+        followUp: `If you want, ask:
+“Break that down into modelling, checking, and output stages.”`
+      },
+      {
+        id: "coordination-routing",
+        topics: ["coordination", "clash", "clash avoidance", "routing", "duct pipe tray", "ceiling void"],
+        reply: `For coordination, avoid treating clash detection as the first line of defence. Good routing decisions should reduce clashes before review.
+
+Recommended sequence:
+1. Understand fixed constraints.
+2. Set service priorities.
+3. Route major systems first.
+4. Check access and maintenance space.
+5. Review clash results.
+6. Agree ownership and update sequence.
+7. Recheck after revisions.
+
+Best practice:
+Do not only ask “Does it clash?”
+Also ask:
+- Can it be installed?
+- Can it be maintained?
+- Can it be supported?
+- Does it interfere with fire stopping or access zones?`,
+
+        followUp: `For a ceiling void, define who gets priority first. Without that rule, the model usually becomes a negotiation after the clash rather than before it.`
+      },
+      {
+        id: "qa-pre-issue",
+        topics: ["qa", "pre-issue", "issuing drawings", "before issue", "drawing checks", "export checks"],
         reply: `Before issuing drawings, check:
+1. correct view and sheet naming
+2. revision and status
+3. dimensions and notes
+4. template consistency
+5. linked-model position
+6. unresolved coordination items
+7. hidden items are intentional
+8. export settings
+9. output readability
+10. current model matches the issued drawing
 
-1. Correct views and sheet numbers.
-2. Revision and status are correct.
-3. Dimensions and notes are clear.
-4. No unresolved key coordination issues.
-5. View templates are correct.
-6. Links and coordinates are correct.
-7. Title block information is complete.
-8. Export settings are correct for PDF and DWG.
-9. Hidden items are intentional.
-10. Drawing matches the current model state.
+Best practice:
+A drawing issue should be the end of a checking process, not the start of one.`,
 
-Good issue control reduces comments and rework.`
-      },
-      {
-        topics: ["hanger", "support", "supports", "bracket", "fixing"],
-        title: "Supports and hangers",
-        reply: `For supports and hangers, consider:
-
-1. Load path and fixing type.
-2. Spacing requirements.
-3. Access for installation.
-4. Interface with fire stopping and builderswork.
-5. Whether the support clashes with other services.
-6. Whether the support detail matches the installation sequence.
-
-Support modelling should reflect installation reality, not only a symbolic layout.`
-      },
-      {
-        topics: ["template", "templates", "project setup", "setup", "new project", "startup"],
-        title: "Project setup",
-        reply: `A good Revit and CADmep project setup should include:
-
-1. Correct levels and grids.
-2. Shared coordinates checked.
-3. Links loaded and positioned correctly.
-4. Naming conventions agreed.
-5. View templates prepared.
-6. Worksets set up correctly.
-7. Browser organisation agreed.
-8. CADmep database and services verified before modelling.
-
-A clean start avoids a lot of coordination problems later.`
-      },
-      {
-        topics: ["view", "views", "template", "section box", "crop region"],
-        title: "View management",
-        reply: `For view management, check:
-
-1. correct discipline
-2. correct detail level
-3. correct view template
-4. crop region and annotation crop
-5. filters applied
-6. section box in 3D views
-7. linked model display settings
-8. phasing and worksets
-
-Most view problems come from templates, filters, or scope settings rather than the model itself.`
+        followUp: `If you want a stronger process, split checks into:
+- model check
+- view check
+- sheet check
+- export check`
       }
+    ];
+
+    const FOLLOW_UP_PHRASES = [
+      "follow up",
+      "go deeper",
+      "explain more",
+      "expand",
+      "more detail",
+      "can you explain",
+      "what should i check first",
+      "what next",
+      "step by step",
+      "break that down",
+      "tell me more",
+      "why",
+      "how exactly",
+      "what do you mean"
     ];
 
     function escapeHtml(str) {
@@ -793,7 +1252,133 @@ Most view problems come from templates, filters, or scope settings rather than t
       return escapeHtml(text).replace(/\n/g, "<br>");
     }
 
-    function addMessage(role, text) {
+    function nowIso() {
+      return new Date().toISOString();
+    }
+
+    function uid() {
+      return "caddy-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8);
+    }
+
+    function loadConversations() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveConversations(conversations) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+    }
+
+    function getCurrentConversationId() {
+      return localStorage.getItem(CURRENT_KEY);
+    }
+
+    function setCurrentConversationId(id) {
+      localStorage.setItem(CURRENT_KEY, id);
+    }
+
+    function getCurrentConversation() {
+      const conversations = loadConversations();
+      const currentId = getCurrentConversationId();
+      return conversations.find(c => c.id === currentId) || null;
+    }
+
+    function updateConversation(updatedConversation) {
+      const conversations = loadConversations();
+      const index = conversations.findIndex(c => c.id === updatedConversation.id);
+      if (index >= 0) {
+        conversations[index] = updatedConversation;
+      } else {
+        conversations.unshift(updatedConversation);
+      }
+      conversations.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+      saveConversations(conversations);
+      renderHistory();
+    }
+
+    function createNewConversation() {
+      const conversation = {
+        id: uid(),
+        title: "New conversation",
+        createdAt: nowIso(),
+        updatedAt: nowIso(),
+        lastTopicId: null,
+        messages: [
+          {
+            role: "bot",
+            text: `Hello — I’m Caddy.
+
+I can help with:
+- Revit visibility troubleshooting
+- linked model display
+- worksets, phasing, design options and view templates
+- CADmep services, ITM content and spooling
+- reports, numbering and PCF export
+- coordination and pre-issue QA
+
+Ask a question or choose one of the starter prompts.`,
+            createdAt: nowIso()
+          }
+        ]
+      };
+
+      setCurrentConversationId(conversation.id);
+      updateConversation(conversation);
+      renderConversation(conversation);
+      return conversation;
+    }
+
+    function ensureConversation() {
+      let conversation = getCurrentConversation();
+      if (!conversation) {
+        const conversations = loadConversations();
+        if (conversations.length > 0) {
+          setCurrentConversationId(conversations[0].id);
+          conversation = conversations[0];
+        } else {
+          conversation = createNewConversation();
+        }
+      }
+      return conversation;
+    }
+
+    function renderConversation(conversation) {
+      chatBody.innerHTML = "";
+      conversation.messages.forEach(msg => addMessageToDom(msg.role, msg.text));
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function renderHistory() {
+      const conversations = loadConversations();
+      const currentId = getCurrentConversationId();
+      historyList.innerHTML = "";
+
+      if (conversations.length === 0) {
+        historyList.innerHTML = `<div class="subtle">No saved conversations yet.</div>`;
+        return;
+      }
+
+      conversations.forEach(conversation => {
+        const btn = document.createElement("button");
+        btn.className = "history-item" + (conversation.id === currentId ? " active" : "");
+        btn.type = "button";
+        btn.innerHTML = `
+          <strong>${escapeHtml(conversation.title || "New conversation")}</strong>
+          <small>Updated ${new Date(conversation.updatedAt).toLocaleString()}</small>
+        `;
+        btn.addEventListener("click", () => {
+          setCurrentConversationId(conversation.id);
+          renderHistory();
+          renderConversation(conversation);
+        });
+        historyList.appendChild(btn);
+      });
+    }
+
+    function addMessageToDom(role, text) {
       const msg = document.createElement("div");
       msg.className = `msg ${role}`;
 
@@ -811,9 +1396,39 @@ Most view problems come from templates, filters, or scope settings rather than t
       msg.appendChild(avatar);
       msg.appendChild(bubble);
       chatBody.appendChild(msg);
-      chatBody.scrollTop = chatBody.scrollHeight;
+    }
 
-      saveChat();
+    function addMessage(role, text) {
+      addMessageToDom(role, text);
+
+      const conversation = ensureConversation();
+      conversation.messages.push({
+        role,
+        text,
+        createdAt: nowIso()
+      });
+
+      if (role === "user" && conversation.title === "New conversation") {
+        conversation.title = text.length > 60 ? text.slice(0, 57) + "..." : text;
+      }
+
+      conversation.updatedAt = nowIso();
+      updateConversation(conversation);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function setLastTopic(topicId) {
+      const conversation = ensureConversation();
+      conversation.lastTopicId = topicId;
+      conversation.updatedAt = nowIso();
+      updateConversation(conversation);
+    }
+
+    function getLastTopic() {
+      const conversation = ensureConversation();
+      return conversation.lastTopicId
+        ? CADDY_KNOWLEDGE.find(item => item.id === conversation.lastTopicId) || null
+        : null;
     }
 
     function addTypingMessage() {
@@ -838,76 +1453,115 @@ Most view problems come from templates, filters, or scope settings rather than t
     function scoreMatch(input, topics) {
       const text = input.toLowerCase();
       let score = 0;
-      for (const topic of topics) {
-        if (text.includes(topic)) score++;
-      }
+
+      topics.forEach(topic => {
+        if (text.includes(topic)) score += 1;
+      });
+
       return score;
     }
 
-    function buildFollowUp(title) {
-      const map = {
-        "Revit visibility troubleshooting": "You can also ask: “Give me a step-by-step visibility debugging workflow.”",
-        "CADmep fabrication guidance": "You can also ask: “What is the correct workflow from modelling to spooling?”",
-        "Clash avoidance approach": "You can also ask: “How should I prioritise duct, pipe and tray in a ceiling void?”",
-        "Pre-issue QA": "You can also ask: “Create me a pre-issue checklist for MEP drawings.”",
-        "Supports and hangers": "You can also ask: “What should I check before agreeing a hanger detail?”",
-        "Project setup": "You can also ask: “Give me a startup checklist for a new Revit MEP project.”",
-        "View management": "You can also ask: “Why is my linked model not displaying correctly in this view?”"
-      };
-      return map[title] || "You can ask a more specific follow-up and I’ll narrow it down.";
+    function isFollowUp(text) {
+      const lower = text.toLowerCase().trim();
+      return FOLLOW_UP_PHRASES.some(phrase => lower.includes(phrase)) || lower.length < 30;
+    }
+
+    function getFollowUpResponse(lastTopic, userText) {
+      const lower = userText.toLowerCase();
+
+      if (!lastTopic) return null;
+
+      if (lower.includes("what should i check first")) {
+        return `Start with the quickest high-value checks for this topic:
+
+1. Confirm the issue in one specific view or one specific object.
+2. Check the most likely view-control setting first.
+3. Compare against a known good view or known good item.
+4. Only then start changing wider project settings.
+
+For this topic, the practical first move is:
+${lastTopic.id === "revit-view-range" ? "- compare the affected plan view range against a working plan" :
+ lastTopic.id === "revit-linked-models" ? "- open Revit Links visibility and verify whether the link is controlled by host view, linked view, or custom" :
+ lastTopic.id === "cadmep-service-templates" ? "- confirm the user is working in the correct service template before changing content" :
+ lastTopic.id === "cadmep-spooling" ? "- confirm the model is stable and consistent before defining spools" :
+ "- isolate one known example and trace the controlling setting first"}
+
+After that, ask me to turn it into a checklist if you want.`;
+      }
+
+      if (lower.includes("step by step") || lower.includes("break that down")) {
+        return `${lastTopic.followUp}
+
+Step-by-step approach:
+1. Identify one known example.
+2. Confirm whether the issue is model-wide or view-specific.
+3. Check the most likely controlling setting.
+4. Compare against a working example.
+5. Correct the cause.
+6. Recheck the output.
+7. Only then apply wider clean-up if needed.`;
+      }
+
+      return lastTopic.followUp || `This is a follow-up to the previous topic. Tell me whether you want:
+- troubleshooting steps
+- best practice
+- common mistakes
+- a checking checklist`;
+    }
+
+    function getDefaultResponse() {
+      return `I can help with Revit and CADmep topics such as:
+
+- missing or hidden elements
+- linked-model visibility
+- view templates, filters and view range
+- worksets, phasing and design options
+- section boxes and 3D coordination views
+- CADmep service templates and ITM content
+- spooling, numbering, reporting and PCF export
+- coordination workflows and pre-issue checks
+
+Try asking a specific question and I’ll make the answer more detailed.`;
     }
 
     function getSmartResponse(userText) {
+      const lower = userText.toLowerCase().trim();
+      const lastTopic = getLastTopic();
+
+      if (isFollowUp(lower) && lastTopic) {
+        return {
+          topicId: lastTopic.id,
+          text: getFollowUpResponse(lastTopic, lower)
+        };
+      }
+
       const ranked = CADDY_KNOWLEDGE
-        .map(item => ({ ...item, score: scoreMatch(userText, item.topics) }))
+        .map(item => ({
+          ...item,
+          score: scoreMatch(lower, item.topics)
+        }))
         .sort((a, b) => b.score - a.score);
 
       const best = ranked[0];
 
       if (!best || best.score === 0) {
-        return `I can help with Revit, CADmep, coordination, fabrication workflow, supports, views and drawing QA.
-
-Try asking something like:
-- Why have my Revit elements disappeared in all views?
-- What is best practice for CADmep fabrication modelling?
-- How do I coordinate ductwork against pipework and cable tray?
-- What checks should I do before issuing drawings?
-- What should I check for hangers and supports?`;
+        return {
+          topicId: null,
+          text: getDefaultResponse()
+        };
       }
 
-      return `${best.reply}
+      return {
+        topicId: best.id,
+        text: `${best.reply}
 
-${buildFollowUp(best.title)}`;
-    }
-
-    function saveChat() {
-      localStorage.setItem("caddyChatHistory", chatBody.innerHTML);
-    }
-
-    function loadChat() {
-      const saved = localStorage.getItem("caddyChatHistory");
-      if (saved) {
-        chatBody.innerHTML = saved;
-      }
-    }
-
-    function resetChat() {
-      chatBody.innerHTML = `
-        <div class="msg bot">
-          <div class="msg-avatar">C</div>
-          <div class="bubble">
-            <p>Hello — I’m <strong>Caddy</strong>.<br><br>
-I’m a browser-based CAD assistant for:<br>
-- Revit troubleshooting<br>
-- CADmep guidance<br>
-- coordination and clash avoidance<br>
-- supports and hangers<br>
-- drawing QA and issue checks<br><br>
-Ask me a question to get started.</p>
-          </div>
-        </div>
-      `;
-      saveChat();
+Follow-up options:
+- “Explain that more simply”
+- “Give me a checklist”
+- “What should I check first?”
+- “Go deeper on that”
+- “Turn that into a step-by-step workflow” `
+      };
     }
 
     async function sendMessage(prefilledText = null) {
@@ -918,18 +1572,52 @@ Ask me a question to get started.</p>
       chatInput.value = "";
       addTypingMessage();
 
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 450));
 
       removeTypingMessage();
-      const reply = getSmartResponse(text);
-      addMessage("bot", reply);
+
+      const response = getSmartResponse(text);
+      if (response.topicId) setLastTopic(response.topicId);
+      addMessage("bot", response.text);
+    }
+
+    function resetCurrentChat() {
+      const conversation = ensureConversation();
+      conversation.messages = [
+        {
+          role: "bot",
+          text: `Hello — I’m Caddy.
+
+I can help with:
+- Revit visibility troubleshooting
+- linked model display
+- worksets, phasing, design options and view templates
+- CADmep services, ITM content and spooling
+- reports, numbering and PCF export
+- coordination and pre-issue QA
+
+Ask a question or choose one of the starter prompts.`,
+          createdAt: nowIso()
+        }
+      ];
+      conversation.lastTopicId = null;
+      conversation.updatedAt = nowIso();
+      updateConversation(conversation);
+      renderConversation(conversation);
     }
 
     sendBtn.addEventListener("click", () => sendMessage());
 
     clearBtn.addEventListener("click", () => {
-      resetChat();
+      resetCurrentChat();
       chatInput.value = "";
+    });
+
+    newChatBtn.addEventListener("click", () => {
+      createNewConversation();
+      renderHistory();
+      chatInput.value = "";
+      chatInput.focus();
     });
 
     chatInput.addEventListener("keydown", (e) => {
@@ -946,11 +1634,9 @@ Ask me a question to get started.</p>
       });
     });
 
-    if (!localStorage.getItem("caddyChatHistory")) {
-      resetChat();
-    } else {
-      loadChat();
-    }
+    ensureConversation();
+    renderHistory();
+    renderConversation(ensureConversation());
   </script>
 </body>
 </html>
