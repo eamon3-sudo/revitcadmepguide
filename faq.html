@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ | Revit CADmep Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --text: #e8eefc;
+      --muted: #a7b4d1;
+      --line: rgba(255,255,255,.08);
+      --accent: #4f8cff;
+      --accent-2: #7fb0ff;
+      --shadow: 0 18px 40px rgba(0,0,0,.28);
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(79,140,255,.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(127,176,255,.08), transparent 20%),
+        linear-gradient(180deg, #0a1120 0%, #0d1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .site-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(8, 14, 25, 0.42);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+    }
+
+    .site-nav-wrap {
+      width: min(calc(100% - 2rem), 1320px);
+      margin: 0 auto;
+    }
+
+    .site-nav { padding: 0.75rem 0; }
+
+    .site-nav-top {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #e8eefc;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .site-brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+    }
+
+    .site-brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #e8eefc;
+      margin: 0;
+    }
+
+    .site-brand-subtitle {
+      display: block;
+      margin-top: 0.2rem;
+      color: #a7b4d1;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-nav-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .site-nav-toggle-icon {
+      position: relative;
+      width: 20px;
+      height: 14px;
+    }
+
+    .site-nav-toggle-icon span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: #ffffff;
+      transition: 0.25s ease;
+    }
+
+    .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+    .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+    .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+      top: 6px;
+      transform: rotate(45deg);
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+      top: 6px;
+      transform: rotate(-45deg);
+    }
+
+    .site-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .site-nav-links a {
+      color: #a7b4d1;
+      padding: 0.75rem 0.95rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .site-nav-links a:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav-links a.active {
+      color: #ffffff;
+      background: rgba(79,140,255,0.16);
+      box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 3rem 0 1.5rem;
+    }
+
+    .hero-card,
+    .search-card,
+    .faq-section,
+    .faq-item,
+    .sidebar-card,
+    .empty-state {
+      background: rgba(9,16,28,.55);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #cfe0ff;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(127,176,255,.2);
+    }
+
+    h1, h2, h3, h4 { margin-top: 0; }
+
+    h1 {
+      margin-bottom: .75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 82ch;
+      font-size: 1.05rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: .55rem .85rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #dbe7ff;
+      border: 1px solid rgba(127,176,255,.18);
+      font-size: .9rem;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 94px;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .sidebar-card,
+    .search-card,
+    .faq-section {
+      padding: 1.15rem;
+    }
+
+    .sidebar-card a {
+      display: block;
+      padding: .7rem .8rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+      margin-bottom: .25rem;
+    }
+
+    .sidebar-card a:hover {
+      color: var(--text);
+      background: rgba(79,140,255,.12);
+    }
+
+    .search-input {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #0b1424;
+      color: var(--text);
+      padding: .95rem 1rem;
+      font: inherit;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(79,140,255,.12);
+    }
+
+    .faq-list {
+      display: grid;
+      gap: .85rem;
+      margin-top: 1rem;
+    }
+
+    .faq-item {
+      overflow: hidden;
+      transition: .2s ease;
+    }
+
+    .faq-item:hover {
+      border-color: rgba(79,140,255,.24);
+    }
+
+    .faq-question {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      color: var(--text);
+      text-align: left;
+      padding: 1rem 1rem;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .faq-question span:last-child {
+      color: var(--muted);
+      font-size: 1.2rem;
+      transition: transform .2s ease;
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-question span:last-child {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0 1rem 1rem;
+      color: var(--muted);
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    .faq-answer ul {
+      margin: .6rem 0 0;
+      padding-left: 1.1rem;
+    }
+
+    .faq-answer li {
+      margin: .35rem 0;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .3rem;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 1.4rem;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 901px) {
+      .site-nav {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0;
+      }
+
+      .site-nav-top {
+        min-height: 74px;
+        flex: 0 1 auto;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .site-nav-toggle {
+        display: inline-flex;
+      }
+
+      .site-nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.45rem;
+        padding-top: 0.85rem;
+      }
+
+      .site-nav-links.is-open {
+        display: flex;
+      }
+
+      .site-nav-links a {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .site-nav-links a:hover,
+      .site-nav-links a.active {
+        background: rgba(79,140,255,0.12);
+        border-color: rgba(79,140,255,0.22);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-nav-wrap,
+      .container {
+        width: min(calc(100% - 1rem), 1320px);
+      }
+
+      .site-brand-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .site-brand-title {
+        font-size: 0.98rem;
+      }
+
+      .site-brand-subtitle {
+        font-size: 0.76rem;
+        max-width: 48vw;
+      }
+
+      .site-nav-top {
+        gap: 0.75rem;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+<!-- ===== UNIVERSAL NAVBAR START ===== -->
+<style>
+  .site-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(8, 14, 25, 0.42);
+    backdrop-filter: blur(26px) saturate(185%);
+    -webkit-backdrop-filter: blur(26px) saturate(185%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+  }
+
+  .site-nav-wrap {
+    width: min(calc(100% - 2rem), 1320px);
+    margin: 0 auto;
+  }
+
+  .site-nav {
+    padding: 0.75rem 0;
+  }
+
+  .site-nav-top {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #e8eefc;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .site-brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+  }
+
+  .site-brand-text {
+    min-width: 0;
+  }
+
+  .site-brand-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #e8eefc;
+    margin: 0;
+  }
+
+  .site-brand-subtitle {
+    display: block;
+    margin-top: 0.2rem;
+    color: #a7b4d1;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-nav-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .site-nav-toggle:hover {
+    background: rgba(79,140,255,0.14);
+    border-color: rgba(79,140,255,0.38);
+  }
+
+  .site-nav-toggle-icon {
+    position: relative;
+    width: 20px;
+    height: 14px;
+  }
+
+  .site-nav-toggle-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffffff;
+    transition: 0.25s ease;
+  }
+
+  .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+  .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+  .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+
+  .site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .site-nav-links a {
+    color: #a7b4d1;
+    padding: 0.75rem 0.95rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .site-nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .site-nav-links a.active {
+    color: #ffffff;
+    background: rgba(79,140,255,0.16);
+    box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+  }
+
+  @media (min-width: 901px) {
+    .site-nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .site-nav-top {
+      min-height: 74px;
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav-toggle {
+      display: inline-flex;
+    }
+
+    .site-nav-links {
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
+      padding-top: 0.85rem;
+    }
+
+    .site-nav-links.is-open {
+      display: flex;
+    }
+
+    .site-nav-links a {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .site-nav-links a:hover,
+    .site-nav-links a.active {
+      background: rgba(79,140,255,0.12);
+      border-color: rgba(79,140,255,0.22);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-nav-wrap {
+      width: min(calc(100% - 1rem), 1320px);
+    }
+
+    .site-brand-badge {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .site-brand-title {
+      font-size: 0.98rem;
+    }
+
+    .site-brand-subtitle {
+      font-size: 0.76rem;
+      max-width: 48vw;
+    }
+
+    .site-nav-top {
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<header class="site-topbar">
+  <div class="site-nav-wrap">
+    <nav class="site-nav" aria-label="Main navigation">
+      <div class="site-nav-top">
+        <a href="index.html" class="site-brand">
+          <div class="site-brand-badge">RC</div>
+          <div class="site-brand-text">
+            <p class="site-brand-title">Revit CADmep Guide</p>
+            <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
+          </div>
+        </a>
+
+        <button
+          class="site-nav-toggle"
+          id="siteNavToggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-controls="siteNavLinks"
+          aria-expanded="false"
+        >
+          <div class="site-nav-toggle-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index">Home</a>
+        <a href="getting-started">Getting Started</a>
+        <a href="documentation">Documentation</a>
+        <a href="faq">Resources</a>
+        <a href="contact">Contact</a>
+        <a href="privacy-policy">Privacy</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const toggle = document.getElementById("siteNavToggle");
+    const links = document.getElementById("siteNavLinks");
+
+    if (!toggle || !links) return;
+
+    toggle.addEventListener("click", function () {
+      const isOpen = links.classList.toggle("is-open");
+      toggle.classList.toggle("is-open", isOpen);
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    links.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", function () {
+        if (window.innerWidth <= 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 900) {
+        links.classList.remove("is-open");
+        toggle.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  })();
+</script>
+<!-- ===== UNIVERSAL NAVBAR END ===== -->
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">FAQ • Common Questions • Quick Help</div>
+          <h1>Frequently Asked Questions</h1>
+          <p class="lead">
+            This page answers common questions about Revit, CADmep, Autodesk Construction Cloud, documentation,
+            quality assurance, and the Caddy assistant.
+          </p>
+
+          <div class="pill-row">
+            <span class="pill">Revit</span>
+            <span class="pill">CADmep</span>
+            <span class="pill">ACC</span>
+            <span class="pill">Documentation</span>
+            <span class="pill">QA</span>
+            <span class="pill">Caddy</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container page-grid">
+      <aside class="sidebar">
+        <div class="search-card">
+          <h3>Search FAQs</h3>
+          <input
+            type="text"
+            id="faqSearch"
+            class="search-input"
+            placeholder="Search a question..."
+          />
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Sections</h3>
+          <a href="#revit">Revit</a>
+          <a href="#cadmep">CADmep</a>
+          <a href="#acc">ACC / Autodesk Docs</a>
+          <a href="#documentation">Documentation</a>
+          <a href="#qa">Quality Assurance</a>
+          <a href="#caddy">Caddy Assistant</a>
+        </div>
+      </aside>
+
+      <div>
+        <section class="faq-section" id="revit">
+          <div class="section-head">
+            <h2>Revit</h2>
+            <span class="section-tag">BIM authoring</span>
+          </div>
+
+          <div class="faq-list">
+            <div class="faq-item" data-search="what is revit bim model documentation">
+              <button class="faq-question"><span>What is Revit used for?</span><span>+</span></button>
+              <div class="faq-answer">
+                Revit is used for model-based building design and documentation. It is commonly used for architecture, structure, MEP modelling, coordination, schedules, sheets, and project documentation.
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="why is my element missing not visible hidden view template filter">
+              <button class="faq-question"><span>Why is an element missing in Revit?</span><span>+</span></button>
+              <div class="faq-answer">
+                Common causes include:
+                <ul>
+                  <li>Hidden in view or category</li>
+                  <li>View template overrides</li>
+                  <li>Filters</li>
+                  <li>Workset visibility</li>
+                  <li>Phase and phase filter settings</li>
+                  <li>Crop region or section box</li>
+                  <li>View range</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="view range plan view cut plane bottom clip top clip">
+              <button class="faq-question"><span>What does view range do in Revit?</span><span>+</span></button>
+              <div class="faq-answer">
+                View range controls which elements are visible in a plan view by using horizontal planes such as top, cut plane, bottom, and view depth.
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="worksharing central model local copy worksets">
+              <button class="faq-question"><span>How does worksharing work in Revit?</span><span>+</span></button>
+              <div class="faq-answer">
+                Worksharing allows multiple users to work on the same project model. In a standard setup, users work in local copies and synchronise their changes back to a central model.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-section" id="cadmep" style="margin-top:1rem;">
+          <div class="section-head">
+            <h2>CADmep</h2>
+            <span class="section-tag">Fabrication workflow</span>
+          </div>
+
+          <div class="faq-list">
+            <div class="faq-item" data-search="what is cadmep fabrication detailing itm services">
+              <button class="faq-question"><span>What is CADmep used for?</span><span>+</span></button>
+              <div class="faq-answer">
+                CADmep is used for fabrication-intent MEP detailing. It is commonly used for ductwork, pipework, plumbing, item-based content, reports, renumbering, spooling, and fabrication outputs.
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="service templates services content wrong items placed">
+              <button class="faq-question"><span>Why are service templates important in CADmep?</span><span>+</span></button>
+              <div class="faq-answer">
+                Service templates control what content users can place. If templates are poorly structured, modelling becomes inconsistent and outputs become less reliable.
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="itm content item files what are itm files">
+              <button class="faq-question"><span>What are ITM files?</span><span>+</span></button>
+              <div class="faq-answer">
+                ITM files are Autodesk Fabrication item content files. They define fabrication items and strongly influence how content behaves, reports, and outputs are generated.
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="pcf export cadmep pipework component format">
+              <button class="faq-question"><span>What should I check before exporting PCF?</span><span>+</span></button>
+              <div class="faq-answer">
+                Before exporting PCF, check:
+                <ul>
+                  <li>Model content is correct</li>
+                  <li>Connectivity is correct</li>
+                  <li>The right objects are selected</li>
+                  <li>The downstream workflow expects PCF in that format</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-section" id="acc" style="margin-top:1rem;">
+          <div class="section-head">
+            <h2>ACC / Autodesk Docs</h2>
+            <span class="section-tag">Cloud collaboration</span>
+          </div>
+
+          <div class="faq-list">
+            <div class="faq-item" data-search="what is acc autodesk construction cloud docs">
+              <button class="faq-question"><span>What is Autodesk Construction Cloud?</span><span>+</span></button>
+              <div class="faq-answer">
+                Autodesk Construction Cloud is a cloud-based platform used for project collaboration, document management, coordination, issue tracking, and other connected workflows. Autodesk Docs is commonly used as the document management environment within that setup.
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="cloud model setup permissions folders access">
+              <button class="faq-question"><span>What do I need before setting up a Revit cloud model?</span><span>+</span></button>
+              <div class="faq-answer">
+                Before setting up a Revit cloud model, confirm:
+                <ul>
+                  <li>The ACC / Autodesk Docs project exists</li>
+                  <li>Permissions are assigned correctly</li>
+                  <li>Folders are structured properly</li>
+                  <li>Users have the right access</li>
+                  <li>The intended model workflow is agreed</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="acc clash detection coordination issues tracking">
+              <button class="faq-question"><span>What is ACC clash detection used for?</span><span>+</span></button>
+              <div class="faq-answer">
+                ACC clash detection is used to identify and review model clashes during coordination. It helps teams track problems, assign actions, and reduce conflicts before installation or issue.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-section" id="documentation" style="margin-top:1rem;">
+          <div class="section-head">
+            <h2>Documentation</h2>
+            <span class="section-tag">Sheets, issue, standards</span>
+          </div>
+
+          <div class="faq-list">
+            <div class="faq-item" data-search="why are naming conventions important documentation standards">
+              <button class="faq-question"><span>Why are naming conventions important?</span><span>+</span></button>
+              <div class="faq-answer">
+                Naming conventions improve consistency, searchability, issue control, and traceability. They help teams find information faster and reduce duplication and confusion.
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="what should be checked before issuing drawings">
+              <button class="faq-question"><span>What should be checked before issuing drawings?</span><span>+</span></button>
+              <div class="faq-answer">
+                Before issue, check:
+                <ul>
+                  <li>Correct views are placed on sheets</li>
+                  <li>Revisions and status are correct</li>
+                  <li>Title block data is correct</li>
+                  <li>Notes, dimensions and tags are clear</li>
+                  <li>PDF or print output has been reviewed</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="dwg export pdf export output quality">
+              <button class="faq-question"><span>Why should I check exports after creating them?</span><span>+</span></button>
+              <div class="faq-answer">
+                Because a view that looks correct in the software can still produce poor output if export settings, linework, text, or sheet setup are wrong. Always review the final issued file.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-section" id="qa" style="margin-top:1rem;">
+          <div class="section-head">
+            <h2>Quality Assurance</h2>
+            <span class="section-tag">Checks and control</span>
+          </div>
+
+          <div class="faq-list">
+            <div class="faq-item" data-search="what is qa quality assurance model drawing output">
+              <button class="faq-question"><span>What does QA mean on this site?</span><span>+</span></button>
+              <div class="faq-answer">
+                QA means the process of checking models, views, sheets, reports, and outputs so they are accurate, consistent, and suitable for issue or use.
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="when should qa happen end of job or throughout workflow">
+              <button class="faq-question"><span>Should QA only happen at the end?</span><span>+</span></button>
+              <div class="faq-answer">
+                No. Strong QA should be built into the workflow from the start. It is much better to catch problems early than to discover them only at issue stage.
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="common qa failures templates exports naming coordination">
+              <button class="faq-question"><span>What are common QA failures?</span><span>+</span></button>
+              <div class="faq-answer">
+                Common QA failures include:
+                <ul>
+                  <li>Wrong templates</li>
+                  <li>Poor naming</li>
+                  <li>Unchecked exports</li>
+                  <li>Unresolved coordination issues</li>
+                  <li>Incorrect content or service setup</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="faq-section" id="caddy" style="margin-top:1rem;">
+          <div class="section-head">
+            <h2>Caddy Assistant</h2>
+            <span class="section-tag">On-site helper</span>
+          </div>
+
+          <div class="faq-list">
+            <div class="faq-item" data-search="what can caddy do chatbot help revit cadmep">
+              <button class="faq-question"><span>What can Caddy help with?</span><span>+</span></button>
+              <div class="faq-answer">
+                Caddy can help answer common questions about Revit, CADmep, BIM workflows, visibility issues, worksharing, schedules, documentation, quality assurance, and more.
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="does caddy remember conversations local storage">
+              <button class="faq-question"><span>Does Caddy remember conversations?</span><span>+</span></button>
+              <div class="faq-answer">
+                Caddy can store conversations locally in your browser using local storage. That means the chat history stays on your device unless you clear your browser data.
+              </div>
+            </div>
+
+            <div class="faq-item" data-search="should i rely on caddy for professional decisions">
+              <button class="faq-question"><span>Should I rely on Caddy for professional decisions?</span><span>+</span></button>
+              <div class="faq-answer">
+                No. Caddy is a guidance assistant. Always verify technical, contractual, and compliance-critical information against official sources and project requirements before professional use.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="empty-state" id="emptyState">
+          No FAQ items matched your search.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      © 2026 Revit CADmep Guide. FAQ page.
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const toggle = document.getElementById("siteNavToggle");
+      const links = document.getElementById("siteNavLinks");
+
+      if (toggle && links) {
+        toggle.addEventListener("click", function () {
+          const isOpen = links.classList.toggle("is-open");
+          toggle.classList.toggle("is-open", isOpen);
+          toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+
+        links.querySelectorAll("a").forEach(link => {
+          link.addEventListener("click", function () {
+            if (window.innerWidth <= 900) {
+              links.classList.remove("is-open");
+              toggle.classList.remove("is-open");
+              toggle.setAttribute("aria-expanded", "false");
+            }
+          });
+        });
+
+        window.addEventListener("resize", function () {
+          if (window.innerWidth > 900) {
+            links.classList.remove("is-open");
+            toggle.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+    })();
+
+    (function () {
+      const faqItems = document.querySelectorAll(".faq-item");
+      const searchInput = document.getElementById("faqSearch");
+      const emptyState = document.getElementById("emptyState");
+
+      faqItems.forEach(item => {
+        const btn = item.querySelector(".faq-question");
+        btn.addEventListener("click", function () {
+          item.classList.toggle("open");
+        });
+      });
+
+      function applySearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visible = 0;
+
+        faqItems.forEach(item => {
+          const searchText = item.getAttribute("data-search") || "";
+          const questionText = item.querySelector(".faq-question").innerText.toLowerCase();
+          const answerText = item.querySelector(".faq-answer").innerText.toLowerCase();
+
+          const match =
+            !query ||
+            searchText.includes(query) ||
+            questionText.includes(query) ||
+            answerText.includes(query);
+
+          item.style.display = match ? "" : "none";
+          if (match) visible++;
+        });
+
+        emptyState.style.display = visible === 0 ? "block" : "none";
+      }
+
+      searchInput.addEventListener("input", applySearch);
+    })();
+  </script>
+</body>
+</html>
