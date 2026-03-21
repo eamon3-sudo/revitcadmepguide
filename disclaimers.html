@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Disclaimer | Revit CADmep Guide</title>
+
+  <style>
+    :root {
+      --bg:#0b1220;
+      --panel:#111a2e;
+      --text:#e8eefc;
+      --muted:#a7b4d1;
+      --line:rgba(255,255,255,.08);
+      --accent:#4f8cff;
+      --warning:#ffb347;
+      --shadow:0 18px 40px rgba(0,0,0,.28);
+      --max:1100px;
+    }
+
+    body {
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#0a1120,#0d1628);
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    .container {
+      width:min(calc(100% - 2rem), var(--max));
+      margin:0 auto;
+      padding:2rem 0;
+    }
+
+    .card {
+      background:rgba(9,16,28,.6);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:2rem;
+      box-shadow:var(--shadow);
+    }
+
+    h1 { font-size:2.2rem; margin-top:0; }
+    h2 { margin-top:1.8rem; }
+
+    p { color:var(--muted); }
+    ul { color:var(--muted); padding-left:1.2rem; }
+    li { margin:.4rem 0; }
+
+    .highlight {
+      background:rgba(255,179,71,.12);
+      border-left:4px solid var(--warning);
+      padding:1rem;
+      border-radius:10px;
+      margin-top:1rem;
+    }
+
+    footer {
+      margin-top:2rem;
+      padding-top:1rem;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      text-align:center;
+    }
+  </style>
+<!-- ===== UNIVERSAL NAVBAR START ===== -->
+<style>
+  .site-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(8, 14, 25, 0.42);
+    backdrop-filter: blur(26px) saturate(185%);
+    -webkit-backdrop-filter: blur(26px) saturate(185%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+  }
+
+  .site-nav-wrap {
+    width: min(calc(100% - 2rem), 1320px);
+    margin: 0 auto;
+  }
+
+  .site-nav {
+    padding: 0.75rem 0;
+  }
+
+  .site-nav-top {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #e8eefc;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .site-brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+  }
+
+  .site-brand-text {
+    min-width: 0;
+  }
+
+  .site-brand-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #e8eefc;
+    margin: 0;
+  }
+
+  .site-brand-subtitle {
+    display: block;
+    margin-top: 0.2rem;
+    color: #a7b4d1;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-nav-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .site-nav-toggle:hover {
+    background: rgba(79,140,255,0.14);
+    border-color: rgba(79,140,255,0.38);
+  }
+
+  .site-nav-toggle-icon {
+    position: relative;
+    width: 20px;
+    height: 14px;
+  }
+
+  .site-nav-toggle-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffffff;
+    transition: 0.25s ease;
+  }
+
+  .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+  .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+  .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+
+  .site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .site-nav-links a {
+    color: #a7b4d1;
+    padding: 0.75rem 0.95rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .site-nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .site-nav-links a.active {
+    color: #ffffff;
+    background: rgba(79,140,255,0.16);
+    box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+  }
+
+  @media (min-width: 901px) {
+    .site-nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .site-nav-top {
+      min-height: 74px;
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav-toggle {
+      display: inline-flex;
+    }
+
+    .site-nav-links {
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
+      padding-top: 0.85rem;
+    }
+
+    .site-nav-links.is-open {
+      display: flex;
+    }
+
+    .site-nav-links a {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .site-nav-links a:hover,
+    .site-nav-links a.active {
+      background: rgba(79,140,255,0.12);
+      border-color: rgba(79,140,255,0.22);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-nav-wrap {
+      width: min(calc(100% - 1rem), 1320px);
+    }
+
+    .site-brand-badge {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .site-brand-title {
+      font-size: 0.98rem;
+    }
+
+    .site-brand-subtitle {
+      font-size: 0.76rem;
+      max-width: 48vw;
+    }
+
+    .site-nav-top {
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<header class="site-topbar">
+  <div class="site-nav-wrap">
+    <nav class="site-nav" aria-label="Main navigation">
+      <div class="site-nav-top">
+        <a href="index.html" class="site-brand">
+          <div class="site-brand-badge">RC</div>
+          <div class="site-brand-text">
+            <p class="site-brand-title">Revit CADmep Guide</p>
+            <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
+          </div>
+        </a>
+
+        <button
+          class="site-nav-toggle"
+          id="siteNavToggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-controls="siteNavLinks"
+          aria-expanded="false"
+        >
+          <div class="site-nav-toggle-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index">Home</a>
+        <a href="getting-started">Getting Started</a>
+        <a href="documentation">Documentation</a>
+        <a href="faq">Resources</a>
+        <a href="contact">Contact</a>
+        <a href="privacy-policy">Privacy</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const toggle = document.getElementById("siteNavToggle");
+    const links = document.getElementById("siteNavLinks");
+
+    if (!toggle || !links) return;
+
+    toggle.addEventListener("click", function () {
+      const isOpen = links.classList.toggle("is-open");
+      toggle.classList.toggle("is-open", isOpen);
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    links.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", function () {
+        if (window.innerWidth <= 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 900) {
+        links.classList.remove("is-open");
+        toggle.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  })();
+</script>
+<!-- ===== UNIVERSAL NAVBAR END ===== -->
+<body>
+
+<main class="container">
+  <div class="card">
+
+    <h1>Disclaimer</h1>
+    <p>Last updated: 2026</p>
+
+    <div class="highlight">
+      <strong>Important Notice:</strong>
+      <p>
+        The information provided on this website is for general guidance and informational purposes only.
+        It must not be relied upon as professional engineering advice, design approval, or regulatory compliance confirmation.
+      </p>
+    </div>
+
+    <h2>1. General Information Only</h2>
+    <p>
+      The Revit CADmep Guide website provides content related to BIM workflows, Autodesk Revit, CADmep,
+      coordination practices, and technical processes.
+    </p>
+
+    <ul>
+      <li>Content is intended for guidance only</li>
+      <li>It may not reflect project-specific requirements</li>
+      <li>It may not align with contractual obligations or standards on your project</li>
+    </ul>
+
+    <h2>2. Accuracy of Information</h2>
+    <p>
+      While every effort is made to ensure that information is accurate and up to date, errors,
+      omissions, or outdated content may occur.
+    </p>
+
+    <ul>
+      <li>Information may be incomplete or simplified</li>
+      <li>Standards, regulations, and software behaviour may change</li>
+      <li>Examples may not apply to all scenarios</li>
+    </ul>
+
+    <div class="highlight">
+      <strong>You must always verify information against official sources before professional use.</strong>
+    </div>
+
+    <h2>3. No Professional Advice</h2>
+    <p>
+      Nothing on this website constitutes professional advice, including but not limited to:
+    </p>
+
+    <ul>
+      <li>Engineering design decisions</li>
+      <li>Fire safety compliance</li>
+      <li>Building regulations or standards interpretation</li>
+      <li>Construction or installation methods</li>
+    </ul>
+
+    <p>
+      You should consult a qualified professional and refer to official standards and project documentation
+      before making decisions.
+    </p>
+
+    <h2>4. Use at Your Own Risk</h2>
+    <p>
+      Any reliance you place on the information provided is strictly at your own risk.
+    </p>
+
+    <ul>
+      <li>The website owner accepts no responsibility for outcomes based on this content</li>
+      <li>You are responsible for validating all information before use</li>
+      <li>Decisions made using this information are your responsibility</li>
+    </ul>
+
+    <h2>5. Chatbot Disclaimer (Caddy)</h2>
+    <p>
+      The Caddy chatbot provides automated responses based on pre-defined logic and stored content.
+    </p>
+
+    <ul>
+      <li>Responses may be incorrect, incomplete, or outdated</li>
+      <li>It should not be relied upon for technical or compliance decisions</li>
+      <li>All chatbot responses must be independently verified</li>
+    </ul>
+
+    <h2>6. External References</h2>
+    <p>
+      This website may reference or link to third-party resources such as Autodesk documentation.
+    </p>
+
+    <ul>
+      <li>Official sources should always take priority</li>
+      <li>We are not responsible for external content</li>
+    </ul>
+
+    <h2>7. Limitation of Liability</h2>
+    <p>
+      To the fullest extent permitted by law, the website owner shall not be liable for:
+    </p>
+
+    <ul>
+      <li>Errors or inaccuracies in the content</li>
+      <li>Losses arising from reliance on the information</li>
+      <li>Project delays, costs, or rework</li>
+    </ul>
+
+    <h2>8. Final Statement</h2>
+    <div class="highlight">
+      <strong>
+        Always cross-check all information with official sources such as Autodesk documentation,
+        project specifications, and relevant standards before applying it in a professional environment.
+      </strong>
+    </div>
+
+    <h2>9. Contact</h2>
+    <p>
+      For any questions regarding this disclaimer, please contact:
+    </p>
+
+    <p><strong>Email:</strong> support@yourcompany.com</p>
+
+  </div>
+
+<!-- FOOTER START -->
+<style>
+  .site-footer {
+    margin-top: 2rem;
+    padding: 2rem 0 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    background: rgba(8,14,25,.85);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-footer .site-footer-container {
+    width: min(calc(100% - 2rem), 1200px);
+    margin: 0 auto;
+  }
+
+  .site-footer .site-footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .site-footer .site-footer-col h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    color: #e8eefc;
+  }
+
+  .site-footer .site-footer-col p {
+    margin: 0;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .site-footer .site-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #e8eefc;
+    font-weight: 700;
+  }
+
+  .site-footer .site-footer-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .site-footer .site-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .site-footer .site-footer-links a {
+    display: block;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .site-footer .site-footer-links a:hover {
+    color: #4f8cff;
+    transform: translateX(2px);
+  }
+
+  .site-footer .site-footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: #a7b4d1;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer .site-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<footer class="site-footer">
+  <div class="site-footer-container">
+    <div class="site-footer-grid">
+      <div class="site-footer-col">
+        <div class="site-footer-brand">
+          <div class="site-footer-badge">RC</div>
+          <span>Revit CADmep Guide</span>
+        </div>
+        <p>
+          A professional resource for learning Autodesk Revit and CADmep,
+          covering BIM workflows, fabrication, and coordination.
+        </p>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Navigation</h4>
+        <div class="site-footer-links">
+          <a href="index.html">Home</a>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="faq.html">Resources</a>
+          <a href="documentation.html">Standards</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Resources</h4>
+        <div class="site-footer-links">
+          <a href="https://www.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk</a>
+          <a href="https://help.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk Help</a>
+          <a href="#">Revit Tutorials</a>
+          <a href="#">CADmep Guides</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Legal</h4>
+        <div class="site-footer-links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-footer-bottom">
+      <div>© 2026 Anarchy Group LTD | https://www.anarchygroup.uk</div>
+      <div>Email: support@revithelpdesk.co.uk</div>
+      <div>This website is not affiliated with Autodesk™, Revit™, CADmep™ or any other Autodesk™ Trademark.</div>
+    </div>
+  </div>
+</footer>
+<!-- FOOTER END -->
+</main>
+
+</body>
+</html>
