@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CADmep Fabrication | Revit CADmep Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --text: #e8eefc;
+      --muted: #a7b4d1;
+      --line: rgba(255,255,255,.08);
+      --accent: #4f8cff;
+      --accent-2: #7fb0ff;
+      --success: #2fbf71;
+      --warning: #ffb347;
+      --danger: #ff6b6b;
+      --shadow: 0 18px 40px rgba(0,0,0,.28);
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(79,140,255,.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(127,176,255,.08), transparent 20%),
+        linear-gradient(180deg, #0a1120 0%, #0d1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .site-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(8, 14, 25, 0.42);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+    }
+
+    .site-nav-wrap {
+      width: min(calc(100% - 2rem), 1320px);
+      margin: 0 auto;
+    }
+
+    .site-nav { padding: 0.75rem 0; }
+
+    .site-nav-top {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #e8eefc;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .site-brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+    }
+
+    .site-brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #e8eefc;
+      margin: 0;
+    }
+
+    .site-brand-subtitle {
+      display: block;
+      margin-top: 0.2rem;
+      color: #a7b4d1;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-nav-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .site-nav-toggle-icon {
+      position: relative;
+      width: 20px;
+      height: 14px;
+    }
+
+    .site-nav-toggle-icon span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: #ffffff;
+      transition: 0.25s ease;
+    }
+
+    .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+    .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+    .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+      top: 6px;
+      transform: rotate(45deg);
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+      top: 6px;
+      transform: rotate(-45deg);
+    }
+
+    .site-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .site-nav-links a {
+      color: #a7b4d1;
+      padding: 0.75rem 0.95rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .site-nav-links a:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav-links a.active {
+      color: #ffffff;
+      background: rgba(79,140,255,0.16);
+      box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 3rem 0 1.5rem;
+    }
+
+    .hero-card,
+    .sidebar-card,
+    .content-card,
+    .info-card,
+    .callout {
+      background: rgba(9,16,28,.55);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #cfe0ff;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(127,176,255,.2);
+    }
+
+    h1, h2, h3, h4 { margin-top: 0; }
+
+    h1 {
+      margin-bottom: .75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 84ch;
+      font-size: 1.05rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: .55rem .85rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #dbe7ff;
+      border: 1px solid rgba(127,176,255,.18);
+      font-size: .9rem;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 94px;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .sidebar-card,
+    .content-card {
+      padding: 1.2rem;
+    }
+
+    .sidebar-card a {
+      display: block;
+      padding: .7rem .8rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+      margin-bottom: .25rem;
+    }
+
+    .sidebar-card a:hover {
+      color: var(--text);
+      background: rgba(79,140,255,.12);
+    }
+
+    .content-stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .7rem;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card {
+      padding: 1rem;
+    }
+
+    .info-card h4 {
+      margin-bottom: .45rem;
+    }
+
+    .callout {
+      padding: 1rem 1.05rem;
+      border-left: 4px solid var(--accent);
+      background: rgba(79,140,255,.09);
+    }
+
+    .callout.warning {
+      border-left-color: var(--warning);
+      background: rgba(255,179,71,.10);
+    }
+
+    .callout.success {
+      border-left-color: var(--success);
+      background: rgba(47,191,113,.10);
+    }
+
+    ul.checklist {
+      margin: .75rem 0 0;
+      padding-left: 1.15rem;
+    }
+
+    ul.checklist li {
+      margin: .35rem 0;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 901px) {
+      .site-nav {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0;
+      }
+
+      .site-nav-top {
+        min-height: 74px;
+        flex: 0 1 auto;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .site-nav-toggle {
+        display: inline-flex;
+      }
+
+      .site-nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.45rem;
+        padding-top: 0.85rem;
+      }
+
+      .site-nav-links.is-open {
+        display: flex;
+      }
+
+      .site-nav-links a {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .site-nav-links a:hover,
+      .site-nav-links a.active {
+        background: rgba(79,140,255,0.12);
+        border-color: rgba(79,140,255,0.22);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-nav-wrap,
+      .container {
+        width: min(calc(100% - 1rem), 1320px);
+      }
+
+      .site-brand-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .site-brand-title {
+        font-size: 0.98rem;
+      }
+
+      .site-brand-subtitle {
+        font-size: 0.76rem;
+        max-width: 48vw;
+      }
+
+      .site-nav-top {
+        gap: 0.75rem;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+<!-- ===== UNIVERSAL NAVBAR START ===== -->
+<style>
+  .site-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(8, 14, 25, 0.42);
+    backdrop-filter: blur(26px) saturate(185%);
+    -webkit-backdrop-filter: blur(26px) saturate(185%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+  }
+
+  .site-nav-wrap {
+    width: min(calc(100% - 2rem), 1320px);
+    margin: 0 auto;
+  }
+
+  .site-nav {
+    padding: 0.75rem 0;
+  }
+
+  .site-nav-top {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #e8eefc;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .site-brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+  }
+
+  .site-brand-text {
+    min-width: 0;
+  }
+
+  .site-brand-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #e8eefc;
+    margin: 0;
+  }
+
+  .site-brand-subtitle {
+    display: block;
+    margin-top: 0.2rem;
+    color: #a7b4d1;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-nav-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .site-nav-toggle:hover {
+    background: rgba(79,140,255,0.14);
+    border-color: rgba(79,140,255,0.38);
+  }
+
+  .site-nav-toggle-icon {
+    position: relative;
+    width: 20px;
+    height: 14px;
+  }
+
+  .site-nav-toggle-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffffff;
+    transition: 0.25s ease;
+  }
+
+  .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+  .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+  .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+
+  .site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .site-nav-links a {
+    color: #a7b4d1;
+    padding: 0.75rem 0.95rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .site-nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .site-nav-links a.active {
+    color: #ffffff;
+    background: rgba(79,140,255,0.16);
+    box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+  }
+
+  @media (min-width: 901px) {
+    .site-nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .site-nav-top {
+      min-height: 74px;
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav-toggle {
+      display: inline-flex;
+    }
+
+    .site-nav-links {
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
+      padding-top: 0.85rem;
+    }
+
+    .site-nav-links.is-open {
+      display: flex;
+    }
+
+    .site-nav-links a {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .site-nav-links a:hover,
+    .site-nav-links a.active {
+      background: rgba(79,140,255,0.12);
+      border-color: rgba(79,140,255,0.22);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-nav-wrap {
+      width: min(calc(100% - 1rem), 1320px);
+    }
+
+    .site-brand-badge {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .site-brand-title {
+      font-size: 0.98rem;
+    }
+
+    .site-brand-subtitle {
+      font-size: 0.76rem;
+      max-width: 48vw;
+    }
+
+    .site-nav-top {
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<header class="site-topbar">
+  <div class="site-nav-wrap">
+    <nav class="site-nav" aria-label="Main navigation">
+      <div class="site-nav-top">
+        <a href="index.html" class="site-brand">
+          <div class="site-brand-badge">RC</div>
+          <div class="site-brand-text">
+            <p class="site-brand-title">Revit CADmep Guide</p>
+            <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
+          </div>
+        </a>
+
+        <button
+          class="site-nav-toggle"
+          id="siteNavToggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-controls="siteNavLinks"
+          aria-expanded="false"
+        >
+          <div class="site-nav-toggle-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index">Home</a>
+        <a href="getting-started">Getting Started</a>
+        <a href="documentation">Documentation</a>
+        <a href="faq">Resources</a>
+        <a href="contact">Contact</a>
+        <a href="privacy-policy">Privacy</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const toggle = document.getElementById("siteNavToggle");
+    const links = document.getElementById("siteNavLinks");
+
+    if (!toggle || !links) return;
+
+    toggle.addEventListener("click", function () {
+      const isOpen = links.classList.toggle("is-open");
+      toggle.classList.toggle("is-open", isOpen);
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    links.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", function () {
+        if (window.innerWidth <= 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 900) {
+        links.classList.remove("is-open");
+        toggle.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  })();
+</script>
+<!-- ===== UNIVERSAL NAVBAR END ===== -->
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">Beginner Guide • CADmep • Fabrication Workflow</div>
+          <h1>CADmep Fabrication</h1>
+          <p class="lead">
+            This page introduces the basics of CADmep fabrication workflows. It is designed for users who need
+            to understand how fabrication content, services, reports, numbering, and outputs fit together in a
+            controlled MEP detailing process.
+          </p>
+
+          <div class="pill-row">
+            <span class="pill">Profiles & databases</span>
+            <span class="pill">Services & ITMs</span>
+            <span class="pill">Fabrication modelling</span>
+            <span class="pill">Reports & numbering</span>
+            <span class="pill">Spooling & export</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container page-grid">
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h3>On this page</h3>
+          <a href="#overview">1. What CADmep fabrication is</a>
+          <a href="#setup">2. Profile and database basics</a>
+          <a href="#services">3. Services and ITM content</a>
+          <a href="#modelling">4. Fabrication modelling basics</a>
+          <a href="#numbering">5. Numbering and reports</a>
+          <a href="#spooling">6. Spooling and outputs</a>
+          <a href="#qa">7. QA basics</a>
+          <a href="#mistakes">8. Common beginner mistakes</a>
+          <a href="#dos-donts">9. Do / Don’t guidance</a>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Quick reminders</h3>
+          <ul class="checklist">
+            <li>CADmep is driven by content and database control</li>
+            <li>Services matter as much as geometry</li>
+            <li>Reports reflect model quality</li>
+            <li>Do not spool unstable information</li>
+            <li>Fix setup issues before bulk modelling</li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="content-stack">
+        <section id="overview" class="content-card">
+          <div class="section-head">
+            <h2>1. What CADmep fabrication is</h2>
+            <span class="section-tag">Start here</span>
+          </div>
+          <p class="muted">
+            CADmep fabrication is a workflow used to create fabrication-intent MEP content for ductwork, pipework,
+            and related systems. It is not only drawing geometry — it is working with controlled items, services,
+            and data so that the model can support reporting, numbering, spooling, and downstream manufacture.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Item-based</h4>
+              <p class="muted">CADmep uses fabrication items rather than only generic drafting objects.</p>
+            </div>
+            <div class="info-card">
+              <h4>Database-driven</h4>
+              <p class="muted">The quality of the database and content strongly affects the workflow.</p>
+            </div>
+            <div class="info-card">
+              <h4>Output-focused</h4>
+              <p class="muted">The model supports reports, numbering, spools, and other fabrication deliverables.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="setup" class="content-card">
+          <div class="section-head">
+            <h2>2. Profile and database basics</h2>
+            <span class="section-tag">Before modelling starts</span>
+          </div>
+
+          <p class="muted">
+            Good fabrication work starts with the correct environment. If the wrong profile or wrong database is active,
+            the rest of the workflow becomes less reliable very quickly.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Check these first</strong>
+              <ul class="checklist">
+                <li>Correct CADmep profile</li>
+                <li>Correct fabrication database path</li>
+                <li>Correct project content source</li>
+                <li>Correct setup for the intended workflow</li>
+              </ul>
+            </div>
+
+            <div class="callout.success">
+              <strong>Why this matters</strong>
+              <ul class="checklist">
+                <li>Reduces content inconsistency</li>
+                <li>Improves report quality</li>
+                <li>Supports repeatable modelling</li>
+                <li>Reduces downstream rework</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout.warning" style="margin-top:1rem;">
+            <strong>Warning:</strong>
+            Users often try to model around poor setup. That usually creates bigger problems later in reports, numbering, and outputs.
+          </div>
+        </section>
+
+        <section id="services" class="content-card">
+          <div class="section-head">
+            <h2>3. Services and ITM content</h2>
+            <span class="section-tag">Core content structure</span>
+          </div>
+
+          <p class="muted">
+            Services and ITM content are central to CADmep. Services control what users can place, and ITM files
+            control the behaviour of the fabrication items being used.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Services</h4>
+              <ul class="checklist">
+                <li>Control available item selections</li>
+                <li>Support consistency across users</li>
+                <li>Should follow project standards</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Service templates</h4>
+              <ul class="checklist">
+                <li>Should be controlled and approved</li>
+                <li>Need to reflect the intended workflow</li>
+                <li>Should not be changed casually</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>ITM files</h4>
+              <ul class="checklist">
+                <li>Define fabrication items</li>
+                <li>Influence reports and outputs</li>
+                <li>Need to be organised and maintained</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="modelling" class="content-card">
+          <div class="section-head">
+            <h2>4. Fabrication modelling basics</h2>
+            <span class="section-tag">Model with purpose</span>
+          </div>
+
+          <p class="muted">
+            Fabrication modelling in CADmep should be done with downstream outputs in mind. The user should think
+            about consistency, connectivity, and how the selected items will behave in reports and spools.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Good modelling practice</strong>
+              <ul class="checklist">
+                <li>Use approved services</li>
+                <li>Use consistent items for similar conditions</li>
+                <li>Maintain clear connectivity</li>
+                <li>Think about report and spool behaviour as you model</li>
+              </ul>
+            </div>
+
+            <div class="callout.success">
+              <strong>What strong modelling supports</strong>
+              <ul class="checklist">
+                <li>Cleaner reports</li>
+                <li>Better numbering</li>
+                <li>Clearer spool output</li>
+                <li>Better communication to manufacture and installation</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="numbering" class="content-card">
+          <div class="section-head">
+            <h2>5. Numbering and reports</h2>
+            <span class="section-tag">Data and outputs</span>
+          </div>
+
+          <p class="muted">
+            Numbering and reports are some of the most important downstream functions in CADmep. They depend on
+            consistent modelling and a clear understanding of what makes one item the same as or different from another.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Numbering logic</h4>
+              <ul class="checklist">
+                <li>Should be agreed early</li>
+                <li>Should reflect consistent item use</li>
+                <li>Should avoid unnecessary variation</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Reports</h4>
+              <ul class="checklist">
+                <li>Support delivery information</li>
+                <li>Can also be used as QA tools</li>
+                <li>Need checking before issue</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Output quality</h4>
+              <ul class="checklist">
+                <li>Depends on content quality</li>
+                <li>Depends on model consistency</li>
+                <li>Should not be assumed correct without review</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="spooling" class="content-card">
+          <div class="section-head">
+            <h2>6. Spooling and outputs</h2>
+            <span class="section-tag">Downstream deliverables</span>
+          </div>
+
+          <p class="muted">
+            Spooling and export outputs should happen at the right point in the workflow. If the model is still unstable,
+            releasing spool or export information too early can create unnecessary rework.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Before spooling or export</strong>
+              <ul class="checklist">
+                <li>Check content consistency</li>
+                <li>Confirm numbering logic</li>
+                <li>Review coordination status</li>
+                <li>Check the intended scope carefully</li>
+              </ul>
+            </div>
+
+            <div class="callout.warning">
+              <strong>Do not rush outputs</strong>
+              <ul class="checklist">
+                <li>If the model is still changing heavily</li>
+                <li>If content is inconsistent</li>
+                <li>If numbering rules are unclear</li>
+                <li>If scope boundaries are not agreed</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="qa" class="content-card">
+          <div class="section-head">
+            <h2>7. QA basics</h2>
+            <span class="section-tag">Check before issue</span>
+          </div>
+
+          <p class="muted">
+            QA in CADmep is not only about checking a finished report. It should begin with the profile, database,
+            services, and content before the user moves on to modelling, numbering, and outputs.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Setup QA</h4>
+              <ul class="checklist">
+                <li>Correct profile</li>
+                <li>Correct database</li>
+                <li>Correct services</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Model QA</h4>
+              <ul class="checklist">
+                <li>Consistent items</li>
+                <li>Clear connectivity</li>
+                <li>Stable enough for outputs</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Output QA</h4>
+              <ul class="checklist">
+                <li>Reports reviewed</li>
+                <li>Spools reviewed</li>
+                <li>Exports validated</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="mistakes" class="content-card">
+          <div class="section-head">
+            <h2>8. Common beginner mistakes</h2>
+            <span class="section-tag">Avoid these early</span>
+          </div>
+
+          <ul class="checklist">
+            <li>Starting with the wrong profile or database</li>
+            <li>Using uncontrolled services or content</li>
+            <li>Mixing inconsistent items for similar conditions</li>
+            <li>Ignoring numbering logic until late in the workflow</li>
+            <li>Spooling unstable information too early</li>
+            <li>Assuming report problems are only report-command problems</li>
+            <li>Trying to work around setup problems manually</li>
+          </ul>
+
+          <div class="callout.warning" style="margin-top:1rem;">
+            <strong>Important:</strong>
+            In CADmep, many workflow problems begin upstream in content and setup, even if they only become obvious at output stage.
+          </div>
+        </section>
+
+        <section id="dos-donts" class="content-card">
+          <div class="section-head">
+            <h2>9. Do / Don’t guidance</h2>
+            <span class="section-tag">Quick reference</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="info-card">
+              <h4>Do</h4>
+              <ul class="checklist">
+                <li>Use the approved profile and database</li>
+                <li>Use controlled services and ITM content</li>
+                <li>Model consistently</li>
+                <li>Think about numbering and reports early</li>
+                <li>Check outputs before issue</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Don’t</h4>
+              <ul class="checklist">
+                <li>Let users create their own uncontrolled workflows</li>
+                <li>Ignore content problems until report stage</li>
+                <li>Use inconsistent items casually</li>
+                <li>Spool unstable content too early</li>
+                <li>Assume automation will fix poor modelling</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:1rem;">
+            <strong>Final takeaway:</strong>
+            CADmep fabrication basics are really about controlled content, consistent modelling, and understanding how the model drives the outputs.
+            If the setup and standards are right, the workflow becomes much more reliable.
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+ <!-- FOOTER START -->
+<style>
+  .site-footer {
+    margin-top: 2rem;
+    padding: 2rem 0 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    background: rgba(8,14,25,.85);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-footer .site-footer-container {
+    width: min(calc(100% - 2rem), 1200px);
+    margin: 0 auto;
+  }
+
+  .site-footer .site-footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .site-footer .site-footer-col h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    color: #e8eefc;
+  }
+
+  .site-footer .site-footer-col p {
+    margin: 0;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .site-footer .site-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #e8eefc;
+    font-weight: 700;
+  }
+
+  .site-footer .site-footer-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .site-footer .site-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .site-footer .site-footer-links a {
+    display: block;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .site-footer .site-footer-links a:hover {
+    color: #4f8cff;
+    transform: translateX(2px);
+  }
+
+  .site-footer .site-footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: #a7b4d1;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer .site-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<footer class="site-footer">
+  <div class="site-footer-container">
+    <div class="site-footer-grid">
+      <div class="site-footer-col">
+        <div class="site-footer-brand">
+          <div class="site-footer-badge">RC</div>
+          <span>Revit CADmep Guide</span>
+        </div>
+        <p>
+          A professional resource for learning Autodesk Revit and CADmep,
+          covering BIM workflows, fabrication, and coordination.
+        </p>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Navigation</h4>
+        <div class="site-footer-links">
+          <a href="index.html">Home</a>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="faq.html">Resources</a>
+          <a href="documentation.html">Standards</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Resources</h4>
+        <div class="site-footer-links">
+          <a href="https://www.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk</a>
+          <a href="https://help.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk Help</a>
+          <a href="#">Revit Tutorials</a>
+          <a href="#">CADmep Guides</a>
+          <a href="downloads">Downloads</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Legal</h4>
+        <div class="site-footer-links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-footer-bottom">
+      <div>© 2026 Anarchy Group LTD | https://www.anarchygroup.uk</div>
+      <div>Email: support@revithelpdesk.co.uk</div>
+      <div>This website is not affiliated with Autodesk™, Revit™, CADmep™ or any other Autodesk™ Trademark.</div>
+    </div>
+  </div>
+</footer>
+<!-- FOOTER END -->
+
+  <script>
+    (function () {
+      const toggle = document.getElementById("siteNavToggle");
+      const links = document.getElementById("siteNavLinks");
+
+      if (!toggle || !links) return;
+
+      toggle.addEventListener("click", function () {
+        const isOpen = links.classList.toggle("is-open");
+        toggle.classList.toggle("is-open", isOpen);
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      links.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", function () {
+          if (window.innerWidth <= 900) {
+            links.classList.remove("is-open");
+            toggle.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
