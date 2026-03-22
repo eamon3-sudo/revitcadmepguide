@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coordination Workflows | Revit CADmep Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --text: #e8eefc;
+      --muted: #a7b4d1;
+      --line: rgba(255,255,255,.08);
+      --accent: #4f8cff;
+      --accent-2: #7fb0ff;
+      --success: #2fbf71;
+      --warning: #ffb347;
+      --danger: #ff6b6b;
+      --shadow: 0 18px 40px rgba(0,0,0,.28);
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(79,140,255,.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(127,176,255,.08), transparent 20%),
+        linear-gradient(180deg, #0a1120 0%, #0d1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .site-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(8, 14, 25, 0.42);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+    }
+
+    .site-nav-wrap {
+      width: min(calc(100% - 2rem), 1320px);
+      margin: 0 auto;
+    }
+
+    .site-nav { padding: 0.75rem 0; }
+
+    .site-nav-top {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #e8eefc;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .site-brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+    }
+
+    .site-brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #e8eefc;
+      margin: 0;
+    }
+
+    .site-brand-subtitle {
+      display: block;
+      margin-top: 0.2rem;
+      color: #a7b4d1;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-nav-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .site-nav-toggle-icon {
+      position: relative;
+      width: 20px;
+      height: 14px;
+    }
+
+    .site-nav-toggle-icon span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: #ffffff;
+      transition: 0.25s ease;
+    }
+
+    .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+    .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+    .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+      top: 6px;
+      transform: rotate(45deg);
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+      top: 6px;
+      transform: rotate(-45deg);
+    }
+
+    .site-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .site-nav-links a {
+      color: #a7b4d1;
+      padding: 0.75rem 0.95rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .site-nav-links a:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav-links a.active {
+      color: #ffffff;
+      background: rgba(79,140,255,0.16);
+      box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 3rem 0 1.5rem;
+    }
+
+    .hero-card,
+    .sidebar-card,
+    .content-card,
+    .info-card,
+    .callout {
+      background: rgba(9,16,28,.55);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #cfe0ff;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(127,176,255,.2);
+    }
+
+    h1, h2, h3, h4 { margin-top: 0; }
+
+    h1 {
+      margin-bottom: .75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 84ch;
+      font-size: 1.05rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: .55rem .85rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #dbe7ff;
+      border: 1px solid rgba(127,176,255,.18);
+      font-size: .9rem;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 94px;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .sidebar-card,
+    .content-card {
+      padding: 1.2rem;
+    }
+
+    .sidebar-card a {
+      display: block;
+      padding: .7rem .8rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+      margin-bottom: .25rem;
+    }
+
+    .sidebar-card a:hover {
+      color: var(--text);
+      background: rgba(79,140,255,.12);
+    }
+
+    .content-stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .7rem;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card {
+      padding: 1rem;
+    }
+
+    .info-card h4 {
+      margin-bottom: .45rem;
+    }
+
+    .callout {
+      padding: 1rem 1.05rem;
+      border-left: 4px solid var(--accent);
+      background: rgba(79,140,255,.09);
+    }
+
+    .callout.warning {
+      border-left-color: var(--warning);
+      background: rgba(255,179,71,.10);
+    }
+
+    .callout.success {
+      border-left-color: var(--success);
+      background: rgba(47,191,113,.10);
+    }
+
+    ul.checklist {
+      margin: .75rem 0 0;
+      padding-left: 1.15rem;
+    }
+
+    ul.checklist li {
+      margin: .35rem 0;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 901px) {
+      .site-nav {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0;
+      }
+
+      .site-nav-top {
+        min-height: 74px;
+        flex: 0 1 auto;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .site-nav-toggle {
+        display: inline-flex;
+      }
+
+      .site-nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.45rem;
+        padding-top: 0.85rem;
+      }
+
+      .site-nav-links.is-open {
+        display: flex;
+      }
+
+      .site-nav-links a {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .site-nav-links a:hover,
+      .site-nav-links a.active {
+        background: rgba(79,140,255,0.12);
+        border-color: rgba(79,140,255,0.22);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-nav-wrap,
+      .container {
+        width: min(calc(100% - 1rem), 1320px);
+      }
+
+      .site-brand-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .site-brand-title {
+        font-size: 0.98rem;
+      }
+
+      .site-brand-subtitle {
+        font-size: 0.76rem;
+        max-width: 48vw;
+      }
+
+      .site-nav-top {
+        gap: 0.75rem;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+<!-- ===== UNIVERSAL NAVBAR START ===== -->
+<style>
+  .site-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(8, 14, 25, 0.42);
+    backdrop-filter: blur(26px) saturate(185%);
+    -webkit-backdrop-filter: blur(26px) saturate(185%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+  }
+
+  .site-nav-wrap {
+    width: min(calc(100% - 2rem), 1320px);
+    margin: 0 auto;
+  }
+
+  .site-nav {
+    padding: 0.75rem 0;
+  }
+
+  .site-nav-top {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #e8eefc;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .site-brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+  }
+
+  .site-brand-text {
+    min-width: 0;
+  }
+
+  .site-brand-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #e8eefc;
+    margin: 0;
+  }
+
+  .site-brand-subtitle {
+    display: block;
+    margin-top: 0.2rem;
+    color: #a7b4d1;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-nav-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .site-nav-toggle:hover {
+    background: rgba(79,140,255,0.14);
+    border-color: rgba(79,140,255,0.38);
+  }
+
+  .site-nav-toggle-icon {
+    position: relative;
+    width: 20px;
+    height: 14px;
+  }
+
+  .site-nav-toggle-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffffff;
+    transition: 0.25s ease;
+  }
+
+  .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+  .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+  .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+
+  .site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .site-nav-links a {
+    color: #a7b4d1;
+    padding: 0.75rem 0.95rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .site-nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .site-nav-links a.active {
+    color: #ffffff;
+    background: rgba(79,140,255,0.16);
+    box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+  }
+
+  @media (min-width: 901px) {
+    .site-nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .site-nav-top {
+      min-height: 74px;
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav-toggle {
+      display: inline-flex;
+    }
+
+    .site-nav-links {
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
+      padding-top: 0.85rem;
+    }
+
+    .site-nav-links.is-open {
+      display: flex;
+    }
+
+    .site-nav-links a {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .site-nav-links a:hover,
+    .site-nav-links a.active {
+      background: rgba(79,140,255,0.12);
+      border-color: rgba(79,140,255,0.22);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-nav-wrap {
+      width: min(calc(100% - 1rem), 1320px);
+    }
+
+    .site-brand-badge {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .site-brand-title {
+      font-size: 0.98rem;
+    }
+
+    .site-brand-subtitle {
+      font-size: 0.76rem;
+      max-width: 48vw;
+    }
+
+    .site-nav-top {
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<header class="site-topbar">
+  <div class="site-nav-wrap">
+    <nav class="site-nav" aria-label="Main navigation">
+      <div class="site-nav-top">
+        <a href="index.html" class="site-brand">
+          <div class="site-brand-badge">RC</div>
+          <div class="site-brand-text">
+            <p class="site-brand-title">Revit CADmep Guide</p>
+            <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
+          </div>
+        </a>
+
+        <button
+          class="site-nav-toggle"
+          id="siteNavToggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-controls="siteNavLinks"
+          aria-expanded="false"
+        >
+          <div class="site-nav-toggle-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index">Home</a>
+        <a href="getting-started">Getting Started</a>
+        <a href="documentation">Documentation</a>
+        <a href="faq" class="active">Resources</a>
+        <a href="contact">Contact</a>
+        <a href="privacy-policy">Privacy</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">Category • Coordination • Models • Actions</div>
+          <h1>Coordination Workflows</h1>
+          <p class="lead">
+            This page outlines practical coordination workflows for model-based projects. It focuses on linked
+            model review, clash detection, issue management, action tracking, and the discipline needed to move
+            from identified problems to closed coordination outcomes.
+          </p>
+
+          <div class="pill-row">
+            <span class="pill">Linked models</span>
+            <span class="pill">Clash detection</span>
+            <span class="pill">Issue tracking</span>
+            <span class="pill">Action ownership</span>
+            <span class="pill">Close-out</span>
+            <span class="pill">QA for coordination</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container page-grid">
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h3>On this page</h3>
+          <a href="#overview">1. Overview</a>
+          <a href="#stages">2. Coordination stages</a>
+          <a href="#linked-models">3. Linked model reviews</a>
+          <a href="#clash-detection">4. Clash detection workflows</a>
+          <a href="#issue-management">5. Issue management</a>
+          <a href="#actions">6. Actions and communication</a>
+          <a href="#closeout">7. Close-out and re-checks</a>
+          <a href="#qa">8. QA expectations</a>
+          <a href="#dos-donts">9. Do / Don’t guidance</a>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Quick reminders</h3>
+          <ul class="checklist">
+            <li>Coordination is more than clash detection</li>
+            <li>Ownership matters as much as identification</li>
+            <li>Record actions clearly</li>
+            <li>Re-check after change</li>
+            <li>Close out issues properly</li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="content-stack">
+        <section id="overview" class="content-card">
+          <div class="section-head">
+            <h2>1. Overview</h2>
+            <span class="section-tag">Foundation</span>
+          </div>
+          <p class="muted">
+            Coordination workflows are the structured processes teams use to identify, communicate, resolve, and
+            verify model issues across disciplines. A strong workflow does not stop at finding clashes — it creates
+            clarity around what the problem is, who owns it, what needs to happen next, and when the issue is truly closed.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Identify</h4>
+              <p class="muted">Find the issue clearly and understand its real impact.</p>
+            </div>
+            <div class="info-card">
+              <h4>Assign</h4>
+              <p class="muted">Make ownership and next action clear.</p>
+            </div>
+            <div class="info-card">
+              <h4>Verify</h4>
+              <p class="muted">Re-check the change and confirm the issue is closed.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="stages" class="content-card">
+          <div class="section-head">
+            <h2>2. Coordination stages</h2>
+            <span class="section-tag">Typical sequence</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Typical coordination sequence</strong>
+              <ul class="checklist">
+                <li>Review model inputs and linked model condition</li>
+                <li>Run or review clash detection</li>
+                <li>Filter and prioritise issues</li>
+                <li>Assign ownership and actions</li>
+                <li>Update models or information</li>
+                <li>Re-run checks and close out</li>
+              </ul>
+            </div>
+
+            <div class="callout.success">
+              <strong>Why sequence matters</strong>
+              <ul class="checklist">
+                <li>Reduces noise from low-value clashes</li>
+                <li>Improves focus on meaningful issues</li>
+                <li>Supports accountability</li>
+                <li>Improves confidence in close-out decisions</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="linked-models" class="content-card">
+          <div class="section-head">
+            <h2>3. Linked model reviews</h2>
+            <span class="section-tag">Start with good inputs</span>
+          </div>
+
+          <p class="muted">
+            Coordination quality depends on model input quality. If linked models are mispositioned, outdated,
+            or poorly understood, the coordination process becomes less reliable.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Positioning</h4>
+              <ul class="checklist">
+                <li>Check the linked model location</li>
+                <li>Confirm shared coordinates strategy if used</li>
+                <li>Avoid guessing alignment</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Version awareness</h4>
+              <ul class="checklist">
+                <li>Know which linked version is under review</li>
+                <li>Be aware of outdated reference models</li>
+                <li>Check if a coordination problem is already superseded</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Scope awareness</h4>
+              <ul class="checklist">
+                <li>Understand which discipline owns which geometry</li>
+                <li>Be clear on host vs linked responsibility</li>
+                <li>Review major interfaces early</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout.warning" style="margin-top:1rem;">
+            <strong>Warning:</strong>
+            A clash result is only as useful as the model inputs that produced it.
+          </div>
+        </section>
+
+        <section id="clash-detection" class="content-card">
+          <div class="section-head">
+            <h2>4. Clash detection workflows</h2>
+            <span class="section-tag">Find the right problems</span>
+          </div>
+
+          <p class="muted">
+            Clash detection should be used to find meaningful coordination problems, not to generate uncontrolled lists
+            of everything that overlaps. The review process should focus on relevance, severity, and actionability.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Good clash workflow</strong>
+              <ul class="checklist">
+                <li>Use sensible clash sets</li>
+                <li>Review clash results in context</li>
+                <li>Separate genuine issues from false positives</li>
+                <li>Prioritise high-impact issues first</li>
+              </ul>
+            </div>
+
+            <div class="callout.success">
+              <strong>Useful review questions</strong>
+              <ul class="checklist">
+                <li>Is it a real clash?</li>
+                <li>Does it affect installation or access?</li>
+                <li>Who owns the next action?</li>
+                <li>Does it need immediate close-out or later review?</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="issue-management" class="content-card">
+          <div class="section-head">
+            <h2>5. Issue management</h2>
+            <span class="section-tag">From problem to action</span>
+          </div>
+
+          <p class="muted">
+            Coordination improves when issues are recorded clearly. A useful issue record should explain the problem,
+            show the location or context, identify the owner, and describe the expected next step.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Record clearly</h4>
+              <ul class="checklist">
+                <li>Describe the problem simply</li>
+                <li>Give enough context</li>
+                <li>Reference location or model area</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Assign clearly</h4>
+              <ul class="checklist">
+                <li>Identify the responsible owner</li>
+                <li>Set an expected action</li>
+                <li>Set a review target if needed</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Track clearly</h4>
+              <ul class="checklist">
+                <li>Know what is open</li>
+                <li>Know what has changed</li>
+                <li>Know what is closed and why</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="actions" class="content-card">
+          <div class="section-head">
+            <h2>6. Actions and communication</h2>
+            <span class="section-tag">Make the next step obvious</span>
+          </div>
+
+          <p class="muted">
+            Coordination workflows are much stronger when the next action is clearly communicated. The aim is to
+            reduce ambiguity and prevent issues from being repeatedly rediscovered without progress.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Good action tracking</strong>
+              <ul class="checklist">
+                <li>State what needs to change</li>
+                <li>State who is expected to act</li>
+                <li>State when it should be reviewed again</li>
+                <li>Keep the issue record easy to understand</li>
+              </ul>
+            </div>
+
+            <div class="callout.warning">
+              <strong>Poor communication signs</strong>
+              <ul class="checklist">
+                <li>Repeated vague comments</li>
+                <li>No ownership</li>
+                <li>No re-check date or trigger</li>
+                <li>Issues discussed verbally but not recorded</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="closeout" class="content-card">
+          <div class="section-head">
+            <h2>7. Close-out and re-checks</h2>
+            <span class="section-tag">Confirm it is actually resolved</span>
+          </div>
+
+          <p class="muted">
+            Closing an issue should not only mean that someone says it is fixed. Strong coordination practice means
+            the change is checked again and the team is satisfied the issue no longer causes the same problem.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Before close-out</strong>
+              <ul class="checklist">
+                <li>Confirm the model or information changed</li>
+                <li>Re-check the original issue context</li>
+                <li>Confirm the issue no longer affects the workflow</li>
+              </ul>
+            </div>
+
+            <div class="callout.success">
+              <strong>Good close-out behaviour</strong>
+              <ul class="checklist">
+                <li>Close with evidence, not assumption</li>
+                <li>Keep the record understandable later</li>
+                <li>Be clear if an issue is deferred rather than resolved</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="qa" class="content-card">
+          <div class="section-head">
+            <h2>8. QA expectations</h2>
+            <span class="section-tag">Coordination quality</span>
+          </div>
+
+          <p class="muted">
+            Coordination workflows benefit from QA just like models and drawings do. The process itself should be
+            structured, consistent, and reviewable.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Input QA</h4>
+              <ul class="checklist">
+                <li>Correct linked models</li>
+                <li>Correct scope of review</li>
+                <li>Known model limitations understood</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Process QA</h4>
+              <ul class="checklist">
+                <li>Useful clash rules</li>
+                <li>Useful filtering and prioritisation</li>
+                <li>Clear issue records</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Output QA</h4>
+              <ul class="checklist">
+                <li>Actions are tracked</li>
+                <li>Close-out is verified</li>
+                <li>Records support later review</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="dos-donts" class="content-card">
+          <div class="section-head">
+            <h2>9. Do / Don’t guidance</h2>
+            <span class="section-tag">Quick reference</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="info-card">
+              <h4>Do</h4>
+              <ul class="checklist">
+                <li>Start with good linked-model inputs</li>
+                <li>Prioritise meaningful clashes</li>
+                <li>Assign clear ownership</li>
+                <li>Track actions and re-check changes</li>
+                <li>Close issues with evidence</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Don’t</h4>
+              <ul class="checklist">
+                <li>Treat every clash as equally important</li>
+                <li>Confuse identification with resolution</li>
+                <li>Leave actions vague</li>
+                <li>Close issues without re-checking</li>
+                <li>Rely on memory instead of records</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:1rem;">
+            <strong>Final takeaway:</strong>
+            Strong coordination workflows create clarity, ownership, and confidence. The real value is not only in finding problems,
+            but in making sure the right problems are acted on and properly closed.
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+<!-- FOOTER START -->
+<style>
+  .site-footer {
+    margin-top: 2rem;
+    padding: 2rem 0 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    background: rgba(8,14,25,.85);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-footer .site-footer-container {
+    width: min(calc(100% - 2rem), 1200px);
+    margin: 0 auto;
+  }
+
+  .site-footer .site-footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .site-footer .site-footer-col h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    color: #e8eefc;
+  }
+
+  .site-footer .site-footer-col p {
+    margin: 0;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .site-footer .site-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #e8eefc;
+    font-weight: 700;
+  }
+
+  .site-footer .site-footer-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .site-footer .site-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .site-footer .site-footer-links a {
+    display: block;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .site-footer .site-footer-links a:hover {
+    color: #4f8cff;
+    transform: translateX(2px);
+  }
+
+  .site-footer .site-footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: #a7b4d1;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer .site-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<footer class="site-footer">
+  <div class="site-footer-container">
+    <div class="site-footer-grid">
+      <div class="site-footer-col">
+        <div class="site-footer-brand">
+          <div class="site-footer-badge">RC</div>
+          <span>Revit CADmep Guide</span>
+        </div>
+        <p>
+          A professional resource for learning Autodesk Revit and CADmep,
+          covering BIM workflows, fabrication, and coordination.
+        </p>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Navigation</h4>
+        <div class="site-footer-links">
+          <a href="index.html">Home</a>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="faq.html">Resources</a>
+          <a href="documentation.html">Standards</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Resources</h4>
+        <div class="site-footer-links">
+          <a href="https://www.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk</a>
+          <a href="https://help.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk Help</a>
+          <a href="#">Revit Tutorials</a>
+          <a href="#">CADmep Guides</a>
+          <a href="downloads">Downloads</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Legal</h4>
+        <div class="site-footer-links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-footer-bottom">
+      <div>© 2026 Anarchy Group LTD | https://www.anarchygroup.uk</div>
+      <div>Email: support@revithelpdesk.co.uk</div>
+      <div>This website is not affiliated with Autodesk™, Revit™, CADmep™ or any other Autodesk™ Trademark.</div>
+    </div>
+  </div>
+</footer>
+<!-- FOOTER END -->
+
+  <script>
+    (function () {
+      const toggle = document.getElementById("siteNavToggle");
+      const links = document.getElementById("siteNavLinks");
+
+      if (!toggle || !links) return;
+
+      toggle.addEventListener("click", function () {
+        const isOpen = links.classList.toggle("is-open");
+        toggle.classList.toggle("is-open", isOpen);
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      links.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", function () {
+          if (window.innerWidth <= 900) {
+            links.classList.remove("is-open");
+            toggle.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
