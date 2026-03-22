@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modeling Standards | Revit CADmep Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --text: #e8eefc;
+      --muted: #a7b4d1;
+      --line: rgba(255,255,255,.08);
+      --accent: #4f8cff;
+      --accent-2: #7fb0ff;
+      --success: #2fbf71;
+      --warning: #ffb347;
+      --danger: #ff6b6b;
+      --shadow: 0 18px 40px rgba(0,0,0,.28);
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(79,140,255,.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(127,176,255,.08), transparent 20%),
+        linear-gradient(180deg, #0a1120 0%, #0d1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .site-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(8, 14, 25, 0.42);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+    }
+
+    .site-nav-wrap {
+      width: min(calc(100% - 2rem), 1320px);
+      margin: 0 auto;
+    }
+
+    .site-nav { padding: 0.75rem 0; }
+
+    .site-nav-top {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #e8eefc;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .site-brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+    }
+
+    .site-brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #e8eefc;
+      margin: 0;
+    }
+
+    .site-brand-subtitle {
+      display: block;
+      margin-top: 0.2rem;
+      color: #a7b4d1;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-nav-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .site-nav-toggle-icon {
+      position: relative;
+      width: 20px;
+      height: 14px;
+    }
+
+    .site-nav-toggle-icon span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: #ffffff;
+      transition: 0.25s ease;
+    }
+
+    .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+    .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+    .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+      top: 6px;
+      transform: rotate(45deg);
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+      top: 6px;
+      transform: rotate(-45deg);
+    }
+
+    .site-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .site-nav-links a {
+      color: #a7b4d1;
+      padding: 0.75rem 0.95rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .site-nav-links a:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav-links a.active {
+      color: #ffffff;
+      background: rgba(79,140,255,0.16);
+      box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 3rem 0 1.5rem;
+    }
+
+    .hero-card,
+    .sidebar-card,
+    .content-card,
+    .info-card,
+    .callout {
+      background: rgba(9,16,28,.55);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #cfe0ff;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(127,176,255,.2);
+    }
+
+    h1, h2, h3, h4 { margin-top: 0; }
+
+    h1 {
+      margin-bottom: .75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 84ch;
+      font-size: 1.05rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: .55rem .85rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #dbe7ff;
+      border: 1px solid rgba(127,176,255,.18);
+      font-size: .9rem;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 94px;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .sidebar-card,
+    .content-card {
+      padding: 1.2rem;
+    }
+
+    .sidebar-card a {
+      display: block;
+      padding: .7rem .8rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+      margin-bottom: .25rem;
+    }
+
+    .sidebar-card a:hover {
+      color: var(--text);
+      background: rgba(79,140,255,.12);
+    }
+
+    .content-stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .7rem;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card {
+      padding: 1rem;
+    }
+
+    .info-card h4 {
+      margin-bottom: .45rem;
+    }
+
+    .callout {
+      padding: 1rem 1.05rem;
+      border-left: 4px solid var(--accent);
+      background: rgba(79,140,255,.09);
+    }
+
+    .callout.warning {
+      border-left-color: var(--warning);
+      background: rgba(255,179,71,.10);
+    }
+
+    .callout.success {
+      border-left-color: var(--success);
+      background: rgba(47,191,113,.10);
+    }
+
+    ul.checklist {
+      margin: .75rem 0 0;
+      padding-left: 1.15rem;
+    }
+
+    ul.checklist li {
+      margin: .35rem 0;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 901px) {
+      .site-nav {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0;
+      }
+
+      .site-nav-top {
+        min-height: 74px;
+        flex: 0 1 auto;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .site-nav-toggle {
+        display: inline-flex;
+      }
+
+      .site-nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.45rem;
+        padding-top: 0.85rem;
+      }
+
+      .site-nav-links.is-open {
+        display: flex;
+      }
+
+      .site-nav-links a {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .site-nav-links a:hover,
+      .site-nav-links a.active {
+        background: rgba(79,140,255,0.12);
+        border-color: rgba(79,140,255,0.22);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-nav-wrap,
+      .container {
+        width: min(calc(100% - 1rem), 1320px);
+      }
+
+      .site-brand-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .site-brand-title {
+        font-size: 0.98rem;
+      }
+
+      .site-brand-subtitle {
+        font-size: 0.76rem;
+        max-width: 48vw;
+      }
+
+      .site-nav-top {
+        gap: 0.75rem;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+<!-- ===== UNIVERSAL NAVBAR START ===== -->
+<style>
+  .site-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(8, 14, 25, 0.42);
+    backdrop-filter: blur(26px) saturate(185%);
+    -webkit-backdrop-filter: blur(26px) saturate(185%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+  }
+
+  .site-nav-wrap {
+    width: min(calc(100% - 2rem), 1320px);
+    margin: 0 auto;
+  }
+
+  .site-nav {
+    padding: 0.75rem 0;
+  }
+
+  .site-nav-top {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #e8eefc;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .site-brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+  }
+
+  .site-brand-text {
+    min-width: 0;
+  }
+
+  .site-brand-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #e8eefc;
+    margin: 0;
+  }
+
+  .site-brand-subtitle {
+    display: block;
+    margin-top: 0.2rem;
+    color: #a7b4d1;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-nav-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .site-nav-toggle:hover {
+    background: rgba(79,140,255,0.14);
+    border-color: rgba(79,140,255,0.38);
+  }
+
+  .site-nav-toggle-icon {
+    position: relative;
+    width: 20px;
+    height: 14px;
+  }
+
+  .site-nav-toggle-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffffff;
+    transition: 0.25s ease;
+  }
+
+  .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+  .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+  .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+
+  .site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .site-nav-links a {
+    color: #a7b4d1;
+    padding: 0.75rem 0.95rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .site-nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .site-nav-links a.active {
+    color: #ffffff;
+    background: rgba(79,140,255,0.16);
+    box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+  }
+
+  @media (min-width: 901px) {
+    .site-nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .site-nav-top {
+      min-height: 74px;
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav-toggle {
+      display: inline-flex;
+    }
+
+    .site-nav-links {
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
+      padding-top: 0.85rem;
+    }
+
+    .site-nav-links.is-open {
+      display: flex;
+    }
+
+    .site-nav-links a {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .site-nav-links a:hover,
+    .site-nav-links a.active {
+      background: rgba(79,140,255,0.12);
+      border-color: rgba(79,140,255,0.22);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-nav-wrap {
+      width: min(calc(100% - 1rem), 1320px);
+    }
+
+    .site-brand-badge {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .site-brand-title {
+      font-size: 0.98rem;
+    }
+
+    .site-brand-subtitle {
+      font-size: 0.76rem;
+      max-width: 48vw;
+    }
+
+    .site-nav-top {
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<header class="site-topbar">
+  <div class="site-nav-wrap">
+    <nav class="site-nav" aria-label="Main navigation">
+      <div class="site-nav-top">
+        <a href="index.html" class="site-brand">
+          <div class="site-brand-badge">RC</div>
+          <div class="site-brand-text">
+            <p class="site-brand-title">Revit CADmep Guide</p>
+            <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
+          </div>
+        </a>
+
+        <button
+          class="site-nav-toggle"
+          id="siteNavToggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-controls="siteNavLinks"
+          aria-expanded="false"
+        >
+          <div class="site-nav-toggle-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index">Home</a>
+        <a href="getting-started">Getting Started</a>
+        <a href="documentation">Documentation</a>
+        <a href="faq">Resources</a>
+        <a href="contact">Contact</a>
+        <a href="privacy-policy">Privacy</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const toggle = document.getElementById("siteNavToggle");
+    const links = document.getElementById("siteNavLinks");
+
+    if (!toggle || !links) return;
+
+    toggle.addEventListener("click", function () {
+      const isOpen = links.classList.toggle("is-open");
+      toggle.classList.toggle("is-open", isOpen);
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    links.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", function () {
+        if (window.innerWidth <= 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 900) {
+        links.classList.remove("is-open");
+        toggle.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  })();
+</script>
+<!-- ===== UNIVERSAL NAVBAR END ===== -->
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">Category • Modelling Practice • Standards</div>
+          <h1>Modeling Standards</h1>
+          <p class="lead">
+            This page sets out practical modelling standards for Revit and CADmep workflows. It focuses on
+            consistency, coordination, content control, naming, and buildable information so that models are
+            reliable, clear, and suitable for downstream use.
+          </p>
+
+          <div class="pill-row">
+            <span class="pill">Revit standards</span>
+            <span class="pill">CADmep standards</span>
+            <span class="pill">Naming & structure</span>
+            <span class="pill">Coordination-ready models</span>
+            <span class="pill">QA-minded workflows</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container page-grid">
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h3>On this page</h3>
+          <a href="#overview">1. Overview</a>
+          <a href="#general-principles">2. General modelling principles</a>
+          <a href="#revit-standards">3. Revit modelling standards</a>
+          <a href="#cadmep-standards">4. CADmep modelling standards</a>
+          <a href="#naming-structure">5. Naming & structure</a>
+          <a href="#coordination">6. Coordination expectations</a>
+          <a href="#qa">7. QA-minded modelling</a>
+          <a href="#dos-donts">8. Do / Don’t guidance</a>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Quick reminders</h3>
+          <ul class="checklist">
+            <li>Model what is needed, not everything possible</li>
+            <li>Stay consistent with project standards</li>
+            <li>Use approved content only</li>
+            <li>Keep models clean and readable</li>
+            <li>Think about downstream users</li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="content-stack">
+        <section id="overview" class="content-card">
+          <div class="section-head">
+            <h2>1. Overview</h2>
+            <span class="section-tag">Foundation</span>
+          </div>
+          <p class="muted">
+            Good modelling standards exist to make information understandable, consistent, and dependable.
+            They help teams coordinate effectively, issue clearer information, reduce rework, and maintain a
+            reliable link between model content and downstream outputs such as drawings, schedules, reports,
+            fabrication information, and site use.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Consistency</h4>
+              <p class="muted">Users should model similar conditions in similar ways across the project.</p>
+            </div>
+            <div class="info-card">
+              <h4>Clarity</h4>
+              <p class="muted">The model should be easy to navigate, review, and understand.</p>
+            </div>
+            <div class="info-card">
+              <h4>Suitability</h4>
+              <p class="muted">The model should support the intended purpose without unnecessary clutter.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="general-principles" class="content-card">
+          <div class="section-head">
+            <h2>2. General modelling principles</h2>
+            <span class="section-tag">Applies to all workflows</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Core principles</strong>
+              <ul class="checklist">
+                <li>Use approved templates and standards from the start</li>
+                <li>Model with purpose and clarity</li>
+                <li>Avoid unnecessary duplication</li>
+                <li>Keep geometry and information aligned</li>
+                <li>Think about who will use the model next</li>
+              </ul>
+            </div>
+
+            <div class="callout success">
+              <strong>Good modelling behaviour</strong>
+              <ul class="checklist">
+                <li>Consistent content placement</li>
+                <li>Clear naming and browser structure</li>
+                <li>Predictable visibility and documentation</li>
+                <li>Controlled revisions and updates</li>
+                <li>Fewer one-off workarounds</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout warning" style="margin-top:1rem;">
+            <strong>Warning:</strong>
+            A model becomes hard to trust when each user applies their own methods without reference to project standards.
+          </div>
+        </section>
+
+        <section id="revit-standards" class="content-card">
+          <div class="section-head">
+            <h2>3. Revit modelling standards</h2>
+            <span class="section-tag">BIM authoring</span>
+          </div>
+
+          <p class="muted">
+            Revit modelling should be structured around the correct template, correct relationships, and consistent
+            use of content, views, and parameters.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Template use</h4>
+              <ul class="checklist">
+                <li>Start from the approved template</li>
+                <li>Use agreed view templates</li>
+                <li>Maintain browser organisation</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Model logic</h4>
+              <ul class="checklist">
+                <li>Check levels and grids</li>
+                <li>Link models correctly</li>
+                <li>Use families consistently</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Data quality</h4>
+              <ul class="checklist">
+                <li>Populate required parameters</li>
+                <li>Support schedules and tags</li>
+                <li>Avoid unused or duplicate content</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3 style="margin-top:1rem;">Revit good practice</h3>
+          <ul class="checklist">
+            <li>Use loadable families for repeatable objects rather than unnecessary in-place families.</li>
+            <li>Keep working views clean and purposeful.</li>
+            <li>Use view templates to control consistency, not random manual overrides.</li>
+            <li>Confirm linked models and shared coordinates before major modelling progresses.</li>
+            <li>Keep annotation and model information aligned rather than relying on misleading notes.</li>
+          </ul>
+        </section>
+
+        <section id="cadmep-standards" class="content-card">
+          <div class="section-head">
+            <h2>4. CADmep modelling standards</h2>
+            <span class="section-tag">Fabrication-focused</span>
+          </div>
+
+          <p class="muted">
+            CADmep standards depend heavily on content control, service templates, database setup, and output logic.
+            Good modelling in CADmep is not only about geometry — it is about using the correct items in the correct way.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Profile & database</h4>
+              <ul class="checklist">
+                <li>Use the correct profile</li>
+                <li>Check the database source</li>
+                <li>Avoid uncontrolled local variations</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Services & content</h4>
+              <ul class="checklist">
+                <li>Use approved service templates</li>
+                <li>Use controlled ITM content</li>
+                <li>Keep folder structure understandable</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Outputs</h4>
+              <ul class="checklist">
+                <li>Model with reports in mind</li>
+                <li>Maintain numbering logic</li>
+                <li>Only spool stable content</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3 style="margin-top:1rem;">CADmep good practice</h3>
+          <ul class="checklist">
+            <li>Do not let users work around poor service or content setup manually.</li>
+            <li>Keep similar items truly consistent if they are expected to report or number together.</li>
+            <li>Confirm connectivity before running downstream exports such as PCF.</li>
+            <li>Treat content standards as part of model standards, not as a separate afterthought.</li>
+          </ul>
+        </section>
+
+        <section id="naming-structure" class="content-card">
+          <div class="section-head">
+            <h2>5. Naming & structure</h2>
+            <span class="section-tag">Organisation</span>
+          </div>
+
+          <p class="muted">
+            A model can be technically correct and still be difficult to use if naming and structure are poor.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Standardise these items</strong>
+              <ul class="checklist">
+                <li>File names</li>
+                <li>View names</li>
+                <li>Sheet numbers and sheet titles</li>
+                <li>Schedules</li>
+                <li>CADmep services and reports</li>
+              </ul>
+            </div>
+
+            <div class="callout success">
+              <strong>Why it matters</strong>
+              <ul class="checklist">
+                <li>Improves navigation</li>
+                <li>Supports QA</li>
+                <li>Improves searchability</li>
+                <li>Reduces duplication</li>
+                <li>Helps traceability</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="coordination" class="content-card">
+          <div class="section-head">
+            <h2>6. Coordination expectations</h2>
+            <span class="section-tag">Model for coordination</span>
+          </div>
+
+          <p class="muted">
+            Models should be built in a way that supports coordination rather than making coordination harder.
+            That means predictable geometry, sensible detail, clear interfaces, and consistent ownership assumptions.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Geometry</h4>
+              <ul class="checklist">
+                <li>Model at an appropriate level of detail</li>
+                <li>Avoid misleading placeholder geometry</li>
+                <li>Keep interfaces clear</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Linked models</h4>
+              <ul class="checklist">
+                <li>Check positions properly</li>
+                <li>Understand host vs linked responsibility</li>
+                <li>Review clashes in context</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Coordination records</h4>
+              <ul class="checklist">
+                <li>Record actions clearly</li>
+                <li>Close issues properly</li>
+                <li>Avoid repeated untracked assumptions</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="qa" class="content-card">
+          <div class="section-head">
+            <h2>7. QA-minded modelling</h2>
+            <span class="section-tag">Build quality into the model</span>
+          </div>
+
+          <p class="muted">
+            Good modelling standards should make QA easier. A clean and consistent model reduces the effort needed
+            to review, check, and issue information.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Model with QA in mind</strong>
+              <ul class="checklist">
+                <li>Use predictable naming</li>
+                <li>Keep views and outputs controlled</li>
+                <li>Check before issue, not after problems appear</li>
+                <li>Make sure schedules and tags read correctly</li>
+              </ul>
+            </div>
+
+            <div class="callout warning">
+              <strong>Common weak habits</strong>
+              <ul class="checklist">
+                <li>Random manual overrides</li>
+                <li>Unapproved content use</li>
+                <li>Over-modelled or messy geometry</li>
+                <li>Relying on memory instead of standards</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="dos-donts" class="content-card">
+          <div class="section-head">
+            <h2>8. Do / Don’t guidance</h2>
+            <span class="section-tag">Quick reference</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="info-card">
+              <h4>Do</h4>
+              <ul class="checklist">
+                <li>Use project-approved templates and content</li>
+                <li>Model consistently</li>
+                <li>Keep naming clear</li>
+                <li>Think about downstream users</li>
+                <li>Check outputs before issue</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Don’t</h4>
+              <ul class="checklist">
+                <li>Invent one-off standards for each user</li>
+                <li>Leave unresolved naming problems</li>
+                <li>Mix approved and unapproved content casually</li>
+                <li>Use geometry to hide uncertainty in information</li>
+                <li>Assume the model is clear just because it looks busy</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:1rem;">
+            <strong>Final takeaway:</strong>
+            Good modelling standards make the model easier to trust, easier to coordinate, and easier to issue.
+            The strongest teams do not only model accurately — they model consistently.
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+<footer class="site-footer">
+  <div class="site-footer-container">
+    <div class="site-footer-grid">
+      <div class="site-footer-col">
+        <div class="site-footer-brand">
+          <div class="site-footer-badge">RC</div>
+          <span>Revit CADmep Guide</span>
+        </div>
+        <p>
+          A professional resource for learning Autodesk Revit and CADmep,
+          covering BIM workflows, fabrication, and coordination.
+        </p>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Navigation</h4>
+        <div class="site-footer-links">
+          <a href="index.html">Home</a>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="faq.html">Resources</a>
+          <a href="documentation.html">Standards</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Resources</h4>
+        <div class="site-footer-links">
+          <a href="https://www.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk</a>
+          <a href="https://help.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk Help</a>
+          <a href="#">Revit Tutorials</a>
+          <a href="#">CADmep Guides</a>
+          <a href="downloads">Downloads</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Legal</h4>
+        <div class="site-footer-links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-footer-bottom">
+      <div>© 2026 Anarchy Group LTD | https://www.anarchygroup.uk</div>
+      <div>Email: support@revithelpdesk.co.uk</div>
+      <div>This website is not affiliated with Autodesk™, Revit™, CADmep™ or any other Autodesk™ Trademark.</div>
+    </div>
+  </div>
+</footer>
+<!-- FOOTER END -->
+
+  <script>
+    (function () {
+      const toggle = document.getElementById("siteNavToggle");
+      const links = document.getElementById("siteNavLinks");
+
+      if (!toggle || !links) return;
+
+      toggle.addEventListener("click", function () {
+        const isOpen = links.classList.toggle("is-open");
+        toggle.classList.toggle("is-open", isOpen);
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      links.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", function () {
+          if (window.innerWidth <= 900) {
+            links.classList.remove("is-open");
+            toggle.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
