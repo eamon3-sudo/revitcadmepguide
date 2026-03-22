@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fabrication Workflows | Revit CADmep Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --text: #e8eefc;
+      --muted: #a7b4d1;
+      --line: rgba(255,255,255,.08);
+      --accent: #4f8cff;
+      --accent-2: #7fb0ff;
+      --success: #2fbf71;
+      --warning: #ffb347;
+      --danger: #ff6b6b;
+      --shadow: 0 18px 40px rgba(0,0,0,.28);
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(79,140,255,.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(127,176,255,.08), transparent 20%),
+        linear-gradient(180deg, #0a1120 0%, #0d1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .site-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(8, 14, 25, 0.42);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+    }
+
+    .site-nav-wrap {
+      width: min(calc(100% - 2rem), 1320px);
+      margin: 0 auto;
+    }
+
+    .site-nav { padding: 0.75rem 0; }
+
+    .site-nav-top {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #e8eefc;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .site-brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+    }
+
+    .site-brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #e8eefc;
+      margin: 0;
+    }
+
+    .site-brand-subtitle {
+      display: block;
+      margin-top: 0.2rem;
+      color: #a7b4d1;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-nav-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .site-nav-toggle-icon {
+      position: relative;
+      width: 20px;
+      height: 14px;
+    }
+
+    .site-nav-toggle-icon span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: #ffffff;
+      transition: 0.25s ease;
+    }
+
+    .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+    .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+    .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+      top: 6px;
+      transform: rotate(45deg);
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+      top: 6px;
+      transform: rotate(-45deg);
+    }
+
+    .site-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .site-nav-links a {
+      color: #a7b4d1;
+      padding: 0.75rem 0.95rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .site-nav-links a:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav-links a.active {
+      color: #ffffff;
+      background: rgba(79,140,255,0.16);
+      box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 3rem 0 1.5rem;
+    }
+
+    .hero-card,
+    .sidebar-card,
+    .content-card,
+    .info-card,
+    .callout {
+      background: rgba(9,16,28,.55);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #cfe0ff;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(127,176,255,.2);
+    }
+
+    h1, h2, h3, h4 { margin-top: 0; }
+
+    h1 {
+      margin-bottom: .75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 84ch;
+      font-size: 1.05rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: .55rem .85rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #dbe7ff;
+      border: 1px solid rgba(127,176,255,.18);
+      font-size: .9rem;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 94px;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .sidebar-card,
+    .content-card {
+      padding: 1.2rem;
+    }
+
+    .sidebar-card a {
+      display: block;
+      padding: .7rem .8rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+      margin-bottom: .25rem;
+    }
+
+    .sidebar-card a:hover {
+      color: var(--text);
+      background: rgba(79,140,255,.12);
+    }
+
+    .content-stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .7rem;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card {
+      padding: 1rem;
+    }
+
+    .info-card h4 {
+      margin-bottom: .45rem;
+    }
+
+    .callout {
+      padding: 1rem 1.05rem;
+      border-left: 4px solid var(--accent);
+      background: rgba(79,140,255,.09);
+    }
+
+    .callout.warning {
+      border-left-color: var(--warning);
+      background: rgba(255,179,71,.10);
+    }
+
+    .callout.success {
+      border-left-color: var(--success);
+      background: rgba(47,191,113,.10);
+    }
+
+    ul.checklist {
+      margin: .75rem 0 0;
+      padding-left: 1.15rem;
+    }
+
+    ul.checklist li {
+      margin: .35rem 0;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 901px) {
+      .site-nav {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0;
+      }
+
+      .site-nav-top {
+        min-height: 74px;
+        flex: 0 1 auto;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .site-nav-toggle {
+        display: inline-flex;
+      }
+
+      .site-nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.45rem;
+        padding-top: 0.85rem;
+      }
+
+      .site-nav-links.is-open {
+        display: flex;
+      }
+
+      .site-nav-links a {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .site-nav-links a:hover,
+      .site-nav-links a.active {
+        background: rgba(79,140,255,0.12);
+        border-color: rgba(79,140,255,0.22);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-nav-wrap,
+      .container {
+        width: min(calc(100% - 1rem), 1320px);
+      }
+
+      .site-brand-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .site-brand-title {
+        font-size: 0.98rem;
+      }
+
+      .site-brand-subtitle {
+        font-size: 0.76rem;
+        max-width: 48vw;
+      }
+
+      .site-nav-top {
+        gap: 0.75rem;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+<!-- ===== UNIVERSAL NAVBAR START ===== -->
+<style>
+  .site-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(8, 14, 25, 0.42);
+    backdrop-filter: blur(26px) saturate(185%);
+    -webkit-backdrop-filter: blur(26px) saturate(185%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+  }
+
+  .site-nav-wrap {
+    width: min(calc(100% - 2rem), 1320px);
+    margin: 0 auto;
+  }
+
+  .site-nav {
+    padding: 0.75rem 0;
+  }
+
+  .site-nav-top {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #e8eefc;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .site-brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+  }
+
+  .site-brand-text {
+    min-width: 0;
+  }
+
+  .site-brand-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #e8eefc;
+    margin: 0;
+  }
+
+  .site-brand-subtitle {
+    display: block;
+    margin-top: 0.2rem;
+    color: #a7b4d1;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-nav-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .site-nav-toggle:hover {
+    background: rgba(79,140,255,0.14);
+    border-color: rgba(79,140,255,0.38);
+  }
+
+  .site-nav-toggle-icon {
+    position: relative;
+    width: 20px;
+    height: 14px;
+  }
+
+  .site-nav-toggle-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffffff;
+    transition: 0.25s ease;
+  }
+
+  .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+  .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+  .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+
+  .site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .site-nav-links a {
+    color: #a7b4d1;
+    padding: 0.75rem 0.95rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .site-nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .site-nav-links a.active {
+    color: #ffffff;
+    background: rgba(79,140,255,0.16);
+    box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+  }
+
+  @media (min-width: 901px) {
+    .site-nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .site-nav-top {
+      min-height: 74px;
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav-toggle {
+      display: inline-flex;
+    }
+
+    .site-nav-links {
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
+      padding-top: 0.85rem;
+    }
+
+    .site-nav-links.is-open {
+      display: flex;
+    }
+
+    .site-nav-links a {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .site-nav-links a:hover,
+    .site-nav-links a.active {
+      background: rgba(79,140,255,0.12);
+      border-color: rgba(79,140,255,0.22);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-nav-wrap {
+      width: min(calc(100% - 1rem), 1320px);
+    }
+
+    .site-brand-badge {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .site-brand-title {
+      font-size: 0.98rem;
+    }
+
+    .site-brand-subtitle {
+      font-size: 0.76rem;
+      max-width: 48vw;
+    }
+
+    .site-nav-top {
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<header class="site-topbar">
+  <div class="site-nav-wrap">
+    <nav class="site-nav" aria-label="Main navigation">
+      <div class="site-nav-top">
+        <a href="index.html" class="site-brand">
+          <div class="site-brand-badge">RC</div>
+          <div class="site-brand-text">
+            <p class="site-brand-title">Revit CADmep Guide</p>
+            <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
+          </div>
+        </a>
+
+        <button
+          class="site-nav-toggle"
+          id="siteNavToggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-controls="siteNavLinks"
+          aria-expanded="false"
+        >
+          <div class="site-nav-toggle-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index">Home</a>
+        <a href="getting-started">Getting Started</a>
+        <a href="documentation">Documentation</a>
+        <a href="faq">Resources</a>
+        <a href="contact">Contact</a>
+        <a href="privacy-policy">Privacy</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const toggle = document.getElementById("siteNavToggle");
+    const links = document.getElementById("siteNavLinks");
+
+    if (!toggle || !links) return;
+
+    toggle.addEventListener("click", function () {
+      const isOpen = links.classList.toggle("is-open");
+      toggle.classList.toggle("is-open", isOpen);
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    links.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", function () {
+        if (window.innerWidth <= 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 900) {
+        links.classList.remove("is-open");
+        toggle.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  })();
+</script>
+<!-- ===== UNIVERSAL NAVBAR END ===== -->
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">Category • Fabrication • Workflow Control</div>
+          <h1>Fabrication Workflows</h1>
+          <p class="lead">
+            This page outlines practical fabrication workflows for CADmep and fabrication-driven delivery.
+            It covers the journey from content and service setup through modelling, numbering, reporting,
+            spooling, export, and QA review so teams can maintain control and consistency.
+          </p>
+
+          <div class="pill-row">
+            <span class="pill">Service templates</span>
+            <span class="pill">ITM content</span>
+            <span class="pill">Reports & numbering</span>
+            <span class="pill">Spooling</span>
+            <span class="pill">PCF export</span>
+            <span class="pill">Fabrication QA</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container page-grid">
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h3>On this page</h3>
+          <a href="#overview">1. Overview</a>
+          <a href="#workflow-stages">2. Workflow stages</a>
+          <a href="#content-control">3. Content, services & database control</a>
+          <a href="#modelling">4. Fabrication modelling practice</a>
+          <a href="#numbering-reporting">5. Numbering & reporting</a>
+          <a href="#spooling">6. Spooling workflows</a>
+          <a href="#exports">7. Export workflows</a>
+          <a href="#qa">8. QA expectations</a>
+          <a href="#dos-donts">9. Do / Don’t guidance</a>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Quick reminders</h3>
+          <ul class="checklist">
+            <li>Fix content problems before heavy modelling</li>
+            <li>Only spool stable information</li>
+            <li>Numbering logic should be agreed early</li>
+            <li>Reports are QA tools as well as outputs</li>
+            <li>Do not automate poor standards</li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="content-stack">
+        <section id="overview" class="content-card">
+          <div class="section-head">
+            <h2>1. Overview</h2>
+            <span class="section-tag">Foundation</span>
+          </div>
+          <p class="muted">
+            A good fabrication workflow is not simply about drawing faster. It is about maintaining control over
+            content, consistency, outputs, and the relationship between the model and downstream manufacture,
+            installation, and coordination. Strong fabrication workflows reduce confusion, improve repeatability,
+            and produce more dependable outputs.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Content control</h4>
+              <p class="muted">Use the right items, the right services, and the right database from the start.</p>
+            </div>
+            <div class="info-card">
+              <h4>Workflow control</h4>
+              <p class="muted">Move through modelling, numbering, spooling, and export in a deliberate sequence.</p>
+            </div>
+            <div class="info-card">
+              <h4>Output control</h4>
+              <p class="muted">Reports and exports should reflect verified model information, not assumptions.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="workflow-stages" class="content-card">
+          <div class="section-head">
+            <h2>2. Workflow stages</h2>
+            <span class="section-tag">Typical sequence</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Typical fabrication workflow</strong>
+              <ul class="checklist">
+                <li>Set the correct profile and database</li>
+                <li>Check services and content</li>
+                <li>Model consistently</li>
+                <li>Apply numbering rules</li>
+                <li>Generate reports</li>
+                <li>Define and create spools where needed</li>
+                <li>Run exports and final outputs</li>
+              </ul>
+            </div>
+
+            <div class="callout success">
+              <strong>Why sequence matters</strong>
+              <ul class="checklist">
+                <li>Early content mistakes spread quickly</li>
+                <li>Bad numbering affects later reports</li>
+                <li>Premature spooling creates rework</li>
+                <li>Poor exports often reflect upstream issues</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="content-control" class="content-card">
+          <div class="section-head">
+            <h2>3. Content, services & database control</h2>
+            <span class="section-tag">Start correctly</span>
+          </div>
+
+          <p class="muted">
+            In fabrication workflows, setup quality has a major effect on downstream quality. Service templates,
+            service types, item folders, ITM content, and database control are all part of the workflow standard.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Profile & database</h4>
+              <ul class="checklist">
+                <li>Use the correct fabrication profile</li>
+                <li>Check the active database path</li>
+                <li>Avoid uncontrolled local edits</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Services</h4>
+              <ul class="checklist">
+                <li>Use approved service templates</li>
+                <li>Keep service structure understandable</li>
+                <li>Do not mix temporary and approved content</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>ITM content</h4>
+              <ul class="checklist">
+                <li>Use controlled item content</li>
+                <li>Keep folders organised logically</li>
+                <li>Review patterns and item behaviour carefully</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout.warning" style="margin-top:1rem;">
+            <strong>Warning:</strong>
+            If users start modelling on poor services or bad content, the workflow usually becomes inconsistent long before output stage.
+          </div>
+        </section>
+
+        <section id="modelling" class="content-card">
+          <div class="section-head">
+            <h2>4. Fabrication modelling practice</h2>
+            <span class="section-tag">Model with outputs in mind</span>
+          </div>
+
+          <p class="muted">
+            Fabrication modelling should support reporting, numbering, spooling, and installation understanding.
+            That means model decisions should be made with downstream use in mind, not only immediate drawing needs.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Good practice</strong>
+              <ul class="checklist">
+                <li>Use consistent item selection for similar conditions</li>
+                <li>Model in a way that supports clean reporting</li>
+                <li>Keep connectivity and logic clear</li>
+                <li>Check coordination before committing too far downstream</li>
+              </ul>
+            </div>
+
+            <div class="callout success">
+              <strong>What strong modelling supports</strong>
+              <ul class="checklist">
+                <li>Cleaner reports</li>
+                <li>More reliable numbering</li>
+                <li>Less spool rework</li>
+                <li>Better communication to manufacture and installation</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="numbering-reporting" class="content-card">
+          <div class="section-head">
+            <h2>5. Numbering & reporting</h2>
+            <span class="section-tag">Output logic</span>
+          </div>
+
+          <p class="muted">
+            Numbering and reporting are not separate from the model. They depend on consistent content use and a
+            clear understanding of what should count as the same item versus a different item.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Numbering</h4>
+              <ul class="checklist">
+                <li>Agree numbering logic early</li>
+                <li>Be clear about what makes items unique</li>
+                <li>Avoid unnecessary variation in similar items</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Reports</h4>
+              <ul class="checklist">
+                <li>Use standard report layouts</li>
+                <li>Use reports to check quality</li>
+                <li>Review outputs before issue</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Consistency</h4>
+              <ul class="checklist">
+                <li>Match report needs to model behaviour</li>
+                <li>Keep data clear and structured</li>
+                <li>Check before bulk issue</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="spooling" class="content-card">
+          <div class="section-head">
+            <h2>6. Spooling workflows</h2>
+            <span class="section-tag">Only when stable</span>
+          </div>
+
+          <p class="muted">
+            Spooling should happen when the model is stable enough to justify it. If major coordination or content
+            changes are still expected, spooling too early often creates avoidable rework.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Before spooling</strong>
+              <ul class="checklist">
+                <li>Check content consistency</li>
+                <li>Confirm numbering logic</li>
+                <li>Resolve major coordination concerns</li>
+                <li>Be clear on what scope is ready</li>
+              </ul>
+            </div>
+
+            <div class="callout.warning">
+              <strong>Do not spool too early</strong>
+              <ul class="checklist">
+                <li>If content is still unstable</li>
+                <li>If numbering rules are unclear</li>
+                <li>If coordination is still changing heavily</li>
+                <li>If spool boundaries are not agreed</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="exports" class="content-card">
+          <div class="section-head">
+            <h2>7. Export workflows</h2>
+            <span class="section-tag">PCF and other outputs</span>
+          </div>
+
+          <p class="muted">
+            Export workflows such as PCF should be treated as part of the controlled fabrication process. Weak
+            exports often indicate weak model preparation rather than only a technical export issue.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Check before export</strong>
+              <ul class="checklist">
+                <li>Connectivity is correct</li>
+                <li>The right items are selected</li>
+                <li>The intended scope is clear</li>
+                <li>Downstream naming/location rules are known</li>
+              </ul>
+            </div>
+
+            <div class="callout.success">
+              <strong>Good export behaviour</strong>
+              <ul class="checklist">
+                <li>Run small tests first</li>
+                <li>Use standard naming and storage rules</li>
+                <li>Treat export quality as part of QA</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="qa" class="content-card">
+          <div class="section-head">
+            <h2>8. QA expectations</h2>
+            <span class="section-tag">Check before issue</span>
+          </div>
+
+          <p class="muted">
+            Fabrication workflows need QA at several stages: content setup, modelling consistency, numbering,
+            reports, spools, and exports.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Content QA</h4>
+              <ul class="checklist">
+                <li>Correct services</li>
+                <li>Correct item content</li>
+                <li>Correct database source</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Model QA</h4>
+              <ul class="checklist">
+                <li>Consistent items</li>
+                <li>Clear connectivity</li>
+                <li>Resolved major coordination concerns</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Output QA</h4>
+              <ul class="checklist">
+                <li>Reports reviewed</li>
+                <li>Spools checked</li>
+                <li>Exports validated</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:1rem;">
+            <strong>Final QA point:</strong>
+            Reports, spools, and exports are not just deliverables — they are also evidence of whether the model has been built in a controlled way.
+          </div>
+        </section>
+
+        <section id="dos-donts" class="content-card">
+          <div class="section-head">
+            <h2>9. Do / Don’t guidance</h2>
+            <span class="section-tag">Quick reference</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="info-card">
+              <h4>Do</h4>
+              <ul class="checklist">
+                <li>Use the correct profile and database</li>
+                <li>Control service templates and item content</li>
+                <li>Agree numbering logic early</li>
+                <li>Model consistently</li>
+                <li>Use reports and exports as QA checks</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Don’t</h4>
+              <ul class="checklist">
+                <li>Let users invent their own service logic</li>
+                <li>Start spooling unstable models</li>
+                <li>Assume export issues are only command issues</li>
+                <li>Ignore poor numbering consistency</li>
+                <li>Automate broken standards</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:1rem;">
+            <strong>Final takeaway:</strong>
+            Strong fabrication workflows are built on controlled setup, consistent modelling, clear output logic, and disciplined QA.
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+<!-- FOOTER START -->
+<style>
+  .site-footer {
+    margin-top: 2rem;
+    padding: 2rem 0 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    background: rgba(8,14,25,.85);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-footer .site-footer-container {
+    width: min(calc(100% - 2rem), 1200px);
+    margin: 0 auto;
+  }
+
+  .site-footer .site-footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .site-footer .site-footer-col h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    color: #e8eefc;
+  }
+
+  .site-footer .site-footer-col p {
+    margin: 0;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .site-footer .site-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #e8eefc;
+    font-weight: 700;
+  }
+
+  .site-footer .site-footer-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .site-footer .site-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .site-footer .site-footer-links a {
+    display: block;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .site-footer .site-footer-links a:hover {
+    color: #4f8cff;
+    transform: translateX(2px);
+  }
+
+  .site-footer .site-footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: #a7b4d1;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer .site-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<footer class="site-footer">
+  <div class="site-footer-container">
+    <div class="site-footer-grid">
+      <div class="site-footer-col">
+        <div class="site-footer-brand">
+          <div class="site-footer-badge">RC</div>
+          <span>Revit CADmep Guide</span>
+        </div>
+        <p>
+          A professional resource for learning Autodesk Revit and CADmep,
+          covering BIM workflows, fabrication, and coordination.
+        </p>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Navigation</h4>
+        <div class="site-footer-links">
+          <a href="index.html">Home</a>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="faq.html">Resources</a>
+          <a href="documentation.html">Standards</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Resources</h4>
+        <div class="site-footer-links">
+          <a href="https://www.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk</a>
+          <a href="https://help.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk Help</a>
+          <a href="#">Revit Tutorials</a>
+          <a href="#">CADmep Guides</a>
+          <a href="downloads">Downloads</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Legal</h4>
+        <div class="site-footer-links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-footer-bottom">
+      <div>© 2026 Anarchy Group LTD | https://www.anarchygroup.uk</div>
+      <div>Email: support@revithelpdesk.co.uk</div>
+      <div>This website is not affiliated with Autodesk™, Revit™, CADmep™ or any other Autodesk™ Trademark.</div>
+    </div>
+  </div>
+</footer>
+<!-- FOOTER END -->
+
+  <script>
+    (function () {
+      const toggle = document.getElementById("siteNavToggle");
+      const links = document.getElementById("siteNavLinks");
+
+      if (!toggle || !links) return;
+
+      toggle.addEventListener("click", function () {
+        const isOpen = links.classList.toggle("is-open");
+        toggle.classList.toggle("is-open", isOpen);
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      links.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", function () {
+          if (window.innerWidth <= 900) {
+            links.classList.remove("is-open");
+            toggle.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
