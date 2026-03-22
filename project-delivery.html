@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Delivery | Revit CADmep Guide</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --text: #e8eefc;
+      --muted: #a7b4d1;
+      --line: rgba(255,255,255,.08);
+      --accent: #4f8cff;
+      --accent-2: #7fb0ff;
+      --success: #2fbf71;
+      --warning: #ffb347;
+      --danger: #ff6b6b;
+      --shadow: 0 18px 40px rgba(0,0,0,.28);
+      --max: 1320px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(79,140,255,.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(127,176,255,.08), transparent 20%),
+        linear-gradient(180deg, #0a1120 0%, #0d1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .site-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(8, 14, 25, 0.42);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+    }
+
+    .site-nav-wrap {
+      width: min(calc(100% - 2rem), 1320px);
+      margin: 0 auto;
+    }
+
+    .site-nav { padding: 0.75rem 0; }
+
+    .site-nav-top {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: #e8eefc;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .site-brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+    }
+
+    .site-brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #e8eefc;
+      margin: 0;
+    }
+
+    .site-brand-subtitle {
+      display: block;
+      margin-top: 0.2rem;
+      color: #a7b4d1;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-nav-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s ease;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .site-nav-toggle-icon {
+      position: relative;
+      width: 20px;
+      height: 14px;
+    }
+
+    .site-nav-toggle-icon span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: #ffffff;
+      transition: 0.25s ease;
+    }
+
+    .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+    .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+    .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+      top: 6px;
+      transform: rotate(45deg);
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+      top: 6px;
+      transform: rotate(-45deg);
+    }
+
+    .site-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .site-nav-links a {
+      color: #a7b4d1;
+      padding: 0.75rem 0.95rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .site-nav-links a:hover {
+      color: #ffffff;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .site-nav-links a.active {
+      color: #ffffff;
+      background: rgba(79,140,255,0.16);
+      box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 3rem 0 1.5rem;
+    }
+
+    .hero-card,
+    .sidebar-card,
+    .content-card,
+    .info-card,
+    .callout {
+      background: rgba(9,16,28,.55);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border-radius: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .8rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #cfe0ff;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(127,176,255,.2);
+    }
+
+    h1, h2, h3, h4 { margin-top: 0; }
+
+    h1 {
+      margin-bottom: .75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 84ch;
+      font-size: 1.05rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: .55rem .85rem;
+      border-radius: 999px;
+      background: rgba(79,140,255,.12);
+      color: #dbe7ff;
+      border: 1px solid rgba(127,176,255,.18);
+      font-size: .9rem;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      padding-bottom: 3rem;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 94px;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .sidebar-card,
+    .content-card {
+      padding: 1.2rem;
+    }
+
+    .sidebar-card a {
+      display: block;
+      padding: .7rem .8rem;
+      border-radius: 12px;
+      color: var(--muted);
+      transition: .2s ease;
+      margin-bottom: .25rem;
+    }
+
+    .sidebar-card a:hover {
+      color: var(--text);
+      background: rgba(79,140,255,.12);
+    }
+
+    .content-stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .7rem;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card {
+      padding: 1rem;
+    }
+
+    .info-card h4 {
+      margin-bottom: .45rem;
+    }
+
+    .callout {
+      padding: 1rem 1.05rem;
+      border-left: 4px solid var(--accent);
+      background: rgba(79,140,255,.09);
+    }
+
+    .callout.warning {
+      border-left-color: var(--warning);
+      background: rgba(255,179,71,.10);
+    }
+
+    .callout.success {
+      border-left-color: var(--success);
+      background: rgba(47,191,113,.10);
+    }
+
+    ul.checklist {
+      margin: .75rem 0 0;
+      padding-left: 1.15rem;
+    }
+
+    ul.checklist li {
+      margin: .35rem 0;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 1.5rem 0 3rem;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 901px) {
+      .site-nav {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0;
+      }
+
+      .site-nav-top {
+        min-height: 74px;
+        flex: 0 1 auto;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .site-nav-toggle {
+        display: inline-flex;
+      }
+
+      .site-nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.45rem;
+        padding-top: 0.85rem;
+      }
+
+      .site-nav-links.is-open {
+        display: flex;
+      }
+
+      .site-nav-links a {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .site-nav-links a:hover,
+      .site-nav-links a.active {
+        background: rgba(79,140,255,0.12);
+        border-color: rgba(79,140,255,0.22);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .grid-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-nav-wrap,
+      .container {
+        width: min(calc(100% - 1rem), 1320px);
+      }
+
+      .site-brand-badge {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+
+      .site-brand-title {
+        font-size: 0.98rem;
+      }
+
+      .site-brand-subtitle {
+        font-size: 0.76rem;
+        max-width: 48vw;
+      }
+
+      .site-nav-top {
+        gap: 0.75rem;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- ===== UNIVERSAL NAVBAR START ===== -->
+<style>
+  .site-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(8, 14, 25, 0.42);
+    backdrop-filter: blur(26px) saturate(185%);
+    -webkit-backdrop-filter: blur(26px) saturate(185%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.34);
+  }
+
+  .site-nav-wrap {
+    width: min(calc(100% - 2rem), 1320px);
+    margin: 0 auto;
+  }
+
+  .site-nav {
+    padding: 0.75rem 0;
+  }
+
+  .site-nav-top {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #e8eefc;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .site-brand-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.22);
+  }
+
+  .site-brand-text {
+    min-width: 0;
+  }
+
+  .site-brand-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #e8eefc;
+    margin: 0;
+  }
+
+  .site-brand-subtitle {
+    display: block;
+    margin-top: 0.2rem;
+    color: #a7b4d1;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .site-nav-toggle {
+    display: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .site-nav-toggle:hover {
+    background: rgba(79,140,255,0.14);
+    border-color: rgba(79,140,255,0.38);
+  }
+
+  .site-nav-toggle-icon {
+    position: relative;
+    width: 20px;
+    height: 14px;
+  }
+
+  .site-nav-toggle-icon span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    border-radius: 999px;
+    background: #ffffff;
+    transition: 0.25s ease;
+  }
+
+  .site-nav-toggle-icon span:nth-child(1) { top: 0; }
+  .site-nav-toggle-icon span:nth-child(2) { top: 6px; }
+  .site-nav-toggle-icon span:nth-child(3) { top: 12px; }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(1) {
+    top: 6px;
+    transform: rotate(45deg);
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav-toggle.is-open .site-nav-toggle-icon span:nth-child(3) {
+    top: 6px;
+    transform: rotate(-45deg);
+  }
+
+  .site-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .site-nav-links a {
+    color: #a7b4d1;
+    padding: 0.75rem 0.95rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  .site-nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .site-nav-links a.active {
+    color: #ffffff;
+    background: rgba(79,140,255,0.16);
+    box-shadow: inset 0 0 0 1px rgba(127,176,255,0.16);
+  }
+
+  @media (min-width: 901px) {
+    .site-nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .site-nav-top {
+      min-height: 74px;
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav-toggle {
+      display: inline-flex;
+    }
+
+    .site-nav-links {
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.45rem;
+      padding-top: 0.85rem;
+    }
+
+    .site-nav-links.is-open {
+      display: flex;
+    }
+
+    .site-nav-links a {
+      width: 100%;
+      padding: 0.95rem 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .site-nav-links a:hover,
+    .site-nav-links a.active {
+      background: rgba(79,140,255,0.12);
+      border-color: rgba(79,140,255,0.22);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .site-nav-wrap {
+      width: min(calc(100% - 1rem), 1320px);
+    }
+
+    .site-brand-badge {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .site-brand-title {
+      font-size: 0.98rem;
+    }
+
+    .site-brand-subtitle {
+      font-size: 0.76rem;
+      max-width: 48vw;
+    }
+
+    .site-nav-top {
+      gap: 0.75rem;
+    }
+  }
+</style>
+
+<header class="site-topbar">
+  <div class="site-nav-wrap">
+    <nav class="site-nav" aria-label="Main navigation">
+      <div class="site-nav-top">
+        <a href="index.html" class="site-brand">
+          <div class="site-brand-badge">RC</div>
+          <div class="site-brand-text">
+            <p class="site-brand-title">Revit CADmep Guide</p>
+            <small class="site-brand-subtitle">BIM • CAD • Coordination</small>
+          </div>
+        </a>
+
+        <button
+          class="site-nav-toggle"
+          id="siteNavToggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-controls="siteNavLinks"
+          aria-expanded="false"
+        >
+          <div class="site-nav-toggle-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+
+      <div class="site-nav-links" id="siteNavLinks">
+        <a href="index">Home</a>
+        <a href="getting-started">Getting Started</a>
+        <a href="documentation">Documentation</a>
+        <a href="faq">Resources</a>
+        <a href="contact">Contact</a>
+        <a href="privacy-policy">Privacy</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const toggle = document.getElementById("siteNavToggle");
+    const links = document.getElementById("siteNavLinks");
+
+    if (!toggle || !links) return;
+
+    toggle.addEventListener("click", function () {
+      const isOpen = links.classList.toggle("is-open");
+      toggle.classList.toggle("is-open", isOpen);
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+
+    links.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", function () {
+        if (window.innerWidth <= 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 900) {
+        links.classList.remove("is-open");
+        toggle.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  })();
+</script>
+<!-- ===== UNIVERSAL NAVBAR END ===== -->
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">Category • Delivery • Handover • Control</div>
+          <h1>Project Delivery</h1>
+          <p class="lead">
+            This page outlines a practical approach to project delivery across model development, documentation,
+            coordination, fabrication outputs, issue control, and handover readiness. It is intended to help teams
+            move from live working information to reliable delivered information in a controlled way.
+          </p>
+
+          <div class="pill-row">
+            <span class="pill">Delivery stages</span>
+            <span class="pill">Information flow</span>
+            <span class="pill">Issue readiness</span>
+            <span class="pill">Fabrication outputs</span>
+            <span class="pill">Traceability</span>
+            <span class="pill">Handover thinking</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container page-grid">
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h3>On this page</h3>
+          <a href="#overview">1. Overview</a>
+          <a href="#stages">2. Delivery stages</a>
+          <a href="#information-flow">3. Information flow</a>
+          <a href="#model-output">4. Model, drawing & output readiness</a>
+          <a href="#coordination">5. Coordination and issue close-out</a>
+          <a href="#approvals">6. QA, approvals & sign-off</a>
+          <a href="#traceability">7. Traceability & revision control</a>
+          <a href="#handover">8. Handover thinking</a>
+          <a href="#dos-donts">9. Do / Don’t guidance</a>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Quick reminders</h3>
+          <ul class="checklist">
+            <li>Delivery is controlled release, not just file issue</li>
+            <li>Check outputs before sending them on</li>
+            <li>Close coordination issues where possible</li>
+            <li>Keep revision logic clear</li>
+            <li>Think about the next user of the information</li>
+          </ul>
+        </div>
+      </aside>
+
+      <div class="content-stack">
+        <section id="overview" class="content-card">
+          <div class="section-head">
+            <h2>1. Overview</h2>
+            <span class="section-tag">Foundation</span>
+          </div>
+          <p class="muted">
+            Project delivery is the process of turning live working information into reviewed, controlled, and
+            usable project outputs. It is not only about creating models or drawings — it is about confirming
+            that the right information is in the right condition, issued at the right time, and understandable
+            by the next person or team who needs it.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Model delivery</h4>
+              <p class="muted">The model must be in a condition that supports its intended use and status.</p>
+            </div>
+            <div class="info-card">
+              <h4>Document delivery</h4>
+              <p class="muted">Drawings, schedules, and reports must be checked, clear, and traceable.</p>
+            </div>
+            <div class="info-card">
+              <h4>Workflow delivery</h4>
+              <p class="muted">Approvals, issue routes, and records must support confidence in what was delivered.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="stages" class="content-card">
+          <div class="section-head">
+            <h2>2. Delivery stages</h2>
+            <span class="section-tag">Typical sequence</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Typical project delivery sequence</strong>
+              <ul class="checklist">
+                <li>Develop the live model or working information</li>
+                <li>Review coordination and key interfaces</li>
+                <li>Carry out internal QA checks</li>
+                <li>Prepare drawings, reports, or fabrication outputs</li>
+                <li>Review issue status and revisions</li>
+                <li>Deliver information into the correct shared/issued route</li>
+              </ul>
+            </div>
+
+            <div class="callout.success">
+              <strong>Why stages matter</strong>
+              <ul class="checklist">
+                <li>They reduce accidental issue of incomplete work</li>
+                <li>They support traceability and approvals</li>
+                <li>They improve confidence in the outputs</li>
+                <li>They reduce rework caused by poor issue control</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="information-flow" class="content-card">
+          <div class="section-head">
+            <h2>3. Information flow</h2>
+            <span class="section-tag">From working to shared</span>
+          </div>
+
+          <p class="muted">
+            A strong delivery process treats information flow as controlled movement between working, reviewed,
+            shared, and issued states. The goal is to avoid confusion between current working content and
+            deliverable project information.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Working information</h4>
+              <ul class="checklist">
+                <li>Still being developed</li>
+                <li>May contain open coordination items</li>
+                <li>Not ready for broad reliance</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Reviewed information</h4>
+              <ul class="checklist">
+                <li>Internally checked</li>
+                <li>Better aligned with project standards</li>
+                <li>Closer to issue condition</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Shared / issued information</h4>
+              <ul class="checklist">
+                <li>Status understood</li>
+                <li>Revisions clear</li>
+                <li>Stored in the correct controlled location</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="model-output" class="content-card">
+          <div class="section-head">
+            <h2>4. Model, drawing & output readiness</h2>
+            <span class="section-tag">Before delivery</span>
+          </div>
+
+          <p class="muted">
+            Before project information is delivered, the team should be satisfied that the model condition,
+            document condition, and output condition all match the intended issue.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Model readiness</strong>
+              <ul class="checklist">
+                <li>Model reflects current intended issue scope</li>
+                <li>Linked models and positions checked</li>
+                <li>Major coordination assumptions understood</li>
+                <li>Required parameters and data present where needed</li>
+              </ul>
+            </div>
+
+            <div class="callout">
+              <strong>Drawing / output readiness</strong>
+              <ul class="checklist">
+                <li>Correct sheets and views prepared</li>
+                <li>Title block and revision information checked</li>
+                <li>Reports or exports reviewed</li>
+                <li>Final issued file reviewed after export</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="coordination" class="content-card">
+          <div class="section-head">
+            <h2>5. Coordination and issue close-out</h2>
+            <span class="section-tag">Before release</span>
+          </div>
+
+          <p class="muted">
+            Delivery quality depends heavily on how well coordination issues have been understood, tracked,
+            and closed. Information can still be delivered with open issues in some cases, but the status
+            and limitations should be understood rather than hidden.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>What to review</strong>
+              <ul class="checklist">
+                <li>Clash status</li>
+                <li>Open interface risks</li>
+                <li>Builderswork or penetration requirements</li>
+                <li>Discipline dependencies</li>
+              </ul>
+            </div>
+
+            <div class="callout.warning">
+              <strong>Delivery risk warning</strong>
+              <ul class="checklist">
+                <li>Unclear coordination ownership</li>
+                <li>Repeated untracked assumptions</li>
+                <li>Drawings issued before interface checks are understood</li>
+                <li>Fabrication outputs released from unstable models</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="approvals" class="content-card">
+          <div class="section-head">
+            <h2>6. QA, approvals & sign-off</h2>
+            <span class="section-tag">Control and confidence</span>
+          </div>
+
+          <p class="muted">
+            Project delivery should include a clear internal checking and approval route. Even when formal sign-off
+            is lightweight, the team should know who checked the information and what standard it was checked against.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Internal QA</h4>
+              <ul class="checklist">
+                <li>Model checks completed</li>
+                <li>Drawing checks completed</li>
+                <li>Output checks completed</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Approvals</h4>
+              <ul class="checklist">
+                <li>Issue responsibility understood</li>
+                <li>Approver identified where required</li>
+                <li>Status matches the actual review stage</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Confidence</h4>
+              <ul class="checklist">
+                <li>Team knows what is being delivered</li>
+                <li>Known limitations are understood</li>
+                <li>Records support later review if needed</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="traceability" class="content-card">
+          <div class="section-head">
+            <h2>7. Traceability & revision control</h2>
+            <span class="section-tag">Know what changed</span>
+          </div>
+
+          <p class="muted">
+            Good project delivery depends on the ability to understand what changed, why it changed, and which
+            revision or version is current.
+          </p>
+
+          <div class="grid-2">
+            <div class="callout">
+              <strong>Traceability checks</strong>
+              <ul class="checklist">
+                <li>Revision information is correct</li>
+                <li>Superseded information is distinguishable</li>
+                <li>Current issued information is clear</li>
+                <li>Change points can be explained</li>
+              </ul>
+            </div>
+
+            <div class="callout.success">
+              <strong>Why it matters</strong>
+              <ul class="checklist">
+                <li>Supports confidence during review</li>
+                <li>Reduces confusion on site</li>
+                <li>Improves audit readiness</li>
+                <li>Helps teams avoid working to old information</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="handover" class="content-card">
+          <div class="section-head">
+            <h2>8. Handover thinking</h2>
+            <span class="section-tag">Think beyond issue day</span>
+          </div>
+
+          <p class="muted">
+            Strong project delivery considers not only the current issue, but also how information will be used
+            later by downstream teams, site teams, fabrication teams, or handover reviewers.
+          </p>
+
+          <div class="grid-3">
+            <div class="info-card">
+              <h4>Readability</h4>
+              <ul class="checklist">
+                <li>Outputs are understandable</li>
+                <li>Statuses are clear</li>
+                <li>Notes and tags support the reader</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Suitability</h4>
+              <ul class="checklist">
+                <li>Information matches intended use</li>
+                <li>No unnecessary clutter</li>
+                <li>Relevant supporting data included</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Future value</h4>
+              <ul class="checklist">
+                <li>Records remain traceable later</li>
+                <li>Handover information is not confusing</li>
+                <li>Superseded files do not obscure current files</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="dos-donts" class="content-card">
+          <div class="section-head">
+            <h2>9. Do / Don’t guidance</h2>
+            <span class="section-tag">Quick reference</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="info-card">
+              <h4>Do</h4>
+              <ul class="checklist">
+                <li>Check before issue</li>
+                <li>Use clear revision and status logic</li>
+                <li>Review coordination status honestly</li>
+                <li>Confirm outputs after export</li>
+                <li>Store delivered information in the correct controlled location</li>
+              </ul>
+            </div>
+
+            <div class="info-card">
+              <h4>Don’t</h4>
+              <ul class="checklist">
+                <li>Assume a live model view equals a good issue file</li>
+                <li>Issue unstable fabrication outputs too early</li>
+                <li>Hide known coordination limitations</li>
+                <li>Mix current and superseded information casually</li>
+                <li>Treat delivery as only an upload action</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="margin-top:1rem;">
+            <strong>Final takeaway:</strong>
+            Good project delivery is controlled, checked, traceable information release. The strongest teams
+            treat delivery as part of the workflow, not only the final step.
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+<!-- FOOTER START -->
+<style>
+  .site-footer {
+    margin-top: 2rem;
+    padding: 2rem 0 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    background: rgba(8,14,25,.85);
+    backdrop-filter: blur(10px);
+  }
+
+  .site-footer .site-footer-container {
+    width: min(calc(100% - 2rem), 1200px);
+    margin: 0 auto;
+  }
+
+  .site-footer .site-footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .site-footer .site-footer-col h4 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    color: #e8eefc;
+  }
+
+  .site-footer .site-footer-col p {
+    margin: 0;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .site-footer .site-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #e8eefc;
+    font-weight: 700;
+  }
+
+  .site-footer .site-footer-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #4f8cff, #7fb0ff);
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .site-footer .site-footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .site-footer .site-footer-links a {
+    display: block;
+    color: #a7b4d1;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .site-footer .site-footer-links a:hover {
+    color: #4f8cff;
+    transform: translateX(2px);
+  }
+
+  .site-footer .site-footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: #a7b4d1;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .site-footer .site-footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .site-footer .site-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<footer class="site-footer">
+  <div class="site-footer-container">
+    <div class="site-footer-grid">
+      <div class="site-footer-col">
+        <div class="site-footer-brand">
+          <div class="site-footer-badge">RC</div>
+          <span>Revit CADmep Guide</span>
+        </div>
+        <p>
+          A professional resource for learning Autodesk Revit and CADmep,
+          covering BIM workflows, fabrication, and coordination.
+        </p>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Navigation</h4>
+        <div class="site-footer-links">
+          <a href="index.html">Home</a>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="faq.html">Resources</a>
+          <a href="documentation.html">Standards</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Resources</h4>
+        <div class="site-footer-links">
+          <a href="https://www.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk</a>
+          <a href="https://help.autodesk.com" target="_blank" rel="noopener noreferrer">Autodesk Help</a>
+          <a href="#">Revit Tutorials</a>
+          <a href="#">CADmep Guides</a>
+          <a href="downloads">Downloads</a>
+        </div>
+      </div>
+
+      <div class="site-footer-col">
+        <h4>Legal</h4>
+        <div class="site-footer-links">
+          <a href="privacy-policy.html">Privacy Policy</a>
+          <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+          <a href="disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-footer-bottom">
+      <div>© 2026 Anarchy Group LTD | https://www.anarchygroup.uk</div>
+      <div>Email: support@revithelpdesk.co.uk</div>
+      <div>This website is not affiliated with Autodesk™, Revit™, CADmep™ or any other Autodesk™ Trademark.</div>
+    </div>
+  </div>
+</footer>
+<!-- FOOTER END -->
+
+  <script>
+    (function () {
+      const toggle = document.getElementById("siteNavToggle");
+      const links = document.getElementById("siteNavLinks");
+
+      if (!toggle || !links) return;
+
+      toggle.addEventListener("click", function () {
+        const isOpen = links.classList.toggle("is-open");
+        toggle.classList.toggle("is-open", isOpen);
+        toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      links.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", function () {
+          if (window.innerWidth <= 900) {
+            links.classList.remove("is-open");
+            toggle.classList.remove("is-open");
+            toggle.setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 900) {
+          links.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
